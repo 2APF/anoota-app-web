@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "nohere.online",
+        "sha256_cert_fingerprints": ["C2:7D:95:23:9F:C7:B6:61:D5:DF:D8:64:6B:CF:B4:8F:41:62:8D:60:27:78:2E:46:99:02:30:8C:7C:EC:06:1B"]
+      }
+    }]
