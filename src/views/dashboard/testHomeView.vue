@@ -10,7 +10,36 @@
         <p v-else>Você já fez <strong>{{ appointmentsCount }}</strong> agendamento{{ appointmentsCount > 1 ? 's' : '' }}</p>
       </header>
 
-  
+      <div class="loyalty-card">
+        <div class="title">
+          <div class="gift-icon"><i class="fas fa-gift"></i></div>
+          <div>
+            <h2>Serviço Grátis a Cada 10</h2>
+            <p>Complete 10 agendamentos e ganhe 1 serviço grátis até 80€</p>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div class="fill" :style="{ width: progressPercent + '%' }"></div>
+          <div class="dots">
+            <div v-for="n in 10" :key="n" class="dot" :class="{ active: n <= appointmentsCount, next: n === appointmentsCount + 1 }">
+              <span>{{ n }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status">
+          <strong v-if="appointmentsCount < 10">
+            Faltam apenas {{ 10 - appointmentsCount }} agendamento{{ 10 - appointmentsCount > 1 ? 's' : '' }}
+          </strong>
+          <strong v-else class="won">Você ganhou 1 serviço grátis!</strong>
+        </div>
+
+        <button @click="goToSearch" class="btn-primary">
+          {{ appointmentsCount < 10 ? 'Fazer próximo agendamento' : 'Resgatar meu prêmio' }}
+        </button>
+      </div>
+
       <div class="ads-carousel">
         <div class="slides" :style="{ transform: `translateX(-${currentAd * 100}%)` }">
           <div v-for="(ad, i) in ads" :key="i" class="ad-slide">
@@ -27,10 +56,17 @@
         </div>
       </div>
 
-
+      <button @click="router.push('/onboarding-profissional')" class="pro-cta">
+        <div class="icon"><i class="fas fa-crown"></i></div>
+        <div class="text">
+          <strong>Ganhe dinheiro com sua habilidade</strong>
+          <span>Seja um profissional premium • Zero comissão por 90 dias</span>
+        </div>
+        <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+      </button>
 
       <section v-if="recentAppointments.length" class="recent">
-        <h2>Suas últimas marcações</h2>
+        <h2>Últimos agendamentos</h2>
         <div class="list">
           <div v-for="apt in recentAppointments" :key="apt.id" class="item" @click="router.push(`/agendamento/${apt.id}`)">
             <div class="left">
@@ -73,6 +109,20 @@ interface User {
   photo?: string;
   isProfessional?: boolean
 }
+
+// const user = reactive({
+//   name: 'Carolina Mendes',
+//   email: 'carolina@email.com',
+//   phone: '+351 912 345 678',
+//   address: 'Lisboa',
+//   avatar: ''
+// })
+
+// const user = ref({
+//   name: 'Carolina Mendes',
+//   isProfessional: false,
+//   rating: '4.92'
+// })
 
 let user: User;
 if (typeof route.params.user === 'string') {

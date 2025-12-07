@@ -67,6 +67,10 @@
 
 
       <div v-if="user.name && user.type == '3'">
+        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.homepage' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </RouterLink>
         <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-calendar-plus"></i>
           <span>Explorar Profissionais</span>
@@ -75,11 +79,11 @@
          <i class="fas fa-calendar-day"></i>
           <span>Meus Agendamentos</span>
         </RouterLink>
-
+<!-- 
         <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.notes' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-book-reader"></i>
           <span>Minhas Notas</span>
-        </RouterLink>
+        </RouterLink> -->
 
         <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.ranking' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-star"></i>

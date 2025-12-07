@@ -21,6 +21,8 @@ import PointsView from '@/views/dashboard/PointsView.vue'
 import ToProfessionalView from '@/views/dashboard/ToProfessionalView.vue'
 import ClientsView from '@/views/dashboard/store/ClientsView.vue'
 import ReportsView from '@/views/dashboard/store/ReportsView.vue'
+import HomeUserView from '@/views/dashboard/HomeView.vue'
+import ScheduleUserView from '@/views/dashboard/scheduleUserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -72,7 +74,7 @@ const router = createRouter({
 
     
     {
-      path: '/store-detail/:slug',
+      path: '/store-detail/:id',
       name: 'app.store.detail',
       component: StoreDetailView,
       meta: {
@@ -83,6 +85,21 @@ const router = createRouter({
         requiresAuth: true
       },
     },
+
+        
+    {
+      path: '/schedule/:id',
+      name: 'app.schedule',
+      component: ScheduleUserView,
+      meta: {
+        title: 'Login - Anoota',
+        description: 'Faça login na sua conta Anoota.',
+        keywords: 'login, autenticação, Anoota',
+        ogImage: 'https://Anoota.online/logo-black.png',
+        requiresAuth: true
+      },
+    },
+
 
     
 
@@ -128,7 +145,7 @@ const router = createRouter({
     {
       path: '/user/homepage',
       name: 'app.user.homepage',
-      component: HomeStoreView,
+      component: HomeUserView,
       meta: {
         title: 'Login - Anoota',
         description: 'Faça login na sua conta Anoota.',

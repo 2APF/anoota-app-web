@@ -43,21 +43,23 @@
         <form @submit.prevent="submitFormSignup" class="auth-form" v-if="!isLogin">
 
           <div class="input-group">
-            <input type="text" v-model="form.name" required placeholder="Nome completo" class="auth-input" />
+            <input type="text" v-model="form.name" required placeholder="Seu Nome *" class="auth-input" />
           </div>
-
+<!-- 
           <div class="input-group">
             <input type="tel" v-model="form.phone" required placeholder="Telefone" class="auth-input" />
-          </div>
+          </div> -->
 
           <div class="input-group">
-            <input type="email" v-model="form.email" required placeholder="Email" class="auth-input" />
+            <input type="email" v-model="form.email" required placeholder="Email *" class="auth-input" />
           </div>
 
           <div class="input-group">
             <input :type="showPass ? 'text' : 'password'" v-model="form.password" required :minlength="isLogin ? 1 : 6"
-              :placeholder="isLogin ? 'Palavra-passe' : 'Palavra-passe (mín. 6 caracteres)'" class="auth-input" />
-            <button type="button" @click="showPass = !showPass" class="toggle-eye">
+              :placeholder="isLogin ? 'Palavra-passe *' : 'Palavra-passe (mín. 6 caracteres) *'" class="auth-input" />
+           
+           
+              <button type="button" @click="showPass = !showPass" class="toggle-eye">
               <i :class="showPass ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
@@ -114,7 +116,7 @@ const loading = ref(false)
 
 const form = ref({
   name: '',
-  phone: '',
+  // phone: '',
   email: '',
   password: '',
   confirm: '',
@@ -125,7 +127,7 @@ const form = ref({
 const notification = ref({ message: '', type: 'success' as 'success' | 'error' })
 
 const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-const validatePhone = (phone: string) => /^\+?\d{9,15}$/.test(phone.replace(/\D/g, ''))
+// const validatePhone = (phone: string) => /^\+?\d{9,15}$/.test(phone.replace(/\D/g, ''))
 
 const showNotification = (msg: string, type: 'success' | 'error') => {
   notification.value = { message: msg, type }
@@ -180,10 +182,10 @@ const submitFormSignup = async () => {
     showNotification('Por favor, insira um email válido.', 'error')
     return
   }
-  if (!validatePhone(form.value.phone)) {
-    showNotification('Por favor, insira um número de telefone válido.', 'error')
-    return
-  }
+  // if (!validatePhone(form.value.phone)) {
+  //   showNotification('Por favor, insira um número de telefone válido.', 'error')
+  //   return
+  // }
   if (form.value.password.length < 6) {
     showNotification('A palavra-passe deve ter pelo menos 6 caracteres.', 'error')
     return
@@ -198,7 +200,7 @@ const submitFormSignup = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: form.value.name,
-        phone: form.value.phone,
+        // phone: form.value.phone,
         email: form.value.email,
         password: form.value.password
       }),
@@ -219,7 +221,7 @@ const submitFormSignup = async () => {
 
 
 
-    router.push({ name: 'app.store.configuration' }).catch(() => { });
+    router.push({ name: 'app.user.homepage' }).catch(() => { });
 
 
     loading.value = false;

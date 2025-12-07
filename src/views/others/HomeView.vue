@@ -59,7 +59,8 @@
                 <small>({{ store.reviews }} avaliações)</small>
               </div>
             </div>
-            <button @click.prevent="goToStore(store.id)" class="btn">Ver Loja e Agendar</button>
+            <RouterLink  :scroll-behavior="{ behavior: 'smooth' }" class="btn" :to="{ name: 'app.store.detail', params: { id: store.id } }">Ver Loja e Agendar</RouterLink>
+         
           </div>
         </div>
       </div>
@@ -86,7 +87,7 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
 const router = useRouter()
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.cirimoveis.com/api/v1'
 
-const stores = ref([])
+const stores: any = ref([])
 const loading = ref(false)
 const page = ref(1)
 const total = ref(0)
@@ -185,7 +186,7 @@ const handleScroll = () => {
 }
 
 const goToStore = (id: number) => {
-  router.push(`/loja/${id}`)
+  router.push({ name: 'app.store.detail', params: { id } })
 }
 
 onMounted(() => {

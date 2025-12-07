@@ -10,36 +10,7 @@
         <p v-else>Você já fez <strong>{{ appointmentsCount }}</strong> agendamento{{ appointmentsCount > 1 ? 's' : '' }}</p>
       </header>
 
-      <div class="loyalty-card">
-        <div class="title">
-          <div class="gift-icon"><i class="fas fa-gift"></i></div>
-          <div>
-            <h2>Serviço Grátis a Cada 10</h2>
-            <p>Complete 10 agendamentos e ganhe 1 serviço grátis até 80€</p>
-          </div>
-        </div>
-
-        <div class="progress-bar">
-          <div class="fill" :style="{ width: progressPercent + '%' }"></div>
-          <div class="dots">
-            <div v-for="n in 10" :key="n" class="dot" :class="{ active: n <= appointmentsCount, next: n === appointmentsCount + 1 }">
-              <span>{{ n }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="status">
-          <strong v-if="appointmentsCount < 10">
-            Faltam apenas {{ 10 - appointmentsCount }} agendamento{{ 10 - appointmentsCount > 1 ? 's' : '' }}
-          </strong>
-          <strong v-else class="won">Você ganhou 1 serviço grátis!</strong>
-        </div>
-
-        <button @click="goToSearch" class="btn-primary">
-          {{ appointmentsCount < 10 ? 'Fazer próximo agendamento' : 'Resgatar meu prêmio' }}
-        </button>
-      </div>
-
+  
       <div class="ads-carousel">
         <div class="slides" :style="{ transform: `translateX(-${currentAd * 100}%)` }">
           <div v-for="(ad, i) in ads" :key="i" class="ad-slide">
