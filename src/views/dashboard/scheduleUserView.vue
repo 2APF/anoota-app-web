@@ -8,16 +8,16 @@
 
     <div v-else class="container">
       <header class="header">
-        <h1>Agendar com {{ store.name }}</h1>
+        <h1>Marcar com {{ store.name }}</h1>
         <p class="subtitle">{{ store.category }} • {{ store.address }}</p>
       </header>
 
       <div class="booking-grid">
         <div class="calendar-section">
           <div class="calendar-header">
-            <button @click="prevMonth" class="nav-btn"><i class="fas-chevron-left"></i></button>
-            <h2>{{ currentMonthName }}</h2>
-            <button @click="nextMonth" class="nav-btn"><i class="fas-chevron-right"></i></button>
+            <button @click="prevMonth" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+            <h3>{{ currentMonthName }}</h3>
+            <button @click="nextMonth" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
           </div>
 
           <div class="weekdays">
@@ -54,7 +54,7 @@
             <p>Nenhum horário disponível neste dia</p>
           </div>
 
-          <div v-else class="form-content">
+          <div v-else>
             <div class="selected-date">
               <i class="fas-calendar-check"></i>
               <strong>{{ format(selectedDate, 'EEEE, d MMMM yyyy', { locale: pt }) }}</strong>
