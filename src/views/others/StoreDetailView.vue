@@ -29,9 +29,12 @@
           <i class="fas fa-circle"></i> {{ store.is_open_now ? 'Aberto agora' : 'Fechado' }}
         </div>
       </div>
-      <button class="btn-schedule-cta" @click="openScheduleModal = true">
-        Agendar Agora
-      </button>
+
+
+       <RouterLink :scroll-behavior="{ behavior: 'smooth' }"
+        :to="{ name: 'app.schedule', params: { id: store.id } }" class="btn-schedule-cta" @click="openScheduleModal = true">
+        Marcar Agora
+      </RouterLink>
     </div>
   </div>
 
@@ -87,30 +90,32 @@
 
 
         <div class="contact-card">
-          <h3>Contato</h3>
+          <h3>Contacto</h3>
           <div class="contact-item"><i class="fas fa-phone"></i> {{ store.phone || 'Não informado' }}</div>
           <div class="contact-item"><i class="fas fa-envelope"></i> {{ store.email || 'Não informado' }}</div>
           <div v-if="store.instagram" class="contact-item"><i class="fab fa-instagram"></i> {{ store.instagram }}</div>
+          <div v-if="store.whatsapp" class="contact-item"><i class="fab fa-whatsapp"></i> {{ store.whatsapp }}</div>
+          <div v-if="store.address" class="contact-item"><i class="fas fa-map-marker-alt"></i> {{ store.address }}</div>
         </div>
 
-                <!-- <div class="schedule-card"> -->
+        <!-- <div class="schedule-card"> -->
 
-          <section class="location-section">
-            <h2>Localização</h2>
-            <div class="map-container">
-              <iframe
-                :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(store.address)}`"
-                width="100%" height="420" style="border:0;border-radius:24px" allowfullscreen="" loading="lazy">
-              </iframe>
-              <div class="map-actions">
-                <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google
-                  Maps</a>
-                <a :href="wazeLink" target="_blank" class="btn-map waze"><i class="fas fa-car"></i> Waze</a>
-                <a :href="appleMapsLink" target="_blank" class="btn-map apple"><i class="fab fa-apple"></i> Apple
-                  Maps</a>
-              </div>
+        <section class="location-section">
+          <h2>Localização</h2>
+          <div class="map-container">
+            <iframe
+              :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(store.address)}`"
+              width="100%" height="420" style="border:0;border-radius:24px" allowfullscreen="" loading="lazy">
+            </iframe>
+            <div class="map-actions">
+              <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google
+                Maps</a>
+              <a :href="wazeLink" target="_blank" class="btn-map waze"><i class="fas fa-car"></i> Waze</a>
+              <a :href="appleMapsLink" target="_blank" class="btn-map apple"><i class="fab fa-apple"></i> Apple
+                Maps</a>
             </div>
-          </section>
+          </div>
+        </section>
         <!-- </div> -->
       </div>
     </div>
@@ -142,10 +147,11 @@
     </div>
   </div> -->
 
-  <button class="fab-schedule" @click="openScheduleModal = true">
-    <i class="fas fa-calendar-plus"></i>
-    <span>Agendar</span>
-  </button>
+  <RouterLink :scroll-behavior="{ behavior: 'smooth' }"
+        :to="{ name: 'app.schedule', params: { id: store.id } }" class="fab-schedule" @click="openScheduleModal = true">
+    <i class="fas fa-calendar-plus" style="width: 20px; height: 20px;"></i>
+    <span>Marcar</span>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
