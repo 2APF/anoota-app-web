@@ -6,8 +6,6 @@
         anoota
       </RouterLink>
 
-
-
       <div class="header-actions">
         <button class="location-btn" @click="openLocation">
           <i class="fas fa-star"></i>

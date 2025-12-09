@@ -212,6 +212,7 @@ const fetchStore = async () => {
   } finally {
     loading.value = false
   }
+  
 }
 
 onMounted(fetchStore)
