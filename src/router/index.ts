@@ -23,6 +23,7 @@ import ClientsView from '@/views/dashboard/store/ClientsView.vue'
 import ReportsView from '@/views/dashboard/store/ReportsView.vue'
 import HomeUserView from '@/views/dashboard/HomeView.vue'
 import ScheduleUserView from '@/views/dashboard/scheduleUserView.vue'
+import ScheduleUserFinishView from '@/views/dashboard/scheduleUserFinishView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -102,6 +103,22 @@ const router = createRouter({
 
 
     
+        
+    {
+      path: '/schedule/finish',
+      name: 'app.schedule.finish',
+      component: ScheduleUserFinishView,
+      meta: {
+        title: 'Login - Anoota',
+        description: 'Faça login na sua conta Anoota.',
+        keywords: 'login, autenticação, Anoota',
+        ogImage: 'https://Anoota.online/logo-black.png',
+        requiresAuth: true
+      },
+    },
+
+
+    
 
 
     
@@ -120,11 +137,6 @@ const router = createRouter({
 
     
     
-
-
-
-
-
 
 
 
