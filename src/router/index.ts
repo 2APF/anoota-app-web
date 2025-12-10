@@ -24,6 +24,7 @@ import ReportsView from '@/views/dashboard/store/ReportsView.vue'
 import HomeUserView from '@/views/dashboard/HomeView.vue'
 import ScheduleUserView from '@/views/dashboard/scheduleUserView.vue'
 import ScheduleUserFinishView from '@/views/dashboard/scheduleUserFinishView.vue'
+import ServicesView from '@/views/dashboard/store/ServicesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -290,6 +291,21 @@ const router = createRouter({
       path: '/store/clients',
       name: 'app.store.clients',
       component: ClientsView,
+      meta: {
+        title: 'Login - Anoota',
+        description: 'Faça login na sua conta Anoota.',
+        keywords: 'login, autenticação, Anoota',
+        ogImage: 'https://Anoota.online/logo-black.png',
+        requiresAuth: true
+      },
+    },
+
+
+      
+    {
+      path: '/store/services',
+      name: 'app.store.services',
+      component: ServicesView,
       meta: {
         title: 'Login - Anoota',
         description: 'Faça login na sua conta Anoota.',

@@ -39,7 +39,7 @@
       <h2 v-if="total > 0" class="count">{{ total }} {{ total === 1 ? 'profissional encontrado' : 'profissionais encontrados' }}</h2>
 
       <div class="grid">
-        <div v-for="(store, i) in stores" :key="store.id" class="card" :style="{ animationDelay: `${i * 0.08}s` }" @click="goToStore(store.id)">
+        <div v-for="(store, i) in stores" :key="store.id" class="card" :style="{ animationDelay: `${i * 0.08}s` }" @click="goToStore(store.slug)">
           <div class="img" :style="{ backgroundImage: `url(${store.cover})` }">
             <span class="tag">{{ store.category }}</span>
             <span class="badge" :class="store.recommend.toLowerCase()">{{ store.recommend }}</span>
@@ -59,7 +59,7 @@
                 <small>({{ store.reviews }} avaliações)</small>
               </div>
             </div>
-            <RouterLink  :scroll-behavior="{ behavior: 'smooth' }" class="btn" :to="{ name: 'app.store.detail', params: { id: store.id } }">Ver Loja e Agendar</RouterLink>
+            <RouterLink  :scroll-behavior="{ behavior: 'smooth' }" class="btn" :to="{ name: 'app.store.detail', params: { id: store.slug } }">Ver Loja e Agendar</RouterLink>
          
           </div>
         </div>

@@ -103,29 +103,28 @@
           <span>Marcações</span>
         </RouterLink>
 
+        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
+         <i class="fas fa-briefcase"></i>
+          <span>Serviços</span>
+        </RouterLink>
         
         <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-calendar-day"></i>
+         <i class="fas fa-users"></i>
           <span>Clientes</span>
         </RouterLink>
 
-        <RouterLink :to="{ name: 'app.user.notes' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
+        <!-- <RouterLink :to="{ name: 'app.user.notes' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
          <i class="fas fa-calendar-day"></i>
           <span>Minhas Notas</span>
-        </RouterLink>
+        </RouterLink> -->
 
         <RouterLink :to="{ name: 'app.store.reports' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
           <i class="fas fa-book-reader"></i>
           <span>Relatórios</span>
         </RouterLink>
 
-        <RouterLink :to="{ name: 'app.store.finances' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-          <i class="fas fa-book-reader"></i>
-          <span>Finanças</span>
-        </RouterLink>
-
         
-        <RouterLink :to="{ name: 'app.store.finances' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
           <i class="fas fa-book-reader"></i>
           <span>Marcações Particulares</span>
         </RouterLink>
@@ -255,19 +254,6 @@ interface User {
   isProfessional?: boolean
 }
 
-// const user = reactive({
-//   name: 'Carolina Mendes',
-//   email: 'carolina@email.com',
-//   phone: '+351 912 345 678',
-//   address: 'Lisboa',
-//   avatar: ''
-// })
-
-// const user = ref({
-//   name: 'Carolina Mendes',
-//   isProfessional: false,
-//   rating: '4.92'
-// })
 
 let user: User;
 if (typeof route.params.user === 'string') {

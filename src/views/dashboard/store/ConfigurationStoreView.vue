@@ -192,38 +192,6 @@
 
         
 
-
-
-
-        <div class="card services-card">
-          <h2>Serviços Oferecidos</h2>
-          
-          <button class="btn-add" @click="addService">
-            <i class="fas fa-plus"></i> Adicionar Serviço
-          </button>
-
-          <div class="services-list">
-            <div v-for="(service, index) in store.services" :key="service.id || index" class="service-item">
-              <input v-model="service.name" placeholder="Nome do serviço" class="name" />
-              <input v-model.number="service.duration_minutes" type="number" placeholder="Duração (min)" class="small" min="5" max="180" />
-              <input v-model.number="service.price" type="number" placeholder="Preço €" class="small" step="0.01" min="0" />
-        <!--       
-              <label class="switch">
-                <input type="checkbox" v-model="service.active" />
-                <span class="slider"></span>
-              </label> -->
-
-              <button @click="removeService(index)" class="btn-remove">×</button>
-            </div>
-          </div>
-
-          <button @click="saveServices" class="btn-save-section bottom" :disabled="loading">
-            <i v-show="loading" class="fas fa-spinner fa-spin"></i>
-            {{ loading ? 'Salvando...' : 'Salvar Serviços' }}
-          </button>
-        </div>
-
-
       </aside>
     </div>
   </div>
@@ -521,42 +489,6 @@ const removeService = (index: number) => {
   store.services.splice(index, 1)
 }
 
-
-
-const saveServices = async () => {
-  loading.value = true
-  
-  const payload = store.services.map(s => ({
-    id: s.id || null,
-    name: s.name.trim(),
-    description: s.description?.trim() || null,
-    duration_minutes: Number(s.duration_minutes),
-    price: Number(s.price),
-    active: s.active ? 1 : 0
-  }))
-
-  try {
-    const res = await fetch(`${API_URL}/store/update/services/${store.store_id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ services: payload })
-    })
-
-    if (!res.ok) throw new Error('Erro ao salvar serviços')
-
-    showNotification('Serviços salvos com sucesso!', 'success')
-
-    const data = await res.json()
-    if (data.services) {
-      store.services = data.services
-    }
-
-  } catch (err) {
-    showNotification('Erro ao salvar serviços', 'error')
-  } finally {
-    loading.value = false
-  }
-}
 
 
 const fetchStore = async () => {

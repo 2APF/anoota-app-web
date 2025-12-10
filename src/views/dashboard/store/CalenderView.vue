@@ -285,10 +285,10 @@ const fetchAvailableTimes = async () => {
     const dateStr = format(selectedDate.value, 'yyyy-MM-dd')
 
     const res = await axios.get(`${API_URL}/store/available-times/${user.id}/${dateStr}`, {
-      params: { date: dateStr },
+      // params: { date: dateStr },
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
-    // console.log('Available time slots:', res.data[0])
+    
     availableTimeSlots.value = Array.isArray(res.data) ? res.data : []
 
     if (!res.data[0]) {

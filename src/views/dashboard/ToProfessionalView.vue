@@ -84,7 +84,7 @@
           </button>
         </form>
 
-        <p class="price">Apenas 6 € por mês</p>
+        <p class="price">Apenas 10€ por mês</p>
         <p class="trust">Mais de 720 profissionais já estão conosco</p>
       </div>
     </div>
