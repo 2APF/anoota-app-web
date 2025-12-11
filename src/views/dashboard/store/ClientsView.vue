@@ -61,13 +61,13 @@
         <h3>{{ editingClient ? 'Editar Cliente' : 'Novo Cliente' }}</h3>
         <form @submit.prevent="saveClient">
           <input v-model="form.name" placeholder="Nome completo *" required />
-          <input v-model="form.phone" placeholder="Telefone (ex: 912345678)" />
-          <input v-model="form.email" type="email" placeholder="Email" />
+          <input v-model="form.phone" placeholder="Telefone (ex: 912345678) *" />
+          <input v-model="form.email" type="email" placeholder="Email (opcional, mas recomendado)" />
           <textarea v-model="form.notes" placeholder="Notas (opcional)" rows="3"></textarea>
 
           <div class="modal-actions">
             <button type="button" @click="closeModal" class="cancel">Cancelar</button>
-            <button type="submit" class="save">
+            <button type="submit" class="save" >
               {{ editingClient ? 'Salvar' : 'Adicionar' }}
             </button>
           </div>
@@ -76,7 +76,7 @@
     </div>
   </teleport>
 
-  <!-- Modal Confirmação de Exclusão -->
+  
   <teleport to="body">
     <div v-if="deleteModalOpen" class="modal-overlay" @click="closeDeleteModal">
       <div class="modal-card delete-modal" @click.stop>

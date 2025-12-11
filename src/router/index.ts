@@ -440,10 +440,10 @@ const router = createRouter({
       name: 'app.settings',
       component: SettingsView,
       meta: {
-        title: 'Configurações - FacturaPro',
-        description: 'Gerencie as configurações da sua conta no FacturaPro.',
-        keywords: 'histórico, faturas, FacturaPro',
-        ogImage: 'https://facturapro.online/logo-black.png'
+        title: 'Configurações - anoota',
+        description: 'Gerencie as configurações da sua conta no anoota.',
+        keywords: 'histórico, faturas, anoota',
+        ogImage: 'https://anoota.online/logo-black.png'
       }
     },
 
@@ -534,7 +534,7 @@ router.beforeEach(async (to, from, next) => {
       if (response.ok) {
         const userData = await response.json()
 
-        console.log(userData);
+        
         if (Array.isArray(to.params.user)) {
           to.params.user.push(userData)
         } else {

@@ -13,9 +13,6 @@ import './assets/js/fontawesome/all.min.js'
 import './assets/js/no.js'
 import VueTheMask from 'vue-the-mask';
 
-// import axios from './../axiosConfig.ts'; /// Para rejeit
-// import "bootstrap/dist/css/bootstrap.min.css"
-// import "bootstrap"
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -25,23 +22,6 @@ import App from './App.vue'
 import router from './router'
 
 
-
-
-/////
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-window.Pusher = Pusher;
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: '97b9f375f41a19024489',
-    cluster: 'mt1',
-    wsHost: '127.0.0.1',            
-    wsPort: 6001,                  
-    // forceTLS: false,               
-    forceTLS: true,
-});
 
 
 const app = createApp(App)

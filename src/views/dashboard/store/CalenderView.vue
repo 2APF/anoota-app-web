@@ -123,7 +123,7 @@
               </div>
 
               <div class="form-actions">
-                <button type="button" @click="modal = false">Cancelar</button>
+                <button type="button" @click="modal = false">Manter</button>
                 <button type="submit" class="primary" 
                   :disabled="!form.client_id || !form.service_ids.length || !form.time || loadingSlots || loading">
                   {{ editMode ? 'Atualizar' : 'Agendar' }}
@@ -359,6 +359,7 @@ const submitCreate = async () => {
     modal.value = false
     loadData()
   } catch (err: any) {
+    console.log(err)
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }
@@ -396,7 +397,9 @@ const loadData = async () => {
     services.value = Array.isArray(data.services) ? data.services : []
 
     const schedules = Array.isArray(data.schedules) ? data.schedules : []
+    
     appointments.value = schedules.map((s: any) => {
+
       const client = clients.value.find(c => c.id === s.client_id) || { name: 'Cliente desconhecido' }
       const serviceIds = Array.isArray(s.services) ? s.services : (s.service_id ? [s.service_id] : [])
       const servicesList = serviceIds
@@ -412,8 +415,8 @@ const loadData = async () => {
         client_name: client.name,
         services_list: servicesList,
         time: format(new Date(s.start_datetime), 'HH:mm'),
-        total_price: totalPrice,
-        total_duration: totalDuration,
+        total_price: s.price ? Number(s.price).toFixed(2) : totalPrice,
+        total_duration: s.duration_minutes ? s.duration_minutes : totalDuration,
         date: format(new Date(s.start_datetime), 'yyyy-MM-dd')
       }
     })

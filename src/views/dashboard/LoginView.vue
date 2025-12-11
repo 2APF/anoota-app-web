@@ -158,7 +158,6 @@ const submitFormLogin = async () => {
       throw new Error(data.message || 'Erro ao autenticar. Tente novamente.');
     }
 
-
     Cookies.set('token', data.data.data.token, { expires: form.value.remember ? 7 : undefined, secure: true, sameSite: 'Strict' });
     Cookies.set('user', JSON.stringify(data.data.data.id), { expires: form.value.remember ? 7 : undefined, secure: true, sameSite: 'Strict' });
     axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.data.access_token}`;
@@ -229,7 +228,8 @@ const submitFormSignup = async () => {
   } catch (error: any) {
 
     loading.value = false;
-    showNotification(error.response?.data?.message || 'Erro ao criar conta.', 'error')
+    // console.log('error:', error)
+    showNotification(error.message || 'Erro ao criar conta.', 'error')
   }
 
 }

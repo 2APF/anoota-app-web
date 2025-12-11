@@ -253,7 +253,8 @@ const confirmCancel = async () => {
     closeCancelModal()
   } catch (err) {
     cancelling.value = false
-    alert('Erro ao cancelar agendamento. Tenta novamente.')
+    console.log('erro: ', err)
+    // alert('Erro ao cancelar agendamento. Tenta novamente.')
   } finally {
     cancelling.value = false
   }
