@@ -243,6 +243,7 @@ onMounted(loadServices)
   background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
   min-height: 100vh;
   padding: 90px 16px 120px;
+  margin-top: 60px;
 }
 
 .header {
