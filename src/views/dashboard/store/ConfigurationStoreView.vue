@@ -45,8 +45,8 @@
 
               <div class="input-group">
                 <label>Telefone (WhatsApp) *</label>
-                <div class="phone-group">
-                  <div class="country-select">
+                <div class="phone-group w-full">
+                  <div class="country-select ">
                     <img :src="selectedFlag" alt="" class="flag">
                     <select v-model="countryCode">
                       <option value="+351" data-flag="https://flagcdn.com/32x24/pt.png" selected>+351 Portugal</option>
@@ -77,8 +77,13 @@
                 <input v-model="store.instagram" type="url" placeholder="https://..." />
               </div>
               <div class="input-group">
-                <label>Slogan (opcional)</label>
-                <input v-model="store.slogan" type="text" placeholder="Slogan " disabled />
+                <label>Link do Perfil da Loja</label>
+                <div class="profile-link w-full">
+                  <input type="text" :value="profileLink" readonly @focus="$event.target.select()" />
+                  <button type="button" @click="copyToClipboard" class="copy-button">
+                    <i class="fas fa-copy"></i>
+                  </button>
+                </div>
               </div>
               <div class="input-group full">
                 <label>Endereço Completo *</label>
@@ -93,48 +98,37 @@
           </form>
         </div>
 
-<div class="card">
-  <h2>Horário de Funcionamento</h2>
-  <form @submit.prevent="submitHours">
-    <div class="hours-list">
-      <div v-for="day in store.hours" :key="day.day" class="hour-item">
-        <div class="day-header">
-          <span class="day-name">{{ day.day }}</span>
-          <label class="switch">
-            <input type="checkbox" v-model="day.active" :checked="day.active" />
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="time-wrapper" v-if="day.active">
-          <input type="time" v-model="day.start_time" required />
-          <span>às</span>
-          <input type="time" v-model="day.end_time" required />
-        </div>
-        <div class="closed" v-else>Fechado</div>
-      </div>
-    </div>
+        <div class="card">
+          <h2>Horário de Funcionamento</h2>
+          <form @submit.prevent="submitHours">
+            <div class="hours-list">
+              <div v-for="day in store.hours" :key="day.day" class="hour-item">
+                <div class="day-header">
+                  <span class="day-name">{{ day.day }}</span>
+                  <label class="switch">
+                    <input type="checkbox" v-model="day.active" :checked="day.active" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="time-wrapper" v-if="day.active">
+                  <input type="time" v-model="day.start_time" required />
+                  <span>às</span>
+                  <input type="time" v-model="day.end_time" required />
+                </div>
+                <div class="closed" v-else>Fechado</div>
+              </div>
+            </div>
 
-    <button type="submit" class="btn-save-section bottom" :disabled="loading">
-      <i v-show="loading" class="fas fa-spinner fa-spin"></i>
-      {{ loading ? 'A processar...' : 'Salvar Horário' }}
-    </button>
-  </form>
-</div>
+            <button type="submit" class="btn-save-section bottom" :disabled="loading">
+              <i v-show="loading" class="fas fa-spinner fa-spin"></i>
+              {{ loading ? 'A processar...' : 'Salvar Horário' }}
+            </button>
+          </form>
+        </div>
 
         <div class="card">
           <h2>Galeria de Fotos</h2>
-          <div class="gallery-grid">
-            <div v-for="(img, i) in store.gallery" :key="i" class="gallery-item">
-              <img :src="img.url || img" />
-              <button class="remove" @click="store.gallery.splice(i, 1)">×</button>
-            </div>
-            <label class="upload-area">
-              <i class="fas fa-plus"></i>
-              <span>Adicionar fotos</span>
-              <input type="file" multiple accept="image/*" @change="handleGalleryUpload" />
-            </label>
-          </div>
-          <button class="btn-save-section bottom" @click="saveSection('gallery')">Salvar Galeria</button>
+          <p style="color: gray; font-style: italic;">Em breve: Adicione fotos da sua loja para atrair mais clientes!</p>
         </div>
       </main>
 
@@ -155,48 +149,40 @@
           </div>
         </div>
 
+        <div class="card">
+          <h2>Imagens da Loja</h2>
+          <div class="upload-grid">
+            <div class="upload-box">
+              <label>
+                <span>Capa da Loja</span>
+                <input type="file" accept="image/*" @change="uploadCover" />
+                <img v-if="coverPreview" :src="coverPreview" />
+                <div v-else class="placeholder">Clique para alterar capa</div>
+              </label>
+            </div>
 
+            <div class="upload-box logo">
+              <label>
+                <span>Logo</span>
+                <input type="file" accept="image/*" @change="uploadLogo" />
+                <img v-if="logoPreview" :src="logoPreview" />
+                <div v-else class="placeholder">Clique para alterar logo</div>
+              </label>
+            </div>
+          </div>
 
+          <button @click="saveImages" class="btn-save-section bottom" :disabled="uploadingImages">
+            <i v-show="uploadingImages" class="fas fa-spinner fa-spin"></i>
+            {{ uploadingImages ? 'Enviando...' : 'Salvar Capa e Logo' }}
+          </button>
+        </div>
 
-
-
-<div class="card">
-  <h2>Imagens da Loja</h2>
-  <div class="upload-grid">
-    <!-- CAPA -->
-    <div class="upload-box">
-      <label>
-        <span>Capa da Loja</span>
-        <input type="file" accept="image/*" @change="uploadCover" />
-        <img v-if="coverPreview" :src="coverPreview" />
-        <div v-else class="placeholder">Clique para alterar capa</div>
-      </label>
-    </div>
-
-    
-    <div class="upload-box logo">
-      <label>
-        <span>Logo</span>
-        <input type="file" accept="image/*" @change="uploadLogo" />
-        <img v-if="logoPreview" :src="logoPreview" />
-        <div v-else class="placeholder">Clique para alterar logo</div>
-      </label>
-    </div>
-  </div>
-
-  <button @click="saveImages" class="btn-save-section bottom" :disabled="uploadingImages">
-    <i v-show="uploadingImages" class="fas fa-spinner fa-spin"></i>
-    {{ uploadingImages ? 'Enviando...' : 'Salvar Capa e Logo' }}
-  </button>
-</div>
-
+        <!-- Sidebar of the bottons  -->
         
-
       </aside>
     </div>
   </div>
 
-  
   <div v-if="notification.message" class="notification" :class="notification.type">
     {{ notification.message }}
   </div>
@@ -214,6 +200,7 @@ var store: any = reactive({
   description: '',
   phone: '',
   store_id: '',
+  slug: '',
   email: '',
   instagram: '',
   address: '',
@@ -222,7 +209,6 @@ var store: any = reactive({
   gallery: [],
   openNow: true,
   hours: [
-    // "id":11,"store_id":8,"day_of_week":4,"start_time":"09:00:00","end_time":"17:00:00","active":1,"created_at":"2025-11-30T13:18:05.000000Z","updated_at":"2025-11-30T13:18:05.000000Z","deleted_at":null
     { day: 'Segunda', active: true, start_time: '10:00', end_time: '20:00' },
     { day: 'Terça', active: true, start_time: '10:00', end_time: '20:00' },
     { day: 'Quarta', active: true, start_time: '10:00', end_time: '20:00' },
@@ -235,7 +221,6 @@ var store: any = reactive({
     { id: '', name: '', description: '', duration_minutes: '', price: '', active: true}
   ]
 })
-// console.log(store.hours)
 
 const route = useRoute()
 const router = useRouter()
@@ -284,6 +269,18 @@ const showNotification = (msg: string, type: 'success' | 'error') => {
   setTimeout(() => notification.value.message = '', 5000)
 }
 
+const profileLink = computed(() => store.slug ? `https://anoota.com/${store.slug}` : '')
+
+const copyToClipboard = async () => {
+  if (!profileLink.value) return
+  try {
+    await navigator.clipboard.writeText(profileLink.value)
+    showNotification('Link copiado com sucesso!', 'success')
+  } catch (err) {
+    showNotification('Erro ao copiar o link.', 'error')
+  }
+}
+
 const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const onlyNumbers = () => {
@@ -293,7 +290,6 @@ const onlyNumbers = () => {
 const isPhoneValid = computed(() => phoneNumber.value.replace(/\D/g, '').length >= 9)
 
 const submitBasicInformation = async () => {
-
   loading.value = true
 
   if (!validateEmail(store.email)) {
@@ -349,26 +345,12 @@ const submitBasicInformation = async () => {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 const coverPreview = ref<string>('')
 const logoPreview = ref<string>('')
 const uploadingImages = ref(false)
 
 const coverFile = ref<File | null>(null)
 const logoFile = ref<File | null>(null)
-
 
 const uploadCover = (e: any) => {
   const file = e.target.files[0]
@@ -381,16 +363,12 @@ const uploadCover = (e: any) => {
 const uploadLogo = (e: any) => {
   const file = e.target.files[0]
   if (file) {
-    {
     logoFile.value = file
     logoPreview.value = URL.createObjectURL(file)
   }
 }
-}
-
 
 const saveImages = async () => {
-
   if (!coverFile.value && !logoFile.value) {
     showNotification('Selecione pelo menos uma imagem.', 'error')
     return
@@ -412,9 +390,6 @@ const saveImages = async () => {
 
     if (!res.ok) throw new Error(data.message || 'Erro ao enviar imagens')
 
-    
-
-    console.log(data.store)
     if (data.store.cover_image) {
       store.cover_image = data.store.cover_image
       coverPreview.value = store.cover_image
@@ -426,7 +401,6 @@ const saveImages = async () => {
 
     showNotification('Capa e logo atualizadas com sucesso!', 'success')
 
-    
     coverFile.value = null
     logoFile.value = null
 
@@ -437,8 +411,6 @@ const saveImages = async () => {
   }
 }
 
-
-
 const submitHours = async () => {
   loading.value = true
 
@@ -448,7 +420,6 @@ const submitHours = async () => {
     start_time: day.active ? day.start_time : null,
     end_time: day.active ? day.end_time : null
   }))
-
 
   try {
     const res = await fetch(`${API_URL}/store/update/hours/${store.store_id}`, {
@@ -472,25 +443,6 @@ const submitHours = async () => {
   }
 }
 
-
-
-const addService = () => {
-  store.services.push({
-    id: null,
-    name: '',
-    description: '',
-    duration_minutes: '',
-    price: '',
-    active: true
-  })
-}
-
-const removeService = (index: number) => {
-  store.services.splice(index, 1)
-}
-
-
-
 const fetchStore = async () => {
   try {
     const res = await fetch(`${API_URL}/store/my/${user.id}`)
@@ -499,7 +451,6 @@ const fetchStore = async () => {
       Object.assign(store, data.store)
       if (!store.gallery) store.gallery = []
       if (!store.services) store.services = []
-
 
       store.hours = data.workSchedules;
       store.services = data.services;
@@ -520,33 +471,14 @@ const fetchStore = async () => {
 }
 
 onMounted(() => {
-  
   fetchStore()
 
-    if (user.type != '1') {
-      
-     if (user.type != '2') {
+  if (user.type != '1') {
+    if (user.type != '2') {
       router.push({ name: 'app.user.homepage' }).catch(() => { })
     }
-    }
+  }
 })
-
-
-const handleCoverUpload = (e: any) => {
-  const file = e.target.files[0]
-  if (file) store.cover = URL.createObjectURL(file)
-}
-
-const handleLogoUpload = (e: any) => {
-  const file = e.target.files[0]
-  if (file) store.logo = URL.createObjectURL(file)
-}
-
-const handleGalleryUpload = (e: any) => {
-  const files = Array.from(e.target.files)
-  files.forEach(f => store.gallery.push(URL.createObjectURL(f)))
-}
-
 
 const saveSection = async (section: string) => {
   const payload: any = { [section]: store[section] }
@@ -563,8 +495,6 @@ const saveSection = async (section: string) => {
     console.error('Erro ao salvar:', err)
   }
 }
-
-
 </script>
 
 <style scoped>
@@ -598,6 +528,35 @@ h2 { font-size: 1.7rem; font-weight: 800; color: #1e293b; margin: 0 0 24px }
 .country-select i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none }
 .phone-group input { flex: 1; padding: 19px 22px; border: none; background: transparent; font-size: 1.1rem }
 .phone-group input:focus { outline: none }
+
+.profile-link {
+  display: flex;
+  position: relative;
+}
+
+.profile-link input {
+  padding-right: 50px;
+}
+
+.copy-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: .3s;
+}
+
+.copy-button:hover {
+  background: #0284c7;
+}
 
 .hours-list { gap: 14px; display: flex; flex-direction: column }
 .hour-item { background: #f8fafc; border-radius: 16px; padding: 20px }

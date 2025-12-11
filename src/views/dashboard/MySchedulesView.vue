@@ -42,7 +42,7 @@
 
           <div class="info">
             <h3>{{ apt.name_service }}</h3>
-            <p>{{ apt.store_name || 'Loja' }}</p>
+            <p>{{ apt.name_store || 'Loja' }}</p>
             <div class="time">
               <i class="fas fa-clock"></i>
               {{ format(apt.start_datetime, 'd MMMM yyyy • HH:mm', { locale: pt }) }}
@@ -91,7 +91,7 @@
             <h4>Certeza que queres cancelar?</h4>
             <div class="appointment-details">
               <strong>{{ selectedAppointment?.name_service }}</strong><br />
-              {{ selectedAppointment?.store_name }}<br />
+              {{ selectedAppointment?.name_store }}<br />
               {{ selectedAppointment && format(selectedAppointment.start_datetime, 'd MMMM yyyy • HH:mm', { locale: pt }) }}
             </div>
 
@@ -115,7 +115,7 @@
               :disabled="!cancelReason.trim() || cancelling"
               class="btn-danger"
             >
-              <i v-if="cancelling" class="fas fa-spinner fa-spin"></i>
+              <i v-show="cancelling" class="fas fa-spinner fa-spin"></i>
               {{ cancelling ? 'A cancelar...' : 'Confirmar cancelamento' }}
             </button>
           </div>
@@ -164,6 +164,7 @@ const fetchAppointments = async () => {
   try {
     const res = await axios.get(`${API_URL}/user/schedule/my/${userId}`)
     const schedules = res.data.schedules || []
+    const store = res.data.store || []
     appointments.value = schedules.map((apt: any) => ({
       ...apt,
       status: apt.cancelled_at
@@ -172,6 +173,8 @@ const fetchAppointments = async () => {
         ? 'completed'
         : 'upcoming'
     }))
+
+    console.log(appointments.value)
   } catch (err) {
     appointments.value = []
   } finally {
@@ -189,9 +192,10 @@ const filteredAppointments = computed(() => {
   if (!search.value.trim()) return list.sort((a, b) => new Date(a.start_datetime).getTime() - new Date(b.start_datetime).getTime())
 
   const q = search.value.toLowerCase()
+  // console.log('Filtering with query:', q);
   return list.filter(a =>
     a.name_service.toLowerCase().includes(q) ||
-    (a.store_name || '').toLowerCase().includes(q) ||
+    (a.name_store || '').toLowerCase().includes(q) ||
     format(new Date(a.start_datetime), 'd MMMM yyyy').toLowerCase().includes(q)
   )
 })
@@ -234,13 +238,21 @@ const confirmCancel = async () => {
 
   cancelling.value = true
   try {
-    await axios.post(`${API_URL}/user/schedule/cancel/${selectedAppointment.value.id}`, {
-      reason: cancelReason.value.trim()
+    await axios.post(`${API_URL}/store/schedule/cancel/${selectedAppointment.value.id}/${userId}`, {
+      
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+       reason_cancelled: cancelReason.value.trim(),
+      })
+
     })
+    cancelling.value = false
 
     await fetchAppointments()
     closeCancelModal()
   } catch (err) {
+    cancelling.value = false
     alert('Erro ao cancelar agendamento. Tenta novamente.')
   } finally {
     cancelling.value = false

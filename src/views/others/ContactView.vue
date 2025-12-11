@@ -29,9 +29,9 @@
           <div class="card">
             <div class="icon"><i class="fas fa-envelope"></i></div>
             <h3>Email</h3>
-            <p class="main">ola@inene.pt</p>
+            <p class="main">ola@anoota.pt</p>
             <p>Resposta em menos de 2h úteis</p>
-            <a href="mailto:ola@inene.pt" class="btn">Enviar email</a>
+            <a href="mailto:ola@anoota.pt" class="btn">Enviar email</a>
           </div>
 
           <div class="card">
@@ -73,7 +73,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="brand">
-          <h3>inene</h3>
+          <h3>anoota</h3>
           <p>A tua agenda digital.</p>
           <div class="social">
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="bottom">
-        <p>© 2025 inene • Pertencente à JANJATEK, Lda • Todos os direitos reservados</p>
+        <p>© 2025 anoota • Pertencente à JANJATEK, Lda • Todos os direitos reservados</p>
       </div>
     </div>
   </footer>

@@ -32,7 +32,7 @@
               today: day.isToday,
               selected: selectedDate && day.date && isSameDay(day.date, selectedDate),
               available: day.hasSlots
-            }" :disabled="!day.date || day.isPast">
+            }" :disabled="!day.date || day.isPast || !day.hasSlots">
               {{ day.num }}
             </button>
           </div>
@@ -252,7 +252,7 @@ const calendarDays = computed(() => {
     const hasAppointments = store.value.schedules?.some((s: any) =>
       format(new Date(s.start_datetime), 'yyyy-MM-dd') === dateStr
     )
-    const hasSlots = day >= today
+    const hasSlots = !hasAppointments && day >= today
 
     cells.push({
       key: day.toISOString(),
@@ -322,10 +322,10 @@ const selectDate = (date: Date | null) => {
   if (!date) return
   if (isPast(date)) return
   const dateStr = format(date, 'yyyy-MM-dd')
-  // const hasAppointment = store.value.schedules?.some((s: any) =>
-  //   format(new Date(s.start_datetime), 'yyyy-MM-dd') === dateStr
-  // )
-  // if (hasAppointment) return
+  const hasAppointment = store.value.schedules?.some((s: any) =>
+    format(new Date(s.start_datetime), 'yyyy-MM-dd') === dateStr
+  )
+  if (hasAppointment) return
 
   selectedDate.value = date
   selectedServices.value = []

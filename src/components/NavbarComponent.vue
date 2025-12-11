@@ -1,8 +1,7 @@
 <template>
   <header class="header">
     <div class="container top-bar">
-
-      <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.home' }" class="logo">
+      <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="logo">
         anoota
       </RouterLink>
 
@@ -14,13 +13,54 @@
           <i class="fas fa-map-marker-alt"></i>
         </button>
 
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.profile' }" class="btn-login" v-if="user.name">
-          <i class="fas fa-user"></i>
-        </RouterLink>
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.auth.login' }" class="btn-login " v-else>
-          <!-- <i class="fas fa-sign-in-alt"></i> -->
-           Entrar
-        </RouterLink>
+        <div class="user-menu-wrapper" ref="userMenuWrapper">
+          <button v-if="user.name" class="user-btn" @click.stop="toggleUserMenu">
+            <i class="fas fa-user-edit"></i>
+          </button>
+
+          <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.auth.login' }" class="btn-login"
+            v-else>
+            Entrar
+          </RouterLink>
+
+          <Transition name="fade">
+            <div v-if="userMenuOpen" class="user-dropdown">
+              <RouterLink :to="{ name: 'app.user.profile' }" class="dropdown-item" @click="closeUserMenu" :scroll-behavior="{ behavior: 'smooth' }">
+                <i class="fas fa-user-edit"></i>
+                Editar Perfil
+              </RouterLink>
+
+
+              <RouterLink :to="{ name: 'app.store.reports' }" class="dropdown-item"  v-if="user.name && user.type == '2'"
+                :scroll-behavior="{ behavior: 'smooth' }">
+                <i class="fas fa-book-reader"></i>
+                <span>Relatórios</span>
+              </RouterLink>
+
+              <RouterLink :to="{ name: 'app.user.schedules' }" class="dropdown-item"  v-if="user.name && user.type == '2'"
+                :scroll-behavior="{ behavior: 'smooth' }">
+                <i class="fas fa-users-cog"></i>
+                <span>Administradores</span>
+              </RouterLink>
+
+
+              <a class="dropdown-item disabled-link" @click="closeUserMenu" :disabled="true">
+                <i class="fas fa-trophy"></i>
+                Ranking & Votos
+              </a>
+              <!-- 
+              <RouterLink :to="{ name: 'app.user.schedules' }" class="dropdown-item" @click="closeUserMenu">
+                <i class="fas fa-calendar-check"></i>
+                Meus Agendamentos
+              </RouterLink> -->
+
+              <button class="dropdown-item logout" @click="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+              </button>
+            </div>
+          </Transition>
+        </div>
 
         <button class="hamburger" :class="{ active: sidebarOpen }" @click="sidebarOpen = !sidebarOpen">
           <span></span>
@@ -35,272 +75,181 @@
 
   <aside class="sidebar" :class="{ active: sidebarOpen }">
     <div class="sidebar-header">
-      <div class="logo-sidebar">inene</div>
+      <div class="logo-sidebar">anoota</div>
       <button class="close-btn" @click="sidebarOpen = false">
         <i class="fas fa-times"></i>
       </button>
     </div>
 
-
-
     <nav class="sidebar-menu">
-
       <div v-if="!user.name">
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.home' }" :class="{ active: activeItem === '/' || activeItem === 'app.home' }"
-          class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="menu-item"
+          @click="sidebarOpen = false">
           <i class="fas fa-home"></i>
           <span>Explorar</span>
-        </RouterLink>  
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.we' }" :class="{ active: activeItem === 'we' }" class="menu-item"
+        </RouterLink>
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.we' }" class="menu-item"
           @click="sidebarOpen = false">
           <i class="fas fa-users"></i>
           <span>Quem Somos</span>
         </RouterLink>
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.contact' }" :class="{ active: activeItem === 'we' }" class="menu-item"
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.contact' }" class="menu-item"
           @click="sidebarOpen = false">
           <i class="fas fa-phone"></i>
-       Fale Connosco
+          <span>Fale Connosco</span>
         </RouterLink>
       </div>
 
-
       <div v-if="user.name && user.type == '3'">
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.homepage' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.homepage' }" class="menu-item"
+          @click="sidebarOpen = false">
           <i class="fas fa-home"></i>
           <span>Home</span>
         </RouterLink>
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
+
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="menu-item"
+          @click="sidebarOpen = false">
           <i class="fas fa-calendar-plus"></i>
           <span>Explorar Profissionais</span>
         </RouterLink>
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.schedules' }" class="menu-item" @click="sidebarOpen = false">
-         <i class="fas fa-calendar-day"></i>
-          <span>Meus Agendamentos</span>
-        </RouterLink>
-<!-- 
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.notes' }" class="menu-item" @click="sidebarOpen = false">
-          <i class="fas fa-book-reader"></i>
-          <span>Minhas Notas</span>
-        </RouterLink> -->
 
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.ranking' }" class="menu-item" @click="sidebarOpen = false">
-          <i class="fas fa-star"></i>
-          <span>Pontos & Ranking</span>
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.schedules' }" class="menu-item"
+          @click="sidebarOpen = false">
+          <i class="fas fa-calendar-day"></i>
+          <span>Minhas Marcações</span>
+        </RouterLink>
+
+
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.comunication' }" class="menu-item disabled-link"
+          @click="sidebarOpen = false">
+          <i class="fas fa-bullhorn"></i>
+          <span>Comunicados</span>
+        </RouterLink>
+
+        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.foxia' }"
+          class="menu-item disabled-link" @click="sidebarOpen = false">
+          <i class="fas fa-robot"></i>
+          <span>Fox AI</span>
         </RouterLink>
       </div>
+
+
 
 
 
       <div v-if="user.name && user.type == '2'">
-       
-        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-          <i class="fas fa-calendar-plus"></i>
+        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item"
+          :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
+          <i class="fas fa-store"></i>
           <span>Configurar Loja</span>
         </RouterLink>
-        
-        <RouterLink :to="{ name: 'app.store.calender' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-calendar-day"></i>
+        <RouterLink :to="{ name: 'app.store.calender' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
+          @click="sidebarOpen = false">
+          <i class="fas fa-calendar-day"></i>
           <span>Marcações</span>
         </RouterLink>
-
-        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-briefcase"></i>
+        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
+          @click="sidebarOpen = false">
+          <i class="fas fa-briefcase"></i>
           <span>Serviços</span>
         </RouterLink>
-        
-        <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-users"></i>
+        <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
+          @click="sidebarOpen = false">
+          <i class="fas fa-users"></i>
           <span>Clientes</span>
         </RouterLink>
-
-        <!-- <RouterLink :to="{ name: 'app.user.notes' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-calendar-day"></i>
-          <span>Minhas Notas</span>
-        </RouterLink> -->
-
-        <RouterLink :to="{ name: 'app.store.reports' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-          <i class="fas fa-book-reader"></i>
-          <span>Relatórios</span>
-        </RouterLink>
-
-        
-        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
+          @click="sidebarOpen = false">
           <i class="fas fa-book-reader"></i>
           <span>Marcações Particulares</span>
         </RouterLink>
-<!-- 
-        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-         <i class="fas fa-calendar-day"></i>
-          <span>Outros</span>
-        </RouterLink> -->
-<!-- 
-        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-          <i class="fas fa-star"></i>
-          <span>Pontos & Ranking</span>
-        </RouterLink> -->
       </div>
-
-      <!-- <RouterLink to="/notificacoes" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-bell"></i>
-        <span>Notificações</span>
-        <span class="badge">3</span>
-      </RouterLink> -->
-
     </nav>
 
-
-
-
     <div class="sidebar-footer">
-
-      
-        <RouterLink v-if="user.name && user.type != '2'"  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.user.to.professional' }" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-crown"></i> 
-          <span>Torna-se Profissional</span>
-        </RouterLink>
-
-        
-        <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.contact' }"  class="menu-item mb-2" @click="sidebarOpen = false">
-          <i class="fas fa-phone"></i>
-          <span>Suporte</span>
-        </RouterLink>
-<!-- 
-      <RouterLink  :to="{ name: 'app.user.to.professional' }" class="btn btn-info mb-3"  :scroll-behavior="{ behavior: 'smooth' }" style="width: 100%;" v-if="user.name && user.type != '2'">
+      <RouterLink v-if="user.name && user.type != '2'" :scroll-behavior="{ behavior: 'smooth' }"
+        :to="{ name: 'app.user.to.professional' }" class="menu-item" @click="sidebarOpen = false">
         <i class="fas fa-crown"></i>
-        Tornar-se Profissional
-      </RouterLink> -->
-      
-      <!-- <RouterLink  :to="{ name: 'app.contact' }" class="btn btn-success mb-3"  :scroll-behavior="{ behavior: 'smooth' }"  style="width: 100%;" v-if="user.name && user.type != '2'">
+        <span>Torna-se Profissional</span>
+      </RouterLink>
+
+      <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.contact' }" class="menu-item mb-2"
+        @click="sidebarOpen = false">
         <i class="fas fa-phone"></i>
-       Suporte Anoota
-      </RouterLink> -->
+        <span>Suporte</span>
+      </RouterLink>
+
       <button class="btn-logout" @click="logout" v-if="user.name">
         <i class="fas fa-sign-out-alt me-2"></i>
         Sair
       </button>
-      <!-- <RouterLink  :scroll-behavior="{ behavior: 'smooth' }"  :to="{ name: 'app.auth.login' }" class="btn btn-info mb-3" style="width: 100%;" v-else">
-        <i class="fas fa-user"></i>
-       Criar Conta
-      </RouterLink> -->
     </div>
-
-
-
-    <!-- <nav class="sidebar-menu">
-      <router-link to="/" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-home"></i>
-        <span>Início</span>
-      </router-link>
-      <router-link to="/marcacoes" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-calendar-check"></i>
-        <span>Minhas Marcações</span>
-      </router-link>
-      <router-link to="/favoritos" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-heart"></i>
-        <span>Favoritos</span>
-      </router-link>
-      <router-link to="/notificacoes" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-bell"></i>
-        <span>Notificações</span>
-        <span class="badge">3</span>
-      </router-link>
-      <router-link to="/perfil" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-user"></i>
-        <span>Perfil</span>
-      </router-link>
-      <router-link to="/configuracoes" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-cog"></i>
-        <span>Configurações</span>
-      </router-link>
-    </nav>
-
-    <div class="sidebar-footer">
-      <button class="btn-logout">
-        <i class="fas fa-sign-out-alt"></i>
-        Terminar Sessão
-      </button>
-    </div> -->
-
   </aside>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, watch, computed, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.tuadominio.pt/api/v1'
 const router = useRouter()
 const route = useRoute()
 
-
-const props = defineProps<{
-  active?: string
-}>()
-
-
 interface User {
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  about: string;
-  address?: string;
-  provider?: string;
-  createdAt?: string;
-  photo?: string;
-  type?: string;
-  isProfessional?: boolean
+  id?: string
+  name: string
+  email: string
+  phone: string
+  about: string
+  address?: string
+  provider?: string
+  createdAt?: string
+  photo?: string
+  type?: string
 }
 
+const user = ref<User>({
+  id: '',
+  name: '',
+  email: '',
+  phone: '',
+  about: '',
+  address: '',
+  provider: '',
+  createdAt: '',
+  photo: '',
+  type: ''
+})
 
-let user: User;
-if (typeof route.params.user === 'string') {
-  user = {
-    id: route.params.user, name: '', phone: '', email: '',
-    about: '', createdAt: '', provider: '', photo: '', address: '', isProfessional: false, type: '',
-  };
-} else if (Array.isArray(route.params.user)) {
-  user = {
-    id: route.params.user[0], name: '', phone: '', email: '',
-    about: '', createdAt: '', provider: '', photo: '', address: '', isProfessional: false, type: '',
-  };
-} else {
-  user = route.params.user || {
-    id: '', name: '', phone: '', email: '',
-    about: '', createdAt: '', provider: '', photo: '', address: '', isProfessional: false, type: '',
-  };
+const param = route.params.user
+if (typeof param === 'string') {
+  user.value.id = param
+} else if (Array.isArray(param)) {
+  user.value.id = param[0] || ''
+} else if (param && typeof param === 'object') {
+  Object.assign(user.value, param)
 }
-
-
-
 
 const sidebarOpen = ref(false)
-const activeItem = computed(() => props.active)
+const userMenuOpen = ref(false)
+const userMenuWrapper = ref<HTMLElement | null>(null)
 
-const isActive = (name: string) => computed(() => route.name === name)
-
-
-
-const logout = async () => {
-  try {
-
-    await new Promise(resolve => setTimeout(resolve, 500))
-    Cookies.remove('token');
-    Cookies.remove('auth');
-    Cookies.remove('user');
-
-    router.push({ name: 'app.home' }).catch(() => { });
-
-  } catch (error: any) {
-    // showNotification(error.response?.data?.message || 'Erro ao efetuar login.', 'error')
-    console.log('aaak')
-  }
-
+const toggleUserMenu = (e: Event) => {
+  e.stopPropagation()
+  userMenuOpen.value = !userMenuOpen.value
 }
 
+const closeUserMenu = () => {
+  userMenuOpen.value = false
+}
 
+const logout = async () => {
+  await new Promise(resolve => setTimeout(resolve, 300))
+  Cookies.remove('token')
+  Cookies.remove('auth')
+  Cookies.remove('user')
+  router.push({ name: 'app.home' }).catch(() => { })
+}
 
 const openLocation = () => {
   alert('Selecionar localização')
@@ -308,6 +257,20 @@ const openLocation = () => {
 
 watch(sidebarOpen, (val) => {
   document.body.style.overflow = val ? 'hidden' : ''
+})
+
+const handleClickOutside = (e: MouseEvent) => {
+  if (userMenuWrapper.value && !userMenuWrapper.value.contains(e.target as Node)) {
+    userMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -346,7 +309,8 @@ watch(sidebarOpen, (val) => {
 }
 
 .location-btn,
-.hamburger {
+.hamburger,
+.user-btn {
   width: 48px;
   height: 48px;
   border-radius: 14px;
@@ -360,10 +324,20 @@ watch(sidebarOpen, (val) => {
   place-items: center;
 }
 
+.user-btn {
+  font-size: 1.8rem;
+}
+
 .location-btn:hover,
 .hamburger:hover,
-.btn-login:hover {
+.user-btn:hover {
   transform: translateY(-2px);
+  background: #f0f9ff;
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .btn-login {
@@ -382,6 +356,61 @@ watch(sidebarOpen, (val) => {
 .btn-login:hover {
   background: #0c8bd1;
   box-shadow: 0 10px 30px rgba(14, 165, 233, .4);
+}
+
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 12px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .2);
+  min-width: 240px;
+  overflow: hidden;
+  z-index: 1100;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  color: #475569;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all .3s;
+}
+
+.dropdown-item:hover {
+  background: #f0f9ff;
+  color: #0ea5e9;
+}
+
+.dropdown-item i {
+  width: 20px;
+  color: #94a3b8;
+}
+
+.dropdown-item:hover i {
+  color: #0ea5e9;
+}
+
+.dropdown-item.logout {
+  color: #ef4444;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dropdown-item.logout:hover {
+  background: #fee2e2;
+}
+
+.dropdown-item.logout i {
+  color: #ef4444;
 }
 
 .hamburger {
@@ -545,16 +574,6 @@ watch(sidebarOpen, (val) => {
   color: #0ea5e9;
 }
 
-.badge {
-  margin-left: auto;
-  background: #ef4444;
-  color: white;
-  font-size: .75rem;
-  font-weight: 800;
-  padding: 5px 11px;
-  border-radius: 50px;
-}
-
 .sidebar-footer {
   padding: 24px 28px;
   border-top: 1px solid #e2e8f0;
@@ -582,6 +601,17 @@ watch(sidebarOpen, (val) => {
   transform: translateY(-3px);
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 @media (max-width: 480px) {
   .top-bar {
     padding: 12px 16px;
@@ -597,9 +627,14 @@ watch(sidebarOpen, (val) => {
   }
 
   .location-btn,
-  .hamburger {
+  .hamburger,
+  .user-btn {
     width: 44px;
     height: 44px;
+  }
+
+  .user-btn {
+    font-size: 1.6rem;
   }
 }
 </style>

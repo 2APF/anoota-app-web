@@ -5,12 +5,6 @@ declare module '@/views/wallet/shortcut/sendMoneyWalletView.vue' {
   }
   
 
-  declare module '@/views/wallet/shortcut/receiveMoneyWalletView.vue' {
-    import { DefineComponent } from 'vue';
-    const component: DefineComponent<{}, {}, any>;
-    export default component;
-  }
-  
   
   declare module '@/components/wallet/FooterComponent.vue' {
     import { DefineComponent } from 'vue';
@@ -39,6 +33,7 @@ declare module '@/views/wallet/shortcut/sendMoneyWalletView.vue' {
 
 
 
+  
 
     
   declare module '@date-fns/locale/pt' {

@@ -5,7 +5,7 @@
     <!-- HERO -->
     <section class="hero">
       <div class="container">
-        <h1 style="color: white;">Somos a <span>Anoota</span></h1>
+        <h1 style="color: white;">Somos a <span>anoota</span></h1>
         <p class="subtitle">A tua agenda digital que acabou com as filas e os telefonemas perdidos.</p>
 
         <div class="stats">
@@ -40,13 +40,13 @@
       </div>
     </section>
 
-    <!-- SOBRE A Anoota -->
+    <!-- SOBRE A anoota -->
     <section class="about">
       <div class="container">
         <div class="grid-about">
           <div class="text">
-            <h2>A Anoota nasceu para simplificar vidas</h2>
-            <p>Pertencente à <strong>JANJATEK</strong>, empresa tecnológica portuguesa especializada em soluções digitais para pequenos negócios, a Anoota surgiu em 2024 com uma missão clara: acabar com as agendas de papel, os telefonemas perdidos e a gestão manual.</p>
+            <h2>A anoota nasceu para simplificar vidas</h2>
+            <p>Pertencente à <strong>JANJATEK</strong>, empresa tecnológica portuguesa especializada em soluções digitais para pequenos negócios, a anoota surgiu em 2024 com uma missão clara: acabar com as agendas de papel, os telefonemas perdidos e a gestão manual.</p>
             <p>Hoje operamos com força em <strong>Portugal</strong>, <strong>Brasil</strong> e <strong>Angola</strong>, conectando milhares de clientes a profissionais incríveis todos os dias.</p>
 
             <div class="features">
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="image">
-            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200" alt="Equipe Anoota">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200" alt="Equipe anoota">
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@
     <!-- CTA -->
     <section class="cta">
       <div class="container">
-        <h2>Junta-te à revolução Anoota</h2>
+        <h2>Junta-te à revolução anoota</h2>
         <p>Se és profissional, cresce o teu negócio. Se és cliente, encontra o melhor perto de ti.</p>
         <div class="buttons">
           <button class="btn-primary">Sou Profissional</button>
@@ -83,7 +83,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="brand">
-          <h3>Anoota</h3>
+          <h3>anoota</h3>
           <p>A tua agenda digital.</p>
           <div class="social">
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -114,7 +114,7 @@
         </div>
       </div>
       <div class="bottom">
-        <p>© 2025 Anoota • Pertencente à JANJATEK, Lda • Todos os direitos reservados</p>
+        <p>© 2025 anoota • Pertencente à JANJATEK, Lda • Todos os direitos reservados</p>
       </div>
     </div>
   </footer>
