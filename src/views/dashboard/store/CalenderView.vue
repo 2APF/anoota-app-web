@@ -48,7 +48,7 @@
       </div>
 
       <div v-else class="list">
-        <div v-for="apt in dayAppointments" :key="apt.id" class="item">
+        <div v-for="apt in dayAppointments" :key="apt.id" class="item" :style="{ backgroundColor: apt.status === '3' ? '#d4edda' : ''}">
           <div class="time">{{ apt.time }}</div>
           <div class="details">
             <div class="client">{{ apt.client_name }}</div>
@@ -58,8 +58,13 @@
           </div>
           <div class="price">€{{ apt.total_price }}</div>
           <div class="duration">{{ apt.total_duration }}min</div>
-          <div class="actions">
+          
+          <div class="actions" v-if="apt.status != '3'">
+            <button @click="openModalChecked(apt)" class="edit"><i class="fas fa-check"></i></button>
             <button @click="edit(apt)" class="edit"><i class="fas fa-edit"></i></button>
+            <button @click="openDelete(apt)" class="delete"><i class="fas fa-trash"></i></button>
+          </div>
+           <div class="actions" v-else>
             <button @click="openDelete(apt)" class="delete"><i class="fas fa-trash"></i></button>
           </div>
         </div>
@@ -103,7 +108,7 @@
                       <div class="name">{{ s.name }}</div>
                       <div class="meta">€{{ s.price }} • {{ s.duration_minutes }}min</div>
                     </div>
-                    <span class="checkmark">Checkmark</span>
+                    <span class="checkmark"><i class="fas fa-check"></i></span>
                   </label>
                 </div>
               </div>
@@ -117,12 +122,15 @@
               <div class="field">
                 <label>Horário *</label>
                 <select v-model="form.time" required :disabled="loadingSlots">
+                  <option :value="form.time" v-if="editMode" selected >{{ form.time }}</option>
                   <option value="">{{ loadingSlots ? 'Carregando...' : 'Selecione o horário' }}</option>
-                  <option v-for="slot in availableTimeSlots" :key="slot" :value="slot">{{ slot }}</option>
+                  <option v-for="slot in availableTimeSlots" :key="slot" :value="slot" >{{ slot }}</option>
                 </select>
               </div>
 
               <div class="form-actions">
+                
+                
                 <button type="button" @click="modal = false">Manter</button>
                 <button type="submit" class="primary" 
                   :disabled="!form.client_id || !form.service_ids.length || !form.time || loadingSlots || loading">
@@ -167,6 +175,28 @@
         </div>
       </Transition>
     </teleport>
+
+
+    <teleport to="body">
+      <Transition name="modal">
+      <div v-if="checkedModal" class="modal-overlay" @click="checkedModal = false">
+        <div class="modal-card delete-modal" @click.stop>
+        <i class="fas fa-check-circle"></i>
+        <h3>Marcação concluída?</h3>
+        <p><strong>{{ appointmentToCheck?.client_name }}</strong></p>
+        <p>{{ appointmentToCheck?.time }} • {{appointmentToCheck?.services_list.map(s => s.name).join(', ')}}
+        </p>
+        <div class="form-actions">
+          <button @click="checkedModal = false">Cancelar</button>
+          <button @click="confirmChecked" :disabled="loading" class="primary check">Sim, concluir</button>
+        </div>
+        </div>
+      </div>
+      </Transition>
+    </teleport>
+
+
+
   </div>
 
   
@@ -207,6 +237,8 @@ const loadingSlots = ref(false)
 
 const modal = ref(false)
 const deleteModal = ref(false)
+const checkedModal = ref(false)
+const appointmentToCheck = ref<Appointment | null>(null)
 const editMode = ref(false)
 const appointmentToDelete = ref<Appointment | null>(null)
 const currentEditId = ref<number | null>(null)
@@ -242,7 +274,7 @@ const selectedServices = computed(() => services.value.filter(s => form.value.se
 const totalPrice = computed(() => selectedServices.value.reduce((s, v) => s + Number(v.price || 0), 0).toFixed(2))
 const totalDuration = computed(() => selectedServices.value.reduce((s, v) => s + v.duration_minutes, 0))
 
-const dayAppointments = computed(() => {
+const dayAppointments: any = computed(() => {
   const dateStr = format(selectedDate.value, 'yyyy-MM-dd')
   return appointments.value.filter(a => a.date === dateStr).sort((a, b) => a.time.localeCompare(b.time))
 })
@@ -317,6 +349,7 @@ const openNew = () => {
 }
 
 const edit = (apt: Appointment) => {
+  console.log('ed: ', apt)
   editMode.value = true
   currentEditId.value = apt.id
   form.value = {
@@ -370,6 +403,33 @@ const openDelete = (apt: Appointment) => {
   deleteModal.value = true
 }
 
+const openModalChecked = (apt: Appointment) => {
+  appointmentToCheck.value = apt
+  checkedModal.value = true
+}
+
+const confirmChecked = async () => {
+
+  loading.value = true
+
+  if (!appointmentToCheck.value) return
+  try {
+    await axios.post(`${API_URL}/store/schedule/complete/${appointmentToCheck.value.id}`, {}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+    showNotification('Marcação concluída com sucesso', 'success')
+      loading.value = false
+
+    checkedModal.value = false
+    loadData()
+  } catch (err: any) {
+    console.log(err)
+    showNotification(err.response?.data?.message || 'Tente novamente', 'error')
+    loading.value = false
+  }
+}
+
+
 const confirmDelete = async () => {
 
   loading.value = true
@@ -414,6 +474,7 @@ const loadData = async () => {
         client_id: s.client_id,
         client_name: client.name,
         services_list: servicesList,
+        status: s.status,
         time: format(new Date(s.start_datetime), 'HH:mm'),
         total_price: s.price ? Number(s.price).toFixed(2) : totalPrice,
         total_duration: s.duration_minutes ? s.duration_minutes : totalDuration,
@@ -650,7 +711,7 @@ onMounted(() => {
 }
 
 .item .time {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 900;
   color: #0ea5e9;
 }
@@ -667,7 +728,7 @@ onMounted(() => {
 }
 
 .item .price {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 900;
   color: #10b981;
   text-align: right;
