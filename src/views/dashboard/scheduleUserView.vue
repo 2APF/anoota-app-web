@@ -909,6 +909,15 @@ onMounted(() => {
     .container {
     max-width: 840px
   }
+
+  .booking-grid {
+   display: block;
+  }
+
+  .calendar-section { 
+  margin-bottom: 20px;
+}
+
   .slots-grid {
     grid-template-columns: repeat(2, 1fr)
   }

@@ -35,7 +35,7 @@ const router = createRouter({
       name: 'app.home',
       component: HomeView,
       meta: {
-        title: 'Home - A revolução',
+        title: 'Página Inicial - Facilitando sua vida',
         description: 'Estamos redefinindo todo conceito de comunicação segura.',
         keywords: 'anoota, segurança, chat, mensagens seguras, criptomoeda, criptografia',
         ogImage: 'https://anoota.online/logo-black.png',
@@ -76,7 +76,8 @@ const router = createRouter({
 
     
     {
-      path: '/store-detail/:id',
+      // profile store view user visit
+      path: '/:id',
       name: 'app.store.detail',
       component: StoreDetailView,
       meta: {
@@ -582,10 +583,10 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach((to) => {
-  const title: any = to.meta.title || 'Cirimóveis - Encontre o imóvel dos seus sonhos'
+  const title: any = to.meta.title || 'Anoota - Facilite tua agenda'
   document.title = title
 
-  const description: any = to.meta.description || 'A Cirimóveis é a sua plataforma confiável para encontrar imóveis em Angola. Explore nossas ofertas de apartamentos, casas e terrenos para compra ou aluguel.'
+  const description: any = to.meta.description || 'Anoota é a sua plataforma confiável para marcações para serviços e encontros.'
   const metaDescription = document.querySelector('meta[name="description"]')
   if (metaDescription) {
     metaDescription.setAttribute('content', description)

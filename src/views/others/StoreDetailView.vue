@@ -88,7 +88,9 @@
           <h3>Contacto</h3>
           <div class="contact-item" v-if="store.phone"><i class="fas fa-phone"></i> {{ store.phone }}</div>
           <div class="contact-item" v-if="store.email"><i class="fas fa-envelope"></i> {{ store.email }}</div>
-          <div class="contact-item" v-if="store.instagram"><i class="fab fa-instagram"></i><a href="{{ store.instagram }}" target="_blank" style="text-decoration: solid; color: dimgrays;">Visitar Instagram</a> </div>
+          <div class="contact-item" v-if="store.instagram"><i class="fab fa-instagram"></i><a
+              :href="store.instagram" target="_blank" style="text-decoration: solid; color: dimgrays;">Visitar
+              Instagram</a> </div>
           <div class="contact-item" v-if="store.whatsapp"><i class="fab fa-whatsapp"></i> {{ store.whatsapp }}</div>
           <div class="contact-item" v-if="store.address"><i class="fas fa-map-marker-alt"></i> {{ store.address }}</div>
         </div>
@@ -161,8 +163,11 @@ const fetchStore = async () => {
   if (!id) return
   loading.value = true
   try {
+
     const res = await axios.get(`${API_URL}/user/store/detail/${id}`)
     store.value = res.data.store || {}
+
+    console.log(store.value)
     work_schedules.value = res.data.workSchedules || []
     services.value = res.data.services || []
   } catch (err) {
@@ -210,7 +215,7 @@ onMounted(fetchStore)
 .container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 90px 20px 140px;
 }
 
 .store-info-header {
@@ -443,7 +448,7 @@ onMounted(fetchStore)
 
 .service-name {
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: #1e293b;
 }
 
@@ -663,6 +668,59 @@ onMounted(fetchStore)
   .cover-photo {
     height: 320px;
   }
+
+
+
+
+
+  
+
+.service-list {
+  background: #f8fafc;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #e2e8f0;
+  transition: all .3s;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-item:hover {
+  background: #f0f9ff;
+  border-radius: 16px;
+  margin: 0 -28px;
+  padding: 20px 28px;
+}
+
+.service-name {
+  font-weight: 700;
+  font-size: 0.70rem;
+  color: #1e293b;
+}
+
+.service-item:hover .service-name {
+  color: #0ea5e9;
+}
+
+.service-details span {
+  margin-left: 20px;
+  font-weight: 700;
+  color: #0ea5e9;
+  font-size: 0.70rem;
+}
+
+
+
 
   .store-info-header {
     margin-top: -60px;

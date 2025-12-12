@@ -271,7 +271,7 @@ const showNotification = (msg: string, type: 'success' | 'error') => {
   setTimeout(() => notification.value.message = '', 5000)
 }
 
-const profileLink = computed(() => store.slug ? `https://anoota.com/${store.slug}` : '')
+const profileLink = computed(() => store.slug ? `https://anoota.janjatek.com/${store.slug}` : '')
 
 const copyToClipboard = async () => {
   if (!profileLink.value) return
