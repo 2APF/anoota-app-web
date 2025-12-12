@@ -157,7 +157,7 @@ h1 {
   color: #1e293b;
   margin: 0 0 16px;
   background: linear-gradient(90deg, #10b981, #0ea5e9);
-  
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

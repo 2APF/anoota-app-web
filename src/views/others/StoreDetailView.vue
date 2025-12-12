@@ -26,8 +26,8 @@
           <i class="fas fa-star"></i> {{ store.rating || '5.0' }}
           Called <span class="reviews">({{ store.reviews_count || 0 }} avaliações)</span>
         </div>
-        <div class="status" :class="{ open: store.is_open_now }">
-          <i class="fas fa-circle"></i> {{ store.is_open_now ? 'Aberto agora' : 'Fechado' }}
+        <div class="status" :class="{ open: store.openNow }">
+          <i class="fas fa-circle"></i> {{ store.openNow ? 'Aberto agora' : 'Fechado' }}
         </div>
       </div>
 
@@ -88,7 +88,7 @@
           <h3>Contacto</h3>
           <div class="contact-item" v-if="store.phone"><i class="fas fa-phone"></i> {{ store.phone }}</div>
           <div class="contact-item" v-if="store.email"><i class="fas fa-envelope"></i> {{ store.email }}</div>
-          <div class="contact-item" v-if="store.instagram"><i class="fab fa-instagram"></i> {{ store.instagram }}</div>
+          <div class="contact-item" v-if="store.instagram"><i class="fab fa-instagram"></i><a href="{{ store.instagram }}" target="_blank" style="text-decoration: solid; color: dimgrays;">Visitar Instagram</a> </div>
           <div class="contact-item" v-if="store.whatsapp"><i class="fab fa-whatsapp"></i> {{ store.whatsapp }}</div>
           <div class="contact-item" v-if="store.address"><i class="fas fa-map-marker-alt"></i> {{ store.address }}</div>
         </div>
@@ -294,6 +294,7 @@ onMounted(fetchStore)
   gap: 10px;
   font-size: 1.2rem;
   font-weight: 700;
+  margin-left: 20px;
 }
 
 .status i {

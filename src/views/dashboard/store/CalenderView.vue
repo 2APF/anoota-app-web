@@ -216,10 +216,29 @@ import { useRoute } from 'vue-router'
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.cirimoveis.com/api/v1'
 const route = useRoute()
 
-let user: any = { id: '' }
-if (typeof route.params.user === 'string') user.id = route.params.user
-else if (Array.isArray(route.params.user)) user.id = route.params.user[0]
-// else if (route.params.user?.id) user.id = route.params.user.id
+
+interface User {
+  id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  about: string;
+  address?: string;
+  provider?: string;
+  createdAt?: string;
+  photo?: string;
+  type?: string;
+}
+
+let user: User;
+if (typeof route.params.user === 'string') {
+  user = { id: route.params.user, name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '', type: '' };
+} else if (Array.isArray(route.params.user)) {
+  user = { id: route.params.user[0], name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '', type: '' };
+} else {
+  user = route.params.user || { id: '', name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '', type: '' };
+}
+
 
 interface Client { id: number; name: string; phone: string; email: string }
 interface Service { id: number; name: string; price: string; duration_minutes: number }
@@ -447,8 +466,8 @@ const confirmDelete = async () => {
 
 const loadData = async () => {
   try {
-    const userIdToUse = user.id || 'me'
-    const res = await axios.get(`${API_URL}/store/calendary/${userIdToUse}`, {
+    
+    const res = await axios.get(`${API_URL}/store/calendary/${user.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
 

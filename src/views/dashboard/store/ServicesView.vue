@@ -260,7 +260,9 @@ onMounted(loadServices)
   font-size: 2.6rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b, #0ea5e9);
+  color: #0ea5e9;
   
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
 }

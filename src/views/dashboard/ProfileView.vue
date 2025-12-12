@@ -320,7 +320,9 @@ const deleteAccount = async () => {
 .profile-edit {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-  padding: 100px 0 140px;
+
+  padding: 80px 80px 80px;
+  margin-top: 60px;
 }
 
 .container {

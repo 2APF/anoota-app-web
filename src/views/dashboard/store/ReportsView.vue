@@ -284,7 +284,8 @@ const createCharts = () => {
 .reports-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-  padding: 100px 20px 140px;
+  
+  padding: 80px 80px 80px;
 }
 
 .container {
@@ -301,7 +302,7 @@ const createCharts = () => {
   font-size: 2.8rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
-  
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 12px;
 }

@@ -2,16 +2,23 @@
   <header class="header">
     <div class="container top-bar">
       <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="logo">
-        anoota
+      <RouterLink class="navbar-brand" to="/" aria-label="Página inicial">
+        <img src="/public/logo.png" style="width: 120px; height: 50px;" />
+      </RouterLink>
+
+        
       </RouterLink>
 
       <div class="header-actions">
-        <button class="location-btn" @click="openLocation">
+         <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="location-btn">
+            <i class="fas fa-map-marker-alt"></i>
+          </RouterLink>
+        <!-- <button class="location-btn" @click="openLocation">
           <i class="fas fa-star"></i>
         </button>
         <button class="location-btn" @click="openLocation">
           <i class="fas fa-map-marker-alt"></i>
-        </button>
+        </button> -->
 
         <div class="user-menu-wrapper" ref="userMenuWrapper">
           <button v-if="user.name" class="user-btn" @click.stop="toggleUserMenu">

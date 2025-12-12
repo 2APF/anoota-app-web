@@ -9,7 +9,7 @@
         <p>Seus pontos, seu nível e o ranking geral</p>
       </header>
 
-      <div class="my-points">
+      <!-- <div class="my-points">
         <div class="card">
           <div class="circle" :style="{ '--p': progress + '%' }">
             <span class="points">{{ userPoints }}</span>
@@ -71,7 +71,7 @@
             <div class="lvl" :class="userLevel.toLowerCase()">{{ userLevel }}</div>
           </div>
         </div>
-      </section>
+      </section> -->
 
     </div>
   </div>
@@ -80,14 +80,14 @@
 <script setup lang="ts">
 import NavbarComponent from '@/components/NavbarComponent.vue'
 
-const userPoints = '685'
+const userPoints: any = '685'
 const userName = 'Carolina Mendes'
 const userLevel = 'Ouro'
 const nextLevel = 40
 const myRank = 12
 
 const levels = [{name:'Bronze',min:0},{name:'Prata',min:300},{name:'Ouro',min:600},{name:'Diamante',min:1000}]
-const current = levels.find(l => userPoints >= l.min && userPoints < (levels[levels.indexOf(l)+1]?.min || 99999))!
+const current: any = levels.find(l => userPoints >= l.min && userPoints < (levels[levels.indexOf(l)+1]?.min || 99999))!
 const next = levels[levels.indexOf(current)+1] || current
 const nextLevelPoints = next.min - userPoints
 const progress = Math.min(((userPoints - current.min) / (next.min - current.min)) * 100, 100)
@@ -114,7 +114,8 @@ const medal = (i:number) => i===0 ? 'fa-medal gold' : i===1 ? 'fa-medal silver' 
 .loyalty-page{min-height:100vh;background:linear-gradient(135deg,#f8fafc,#e0f2fe 100%);padding:100px 0 140px}
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 .page-header{text-align:center;margin-bottom:48px}
-.page-header h1{font-size:2.8rem;font-weight:900;background:linear-gradient(90deg,#1e293b,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 8px}
+.page-header h1{font-size:2.8rem;font-weight:900;background:linear-gradient(90deg,#1e293b,#0ea5e9);
+  -webkit-background-clip: text;-webkit-text-fill-color:transparent;margin:0 0 8px}
 .page-header p{font-size:1.2rem;color:#475569}
 
 .my-points .card{background:white;border-radius:28px;padding:36px;display:flex;align-items:center;gap:36px;box-shadow:0 12px 40px rgba(0,0,0,.08);border:1px solid #e2e8f0;margin-bottom:48px}

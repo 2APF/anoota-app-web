@@ -196,7 +196,7 @@ onMounted(() => {
   loadStores()
   window.addEventListener('scroll', handleScroll)
   document.addEventListener('click', (e) => {
-    if (e.target && !e.target.closest('.categories-wrapper')) {
+    if (e.target instanceof Element && !e.target.closest('.categories-wrapper')) {
       categoryOpen.value = false
     }
   })

@@ -1,6 +1,6 @@
 {
-    "name": "NoHere",
-    "short_name": "NoHere",
+    "name": "Bizness Label Group",
+    "short_name": "Bizness Label Group",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -14,7 +14,7 @@
       {
         "name": "Home",
         "url": "https://nohere.online/",
-        "description": "Página inicial do Chat NoHere"
+        "description": "Página inicial da Bizness Label Group"
       }
     ],
     "categories": [

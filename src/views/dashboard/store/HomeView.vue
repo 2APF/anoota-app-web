@@ -145,7 +145,8 @@ onUnmounted(() => clearInterval(interval))
 .container{max-width:1000px;margin:0 auto}
 
 .welcome{text-align:center;margin-bottom:48px}
-.welcome h1{font-size:clamp(2.8rem,7vw,4.5rem);font-weight:900;background:linear-gradient(90deg,#1e293b,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 16px}
+.welcome h1{font-size:clamp(2.8rem,7vw,4.5rem);font-weight:900;background:linear-gradient(90deg,#1e293b,#0ea5e9);
+  -webkit-background-clip: text;-webkit-text-fill-color:transparent;margin:0 0 16px}
 .welcome p{font-size:1.35rem;color:#475569;font-weight:500}
 
 .loyalty-card{background:white;border-radius:32px;padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,.12);margin-bottom:48px;border:1px solid #e0e7ff}
