@@ -161,6 +161,7 @@ interface User {
   provider?: string
   createdAt?: string
   photo?: string
+  type?: string
 }
 
 let user: User;

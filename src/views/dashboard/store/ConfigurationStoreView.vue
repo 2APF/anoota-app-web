@@ -79,7 +79,7 @@
               <div class="input-group">
                 <label>Link do Perfil da Loja</label>
                 <div class="profile-link w-full">
-                  <input type="text" :value="profileLink" readonly @focus="$event.target.select()" />
+                  <input type="text" :value="profileLink" readonly @focus="($event) => $event.target && $event.target.select()" />
                   <button type="button" @click="copyToClipboard" class="copy-button">
                     <i class="fas fa-copy"></i>
                   </button>

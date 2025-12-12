@@ -123,7 +123,7 @@ const formatDate = (date: Date) => {
   font-size: 2.8rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
-  -webkit-background-clip: text;
+  
   -webkit-text-fill-color: transparent;
   margin: 0 0 12px;
 }

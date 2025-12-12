@@ -8,7 +8,6 @@ import StoreDetailView from '@/views/others/StoreDetailView.vue'
 import ConfigurationStoreView from '@/views/dashboard/store/ConfigurationStoreView.vue'
 import StatisticStoreView from '@/views/dashboard/store/StatisticStoreView.vue'
 import ReadingStoreView from '@/views/dashboard/store/ReadingStoreView.vue'
-import FinancesStoreView from '@/views/dashboard/store/FinancesStoreView.vue'
 import CalenderView from '@/views/dashboard/store/CalenderView.vue'
 import WeView from '@/views/others/WeView.vue'
 import ContactView from '@/views/others/ContactView.vue'
@@ -387,18 +386,7 @@ const router = createRouter({
         requiresAuthUser: true
       },
     },
-    {
-      path: '/store/finances',
-      name: 'app.store.finances',
-      component: FinancesStoreView,
-      meta: {
-        title: 'Login - anoota',
-        description: 'Faça login na sua conta anoota.',
-        keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
-        requiresAuthUser: true
-      },
-    },
+    
     
     {
       path: '/store/stats',

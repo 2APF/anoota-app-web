@@ -219,7 +219,7 @@ const route = useRoute()
 let user: any = { id: '' }
 if (typeof route.params.user === 'string') user.id = route.params.user
 else if (Array.isArray(route.params.user)) user.id = route.params.user[0]
-else if (route.params.user?.id) user.id = route.params.user.id
+// else if (route.params.user?.id) user.id = route.params.user.id
 
 interface Client { id: number; name: string; phone: string; email: string }
 interface Service { id: number; name: string; price: string; duration_minutes: number }

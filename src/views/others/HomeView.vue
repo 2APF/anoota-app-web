@@ -55,8 +55,10 @@
             <div class="meta">
               <div class="loc"><i class="fas fa-map-marker-alt"></i> {{ store.address }}</div>
               <div class="rate">
-                <i class="fas fa-star"></i> <strong>{{ store.rating }}</strong>
-                <small>({{ store.reviews }} avaliações)</small>
+                <i class="fas fa-star"></i> <strong>5.0 </strong>
+                <small>Called
+(0 avaliações)</small>
+                <!-- <small>({{ store.reviews }} avaliações)</small> -->
               </div>
             </div>
             <RouterLink  :scroll-behavior="{ behavior: 'smooth' }" class="btn" :to="{ name: 'app.store.detail', params: { id: store.slug } }">Ver Loja e Agendar</RouterLink>
@@ -194,7 +196,7 @@ onMounted(() => {
   loadStores()
   window.addEventListener('scroll', handleScroll)
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.categories-wrapper')) {
+    if (e.target && !e.target.closest('.categories-wrapper')) {
       categoryOpen.value = false
     }
   })
@@ -279,7 +281,7 @@ h1 { font-size: clamp(2.6rem, 7vw, 4.8rem); font-weight: 900; line-height: 1.15;
 .close { position: absolute; top: 16px; right: 16px; background: #ff3737; color: white; padding: 8px 16px; border-radius: 50px; font-size: .85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
 .content { padding: 28px; position: relative; }
-.logo-circle { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,.15); margin: -50px auto 16px; background: white; }
+.logo-circle { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,.15); margin: -50px auto 16px; background: white; }
 .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
 h3 { font-size: 1.55rem; font-weight: 900; margin: 0 0 14px; color: #1e293b; text-align: center; }
 .meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; color: #475569; text-align: center; }

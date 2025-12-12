@@ -10,16 +10,15 @@
 
       <div class="filters-bar">
         <div class="period-selector">
-          <button @click="period = 'today'" :class="{ active: period === 'today' }">Hoje</button>
           <button @click="period = 'week'" :class="{ active: period === 'week' }">Semana</button>
           <button @click="period = 'month'" :class="{ active: period === 'month' }">Mês</button>
           <button @click="period = 'custom'" :class="{ active: period === 'custom' }">Personalizado</button>
         </div>
 
         <div class="custom-range" v-if="period === 'custom'">
-          <input v-model="customStart" type="date" />
+          <input v-model="data_start_search" type="date" />
           <span>até</span>
-          <input v-model="customEnd" type="date" />
+          <input v-model="data_end_search" type="date" />
         </div>
 
         <input v-model="searchClient" type="text" placeholder="Buscar cliente..." class="search-input" />
@@ -34,7 +33,7 @@
         <div class="stat-card">
           <div class="icon appointments">✔</div>
           <div class="value">{{ totalAppointments }}</div>
-          <div class="label">Marcações</div>
+          <div class="label">Marcações Concluídas</div>
         </div>
         <div class="stat-card">
           <div class="icon clients">👤</div>
@@ -72,25 +71,28 @@
           </div>
         </div>
 
-        <div class="table-wrapper">
+                <div class="table-wrapper">
           <table>
             <thead>
               <tr>
                 <th>Data</th>
                 <th>Cliente</th>
                 <th>Serviço</th>
-                <th>Hora</th>
+                <th>Duração</th>
                 <th>Valor</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
+
+
+              
               <tr v-for="apt in filteredAppointments" :key="apt.id">
-                <td>{{ formatDate(apt.date) }}</td>
-                <td>{{ apt.client }}</td>
-                <td>{{ apt.service }}</td>
-                <td>{{ apt.time }}</td>
-                <td>€{{ apt.price.toFixed(2) }}</td>
+                <td>{{ formatDate(apt.start_datetime) }}</td>
+                <td>{{ apt.name_client }}</td>
+                <td>{{ apt.name_service }}</td>
+                <td>{{ apt.duration_minutes_service }}</td>
+                <td>€{{ apt.price }}</td>
                 <td>
                   <span class="status" :class="apt.status">
                     {{ apt.status === 'confirmed' ? 'Concluído' : 'Pendente' }}
@@ -113,37 +115,46 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import { useRouter, useRoute } from 'vue-router'
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 
 Chart.register(...registerables)
 
-interface Appointment {
+interface Schedule {
   id: number
-  date: Date
-  time: string
-  client: string
-  service: string
-  price: number
-  status: 'confirmed' | 'pending'
+  store_id: number
+  price_paid: string
+  status: string
+  name_service: string
+  name_client: string
+  start_datetime: any
+  duration_minutes_service: any
+  price: string
 }
 
-const period = ref<'today' | 'week' | 'month' | 'custom'>('month')
-const customStart = ref('')
-const customEnd = ref('')
+const period = ref<'week' | 'month' | 'custom'>('month')
+const data_start_search = ref('')
+const data_end_search = ref('')
 const searchClient = ref('')
+const loading = ref(true)
 
-const appointments = ref<Appointment[]>([
-  { id: 1, date: new Date(2025, 11, 10), time: '10:00', client: 'Ricardo Alves', service: 'Corte + Barba', price: 45, status: 'confirmed' },
-  { id: 2, date: new Date(2025, 11, 10), time: '14:30', client: 'Miguel Santos', service: 'Corte Moderno', price: 32, status: 'confirmed' },
-  { id: 3, date: new Date(2025, 11, 9), time: '16:00', client: 'Ana Costa', service: 'Barba Completa', price: 28, status: 'confirmed' },
-  { id: 4, date: new Date(2025, 11, 8), time: '11:00', client: 'João Mendes', service: 'Corte Clássico', price: 32, status: 'pending' },
-  { id: 5, date: new Date(2025, 11, 7), time: '17:30', client: 'Pedro Silva', service: 'Corte + Coloração', price: 85, status: 'confirmed' },
-  { id: 6, date: new Date(2025, 11, 6), time: '09:30', client: 'Luís Ferreira', service: 'Corte + Barba', price: 45, status: 'confirmed' },
-  { id: 7, date: new Date(2025, 11, 5), time: '13:00', client: 'Tiago Costa', service: 'Barba Completa', price: 28, status: 'confirmed' },
-  { id: 8, date: new Date(2025, 11, 4), time: '18:00', client: 'Fábio Lima', service: 'Corte Moderno', price: 32, status: 'confirmed' },
-])
+const API_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://api.cirimoveis.com/api/v1'
+
+const schedules = ref<Schedule[]>([])
+const totalRevenue = ref(0)
+const totalAppointments = ref(0)
+const servicesMoreBooked = ref<{ id: number; name: string; total_bookings: number }[]>([])
+
+const router = useRouter()
+const route = useRoute()
+
+let userId = ''
+if (typeof route.params.user === 'string') userId = route.params.user
+else if (Array.isArray(route.params.user)) userId = route.params.user[0] || ''
+else if (route.params.user && typeof route.params.user === 'object') userId = (route.params.user as any).id || ''
+
 
 const revenueChart = ref<HTMLCanvasElement | null>(null)
 const servicesChart = ref<HTMLCanvasElement | null>(null)
@@ -151,49 +162,64 @@ let chart1: Chart | null = null
 let chart2: Chart | null = null
 
 const filteredAppointments = computed(() => {
-  let filtered = appointments.value.filter(a => a.status === 'confirmed')
-
-  const now = new Date()
-  let start: Date = now, end: Date = now
-
-  if (period.value === 'today') {
-    start = new Date(now.setHours(0,0,0,0))
-  } else if (period.value === 'week') {
-    start = startOfWeek(now, { weekStartsOn: 1 })
-  } else if (period.value === 'month') {
-    start = startOfMonth(now)
-  } else if (period.value === 'custom' && customStart.value && customEnd.value) {
-    start = new Date(customStart.value)
-    end = new Date(customEnd.value)
-  }
-
-  if (period.value !== 'custom' || (customStart.value && customEnd.value)) {
-    filtered = filtered.filter(a => isWithinInterval(a.date, { start, end }))
-  }
+  let filtered = schedules.value.filter(s => s.status === '3')
 
   if (searchClient.value) {
-    filtered = filtered.filter(a => a.client.toLowerCase().includes(searchClient.value.toLowerCase()))
+    filtered = filtered.filter(s => s.name_service.toLowerCase().includes(searchClient.value.toLowerCase()))
   }
 
-  return filtered.sort((a, b) => b.date.getTime() - a.date.getTime())
+  return filtered
 })
 
-const totalRevenue = computed(() => filteredAppointments.value.reduce((sum, a) => sum + a.price, 0))
-const totalAppointments = computed(() => filteredAppointments.value.length)
-const uniqueClients = computed(() => new Set(filteredAppointments.value.map(a => a.client)).size)
-const avgTicket = computed(() => totalAppointments.value > 0 ? totalRevenue.value / totalAppointments.value : 0)
-
 const formatDate = (d: Date) => format(d, "dd MMM yyyy", { locale: pt })
+
+
+const uniqueClients = computed(() => {
+  const clients = new Set(filteredAppointments.value.map(s => s.id))
+  return clients.size
+})
+
+const avgTicket = computed(() => 
+  totalAppointments.value > 0 ? totalRevenue.value / totalAppointments.value : 0
+)
+
+const fetchReports = async () => {
+  loading.value = true
+  try {
+    const params: any = {}
+    if (period.value === 'custom' && data_start_search.value && data_end_search.value) {
+      params.start = data_start_search.value
+      params.end = data_end_search.value
+    }
+
+    const res = await fetch(`${API_URL}/store/report/all/${userId}`, { method: 'GET' })
+    const data = await res.json()
+
+    schedules.value = data.schedules || []
+    totalRevenue.value = Number(data.total_revenue || 0)
+    totalAppointments.value = data.total_schedules_finished || 0
+    servicesMoreBooked.value = data.services_more_booked || []
+  } catch (err) {
+    console.error('Erro ao carregar relatórios', err)
+    schedules.value = []
+    totalRevenue.value = 0
+    totalAppointments.value = 0
+    servicesMoreBooked.value = []
+  } finally {
+    loading.value = false
+  }
+}
 
 const exportPDF = () => alert('Exportação PDF em desenvolvimento')
 const exportExcel = () => alert('Exportação Excel em desenvolvimento')
 
 onMounted(() => {
+  fetchReports()
   createCharts()
 })
 
-watch([period, customStart, customEnd, filteredAppointments], () => {
-  createCharts()
+watch([period, data_start_search, data_end_search], () => {
+  fetchReports()
 }, { deep: true })
 
 const createCharts = () => {
@@ -213,10 +239,13 @@ const createCharts = () => {
     }]
   }
 
+  const servicesLabels = servicesMoreBooked.value.map(s => s.name)
+  const servicesValues = servicesMoreBooked.value.map(s => s.total_bookings)
+
   const servicesData = {
-    labels: ['Corte + Barba', 'Corte Moderno', 'Barba Completa', 'Coloração', 'Outros'],
+    labels: servicesLabels.length ? servicesLabels : ['Sem dados'],
     datasets: [{
-      data: [38, 28, 18, 10, 6],
+      data: servicesValues.length ? servicesValues : [1],
       backgroundColor: ['#0ea5e9', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'],
       borderWidth: 0,
     }]
@@ -226,7 +255,12 @@ const createCharts = () => {
     chart1 = new Chart(ctx1, {
       type: 'bar',
       data: revenueData,
-      options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
     })
   }
 
@@ -234,7 +268,11 @@ const createCharts = () => {
     chart2 = new Chart(ctx2, {
       type: 'doughnut',
       data: servicesData,
-      options: { responsive: true, plugins: { legend: { position: 'bottom' as const } } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' as const } }
+      }
     })
   }
 }
@@ -263,7 +301,7 @@ const createCharts = () => {
   font-size: 2.8rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
-  -webkit-background-clip: text;
+  
   -webkit-text-fill-color: transparent;
   margin: 0 0 12px;
 }
@@ -391,6 +429,8 @@ const createCharts = () => {
   padding: 32px;
   box-shadow: 0 15px 50px rgba(0,0,0,.1);
   border: 1px solid #e2e8f0;
+  height: 380px;
+  position: relative;
 }
 
 .chart-card h3 {
@@ -399,6 +439,11 @@ const createCharts = () => {
   color: #1e293b;
   margin-bottom: 24px;
   text-align: center;
+}
+
+.chart-card canvas {
+  height: 100% !important;
+  width: 100% !important;
 }
 
 .table-section {
@@ -462,7 +507,7 @@ const createCharts = () => {
 
 table {
   width: 100%;
-  min-width: 600px;
+  min-width: 500px;
   border-collapse: collapse;
 }
 
@@ -494,23 +539,6 @@ tbody tr:hover {
 
 tbody tr:last-child {
   border-bottom: none;
-}
-
-.status {
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: .85rem;
-  font-weight: 700;
-}
-
-.status.confirmed {
-  background: #ecfdf5;
-  color: #10b981;
-}
-
-.status.pending {
-  background: #fff7ed;
-  color: #f97316;
 }
 
 .empty {
@@ -561,6 +589,7 @@ tbody tr:last-child {
   }
   .chart-card {
     padding: 24px;
+    height: 340px;
   }
   .table-header {
     align-items: stretch;

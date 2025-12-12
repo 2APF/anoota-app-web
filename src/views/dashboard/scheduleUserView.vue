@@ -3,7 +3,7 @@
 
   <div class="booking-page">
 
-    <div v-if="loading" class="loading">
+    <div v-if="loading" class="loading-screen">
       <i class="fas fa-spinner fa-spin"></i>
     </div>
 
@@ -861,19 +861,16 @@ onMounted(() => {
   cursor: not-allowed
 }
 
-.loading {
+.loading-screen {
   position: fixed;
   inset: 0;
-  background: rgba(248, 250, 252, .95);
+  background: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999
-}
-
-.loading i {
+  z-index: 9999;
   font-size: 3rem;
-  color: #0ea5e9
+  color: #0ea5e9;
 }
 
 .notification {

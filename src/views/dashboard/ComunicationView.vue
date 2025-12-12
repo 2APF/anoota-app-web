@@ -178,7 +178,7 @@ const sentMessages = ref([
   { id: 5, title: 'Novo horário', body: 'A partir de Janeiro abriremos aos domingos.', created_at: '2025-12-05T16:45:00', target: 'all', channel: 'whatsapp' }
 ])
 
-const filteredMessages = computed(() => {
+const filteredMessages: any = computed(() => {
   if (activeTab.value === 'received') return messages.value
   if (activeTab.value === 'sent') return sentMessages.value
   return []
@@ -258,7 +258,7 @@ onMounted(() => {
   font-size: 2.8rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
-  -webkit-background-clip: text;
+  
   -webkit-text-fill-color: transparent;
   margin: 0 0 12px;
 }

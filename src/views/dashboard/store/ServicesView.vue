@@ -123,7 +123,7 @@ const showNotification = (msg: string, type: 'success' | 'error' = 'success') =>
 interface Service {
   id: number
   name: string
-  duration_minutes: number
+  duration_minutes: any
   price: string
 }
 
@@ -260,7 +260,7 @@ onMounted(loadServices)
   font-size: 2.6rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b, #0ea5e9);
-  -webkit-background-clip: text;
+  
   -webkit-text-fill-color: transparent;
   margin: 0;
 }

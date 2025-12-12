@@ -98,7 +98,7 @@
           <div class="map-container">
             <iframe
               :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(store.address)}`"
-              width="100%" height="420" style="border:0;border-radius:24px" allowfullscreen="" loading="lazy">
+              width="100%" height="420" style="border:0;border-radius:24px" loading="lazy">
             </iframe>
             <div class="map-actions">
               <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google
