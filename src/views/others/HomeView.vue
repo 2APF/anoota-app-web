@@ -115,7 +115,7 @@ const categories = [
 ]
 
 const typedText = ref('')
-const phrases = ['perto de si', 'ao seu gosto', 'mantendo a fidelidade', 'hoje mesmo', 'com os melhores']
+const phrases = ['perto de si', 'ao seu gosto', 'hoje mesmo', 'rápido']
 let phraseIndex = 0
 let charIndex = 0
 let isDeleting = false
@@ -546,10 +546,19 @@ h3 {
   .search-icon { left: 18px; }
   .results { padding: 50px 16px 80px; }
   .count { font-size: 1.6rem; margin-bottom: 28px; }
+
+  
   .grid {
   display: block;
+  
   max-width: 400px;
    gap: 20px; }
+
+   
+  .card {
+    margin-bottom: 15px;
+  }
+
   .card:hover { transform: none; }
 }
 </style>

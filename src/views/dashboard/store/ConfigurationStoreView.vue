@@ -46,7 +46,7 @@
               <div class="input-group">
                 <label>Telefone (WhatsApp) *</label>
                 <div class="phone-group w-full">
-                  <div class="country-select ">
+                  <div class="country-select">
                     <img :src="selectedFlag" alt="" class="flag">
                     <select v-model="countryCode">
                       <option value="+351" data-flag="https://flagcdn.com/32x24/pt.png" selected>+351 Portugal</option>
@@ -129,8 +129,7 @@
 
         <div class="card">
           <h2>Galeria de Fotos</h2>
-          <p style="color: gray; font-style: italic;">Em breve: Adicione fotos da sua loja para atrair mais clientes!
-          </p>
+          <p style="color: gray; font-style: italic;">Em breve: Adicione fotos da sua loja para atrair mais clientes!</p>
         </div>
       </main>
 
@@ -178,9 +177,6 @@
             {{ uploadingImages ? 'Enviando...' : 'Salvar Capa e Logo' }}
           </button>
         </div>
-
-        <!-- Sidebar of the bottons  -->
-
       </aside>
     </div>
   </div>
@@ -512,20 +508,33 @@ const saveSection = async (section: string) => {
   padding: 0 24px
 }
 
-
 .config-page {
+  
   padding: 80px 80px 80px;
   margin-top: 60px;
 }
 
+/* .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+} */
+
+
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 40px
+  text-align: center;
+  margin-bottom: 46px;
 }
+
+.header h1 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 12px;
+}
+
 
 h1 {
   font-size: 2.3rem;
@@ -671,15 +680,6 @@ h2 {
   box-shadow: 0 1px 4px rgba(0, 0, 0, .2)
 }
 
-.country-select i {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
-  pointer-events: none
-}
-
 .phone-group input {
   flex: 1;
   padding: 19px 22px;
@@ -808,61 +808,6 @@ input:checked+.slider:before {
   padding: 8px 0
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 16px;
-  margin-bottom: 20px
-}
-
-.gallery-item {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden
-}
-
-.gallery-item img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover
-}
-
-.remove {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(239, 68, 68, .9);
-  color: #fff;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer
-}
-
-.upload-area {
-  background: #f0f9ff;
-  border: 2px dashed #0ea5e9;
-  border-radius: 16px;
-  height: 130px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #0ea5e9;
-  font-weight: 600;
-  position: relative
-}
-
-.upload-area input {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer
-}
-
 .sidebar {
   gap: 32px;
   display: flex;
@@ -938,26 +883,6 @@ input:checked+.slider:before {
   color: #ef4444
 }
 
-.notification {
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  padding: 16px 28px;
-  border-radius: 16px;
-  color: white;
-  font-weight: 700;
-  z-index: 9999;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-.notification.success {
-  background: #10b981;
-}
-
-.notification.error {
-  background: #ef4444;
-}
-
 .upload-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1013,120 +938,146 @@ input:checked+.slider:before {
   border-radius: 50%
 }
 
-.btn-add {
-  width: 100%;
-  padding: 16px;
-  background: #0ea5e9;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
+.notification {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  padding: 16px 28px;
+  border-radius: 16px;
+  color: white;
   font-weight: 700;
-  cursor: pointer;
-  margin: 20px 0;
-  transition: .3s
+  z-index: 9999;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
-.btn-add:hover {
-  background: #0c8bd1
+.notification.success {
+  background: #10b981;
 }
 
-.services-card {
-  overflow: visible
-}
-
-.services-list {
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px
-}
-
-.service-item {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center
-}
-
-.service-item input {
-  flex: 1;
-  min-width: 200px;
-  padding: 13px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #fdfdfd;
-  font-size: .95rem
-}
-
-.service-item input.small {
-  flex: 0 0 100px;
-  text-align: center
-}
-
-.btn-remove {
-  width: 48px;
-  height: 48px;
+.notification.error {
   background: #ef4444;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: .2s
 }
 
-.btn-remove:hover {
-  background: #dc2626
-}
-
-@media (max-width:1100px) {
+@media (max-width: 1200px) {
   .grid {
-    grid-template-columns: 1fr
+    grid-template-columns: 1fr 400px;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 
   .sidebar {
     order: -1;
-    position: static
+    position: static;
   }
 }
 
-@media (max-width:768px) {
-  .service-item {
-    flex-direction: column;
-    gap: 8px
-  }
-
-  .service-item input,
-  .service-item input.small {
-    width: 100%
-  }
-
-  .upload-grid {
-    grid-template-columns: 1fr
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .phone-group {
-    flex-direction: column
+    flex-direction: column;
+    border-radius: 12px;
   }
 
   .country-select {
     width: 100%;
-    border-bottom: 1px solid #e2e8f0
+    border-bottom: 2px solid #e2e8f0;
+    border-radius: 12px 12px 0 0;
   }
 
   .country-select select {
-    padding-left: 56px
+    padding: 16px 16px 16px 52px;
+    border-radius: 12px 12px 0 0;
   }
-}
 
-@media (max-width:480px) {
-  .header {
-    flex-direction: column;
-    text-align: center
+  .phone-group input {
+    padding: 16px 18px;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .upload-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .card {
-    padding: 24px
+    padding: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .config-page {
+    padding: 70px 0 60px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+    margin-top: 90px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .card {
+    padding: 24px;
+    border-radius: 18px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    padding: 12px 14px;
+    font-size: .95rem;
+  }
+
+  .btn-save-section.bottom {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .hour-item {
+    padding: 18px;
+  }
+
+  .time-wrapper input {
+    width: 100px;
+  }
+
+  .preview-card .cover {
+    height: 200px;
+  }
+
+  .logo-box {
+    width: 100px;
+    height: 100px;
+    top: 140px;
+    left: 24px;
+  }
+
+  .info {
+    padding: 70px 20px 20px;
+  }
+
+  .info h3 {
+    font-size: 1.6rem;
   }
 }
 </style>
