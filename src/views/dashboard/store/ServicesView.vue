@@ -2,7 +2,11 @@
   <NavbarComponent />
 
   <div class="services-page">
-    <header class="header">
+
+
+    <div class="container">
+
+      <header class="header">
       <div class="title">
         <h1>Meus Serviços</h1>
         <p class="total-count">{{ services.length }} serviço{{ services.length !== 1 ? 's' : '' }} cadastrado{{ services.length !== 1 ? 's' : '' }}</p>
@@ -12,8 +16,8 @@
       </button>
     </header>
 
-    <div class="container">
-      <div class="search-bar">
+
+      <div class="search-bar"> 
         <input v-model="searchQuery" @input="filterServices" placeholder="Pesquisar por nome do serviço..." />
       </div>
 
@@ -27,11 +31,9 @@
       <div v-else class="services-list">
         <div v-for="service in filteredServices" :key="service.id" class="service-item">
           <div class="main-info">
-            <div class="icon">
-              <i class="fas fa-scissors"></i>
-            </div>
+         
             <div class="details">
-              <h3>{{ service.name }}</h3>
+              <h3 class="service-name">{{ service.name }}</h3>
               <div class="meta">
                 <span><i class="fas fa-clock"></i> {{ service.duration_minutes }} min</span>
                 <span><i class="fas fa-euro-sign"></i> {{ service.price }}</span>
@@ -179,7 +181,6 @@ const editService = (service: Service) => {
   modalOpen.value = true
 }
 
-
 const saveService = async () => {
   if (!form.value.name || !form.value.duration_minutes || !form.value.price) return
 
@@ -260,8 +261,6 @@ onMounted(loadServices)
   font-size: 2.6rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b, #0ea5e9);
-  color: #0ea5e9;
-  
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
@@ -275,17 +274,17 @@ onMounted(loadServices)
 }
 
 .btn-add {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #10b981, #34d399);
+  padding: 14px 28px;
+  background: #0ea5e9;
   color: white;
   border: none;
   border-radius: 50px;
-  font-weight: 800;
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(16,185,129,.3);
-  transition: all .3s;
+  box-shadow: 0 8px 25px rgba(14,165,233,.3);
 }
+
 
 .btn-add:hover {
   transform: translateY(-4px);
@@ -302,9 +301,20 @@ onMounted(loadServices)
   margin-bottom: 32px;
 }
 
+.search-bar i {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0ea5e9;
+  font-size: 1.4rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .search-bar input {
   width: 100%;
-  padding: 18px 24px;
+  padding: 18px 24px 18px 60px;
   border: 3px solid #e2e8f0;
   border-radius: 50px;
   background: white;
@@ -386,11 +396,19 @@ onMounted(loadServices)
   flex-shrink: 0;
 }
 
-.details h3 {
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-name {
   margin: 0 0 8px;
   font-size: 1.4rem;
   font-weight: 900;
   color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .meta {
@@ -565,24 +583,69 @@ onMounted(loadServices)
   .header {
     flex-direction: column;
     text-align: center;
+    gap: 14px;
   }
+
+  .title h1 {
+    font-size: 2.2rem;
+  }
+
   .btn-add {
     width: 100%;
     padding: 16px;
   }
+
+  .search-bar input {
+    padding: 16px 20px 16px 56px;
+    font-size: 1.05rem;
+  }
+
+  .search-bar i {
+    left: 20px;
+    font-size: 1.3rem;
+  }
+
   .service-item {
     flex-direction: column;
     align-items: flex-start;
     padding: 20px;
+    gap: 16px;
   }
+
   .main-info {
     width: 100%;
   }
+
   .actions {
     width: 100%;
     justify-content: flex-end;
   }
+
+  .icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.6rem;
+  }
+
+  .service-name {
+    font-size: 1.3rem;
+  }
+
+  .meta {
+    gap: 16px;
+    font-size: .95rem;
+  }
+
   .row {
+    flex-direction: column;
+  }
+
+  .modal-card {
+    padding: 28px;
+    margin: 10px;
+  }
+
+  .modal-actions {
     flex-direction: column;
   }
 }

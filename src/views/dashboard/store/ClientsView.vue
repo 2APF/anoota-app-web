@@ -2,6 +2,8 @@
   <NavbarComponent />
 
   <div class="clients-page">
+
+    <div class="container">
     <header class="header">
       <div class="title">
         <h1>Meus Clientes</h1>
@@ -11,10 +13,7 @@
         + Novo Cliente
       </button>
     </header>
-
-    <div class="container">
       <div class="search-bar">
-        <!-- <i class="fas fa-search"></i> -->
         <input v-model="searchQuery" @input="filterClients" placeholder="Pesquisar por nome, telefone ou email..." />
       </div>
 
@@ -32,10 +31,10 @@
               {{ client.name.trim().charAt(0).toUpperCase() }}
             </div>
             <div class="details">
-              <h3>{{ client.name }}</h3>
+              <h3 class="client-name">{{ client.name }}</h3>
               <div class="contact">
-                <span v-if="client.phone"><i class="fas fa-phone"></i> {{ client.phone }}</span>
-                <span v-if="client.email"><i class="fas fa-envelope"></i> {{ client.email }}</span>
+                <span v-if="client.phone" class="contact-line"><i class="fas fa-phone"></i> {{ client.phone }}</span>
+                <span v-if="client.email" class="contact-line"><i class="fas fa-envelope"></i> {{ client.email }}</span>
               </div>
               <small class="since">Desde {{ formatDate(client.created_at) }}</small>
             </div>
@@ -67,7 +66,7 @@
 
           <div class="modal-actions">
             <button type="button" @click="closeModal" class="cancel">Cancelar</button>
-            <button type="submit" class="save" >
+            <button type="submit" class="save">
               {{ editingClient ? 'Salvar' : 'Adicionar' }}
             </button>
           </div>
@@ -76,7 +75,7 @@
     </div>
   </teleport>
 
-  
+  <!-- Modal Delete -->
   <teleport to="body">
     <div v-if="deleteModalOpen" class="modal-overlay" @click="closeDeleteModal">
       <div class="modal-card delete-modal" @click.stop>
@@ -96,10 +95,9 @@
     </div>
   </teleport>
 
-   <div v-if="notification.message" class="notification" :class="notification.type">
+  <div v-if="notification.message" class="notification" :class="notification.type">
     {{ notification.message }}
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -114,17 +112,12 @@ const route = useRoute()
 const router = useRouter()
 const API_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://api.cirimoveis.com/api/v1'
 
-
-
-
 const notification = ref({ message: '', type: 'success' as 'success' | 'error' })
 
 const showNotification = (msg: string, type: 'success' | 'error') => {
   notification.value = { message: msg, type }
   setTimeout(() => notification.value.message = '', 5000)
 }
-
-
 
 interface User {
   id?: string;
@@ -147,8 +140,6 @@ if (typeof route.params.user === 'string') {
 } else {
   user = route.params.user || { id: '', name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '', type: '' };
 }
-
-
 
 interface Client {
   id: number
@@ -283,6 +274,7 @@ onMounted(loadClients)
   background: #f8fafc;
   min-height: 100vh;
   padding: 90px 16px 120px;
+  margin-top: 60px;
 }
 
 .header {
@@ -293,7 +285,6 @@ onMounted(loadClients)
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 60px;
 }
 
 .title h1 {
@@ -340,28 +331,7 @@ onMounted(loadClients)
   color: #0ea5e9;
   font-size: 1.3rem;
   pointer-events: none;
-}
-
-
-
-.notification {
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  padding: 16px 28px;
-  border-radius: 16px;
-  color: white;
-  font-weight: 700;
-  z-index: 9999;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-.notification.success {
-  background: #10b981;
-}
-
-.notification.error {
-  background: #ef4444;
+  z-index: 1;
 }
 
 .search-bar input {
@@ -372,6 +342,7 @@ onMounted(loadClients)
   background: white;
   font-size: 1.05rem;
   box-shadow: 0 8px 25px rgba(0,0,0,.06);
+  transition: all .3s;
 }
 
 .search-bar input:focus {
@@ -437,7 +408,12 @@ onMounted(loadClients)
   flex-shrink: 0;
 }
 
-.details h3 {
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.client-name {
   margin: 0 0 6px;
   font-size: 1.25rem;
   font-weight: 800;
@@ -455,10 +431,20 @@ onMounted(loadClients)
   color: #475569;
 }
 
-.contact i {
+.contact-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-line i {
   color: #0ea5e9;
-  margin-right: 8px;
   font-size: .9rem;
+  flex-shrink: 0;
 }
 
 .since {
@@ -581,10 +567,31 @@ onMounted(loadClients)
   color: white;
 }
 
+.notification {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  padding: 16px 28px;
+  border-radius: 16px;
+  color: white;
+  font-weight: 700;
+  z-index: 9999;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.notification.success {
+  background: #10b981;
+}
+
+.notification.error {
+  background: #ef4444;
+}
+
 @media (max-width: 480px) {
   .header {
     flex-direction: column;
     text-align: center;
+    gap: 12px;
   }
 
   .btn-add {
@@ -592,10 +599,21 @@ onMounted(loadClients)
     padding: 16px;
   }
 
+  .search-bar input {
+    padding: 14px 18px 14px 52px;
+    font-size: 1rem;
+  }
+
+  .search-bar i {
+    left: 18px;
+    font-size: 1.2rem;
+  }
+
   .client-item {
     flex-direction: column;
     align-items: flex-start;
     padding: 18px;
+    gap: 14px;
   }
 
   .main-info {
@@ -607,9 +625,31 @@ onMounted(loadClients)
     justify-content: flex-end;
   }
 
+  .avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+
+  .client-name {
+    font-size: 1.15rem;
+  }
+
+  .contact {
+    font-size: .9rem;
+  }
+
+  .contact-line {
+    max-width: 100%;
+  }
+
   .modal-card {
     padding: 24px;
     margin: 10px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
   }
 }
 </style>

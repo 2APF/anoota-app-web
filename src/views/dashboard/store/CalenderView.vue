@@ -368,7 +368,7 @@ const openNew = () => {
 }
 
 const edit = (apt: Appointment) => {
-  console.log('ed: ', apt)
+  // console.log('ed: ', apt)
   editMode.value = true
   currentEditId.value = apt.id
   form.value = {
@@ -411,7 +411,7 @@ const submitCreate = async () => {
     modal.value = false
     loadData()
   } catch (err: any) {
-    console.log(err)
+   // console.log(err)
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }
@@ -442,7 +442,7 @@ const confirmChecked = async () => {
     checkedModal.value = false
     loadData()
   } catch (err: any) {
-    console.log(err)
+    // console.log(err)
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }

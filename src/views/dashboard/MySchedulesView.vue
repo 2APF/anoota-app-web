@@ -6,7 +6,7 @@
       <i class="fas fa-spinner fa-spin"></i>
     </div>
 
-    <div v-else class="container mt-3">
+    <div v-else class="container">
       <header class="page-header">
         <h1>Meus Agendamentos</h1>
         <p>Gestão completa dos teus serviços marcados</p>
@@ -76,17 +76,10 @@
     </div>
   </div>
 
-
-
-
-
-
   <teleport to="body">
     <transition name="fade">
       <div v-if="showCancelModal" class="modal-overlay" @click="closeCancelModal">
         <div class="modal-card" @click.stop>
-          
-
           <div class="modal-body">
             <h4>Certeza que queres cancelar?</h4>
             <div class="appointment-details">
@@ -153,7 +146,6 @@ const activeTab = ref('all')
 const tabs = [
   { id: 'all', label: 'Todos' },
   { id: 'upcoming', label: 'Em breve' },
-  // { id: 'completed', label: 'Realizados' },
   { id: 'cancelled', label: 'Cancelados' }
 ]
 
@@ -164,7 +156,6 @@ const fetchAppointments = async () => {
   try {
     const res = await axios.get(`${API_URL}/user/schedule/my/${userId}`)
     const schedules = res.data.schedules || []
-    const store = res.data.store || []
     appointments.value = schedules.map((apt: any) => ({
       ...apt,
       status: apt.cancelled_at
@@ -173,8 +164,6 @@ const fetchAppointments = async () => {
         ? 'completed'
         : 'upcoming'
     }))
-
-    console.log(appointments.value)
   } catch (err) {
     appointments.value = []
   } finally {
@@ -192,7 +181,6 @@ const filteredAppointments = computed(() => {
   if (!search.value.trim()) return list.sort((a, b) => new Date(a.start_datetime).getTime() - new Date(b.start_datetime).getTime())
 
   const q = search.value.toLowerCase()
-  // console.log('Filtering with query:', q);
   return list.filter(a =>
     a.name_service.toLowerCase().includes(q) ||
     (a.name_store || '').toLowerCase().includes(q) ||
@@ -239,22 +227,12 @@ const confirmCancel = async () => {
   cancelling.value = true
   try {
     await axios.post(`${API_URL}/store/schedule/cancel/${selectedAppointment.value.id}/${userId}`, {
-      
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-       reason_cancelled: cancelReason.value.trim(),
-      })
-
+      reason_cancelled: cancelReason.value.trim(),
     })
-    cancelling.value = false
-
     await fetchAppointments()
     closeCancelModal()
   } catch (err) {
-    cancelling.value = false
     console.log('erro: ', err)
-    // alert('Erro ao cancelar agendamento. Tenta novamente.')
   } finally {
     cancelling.value = false
   }
@@ -269,13 +247,13 @@ onMounted(fetchAppointments)
 .appointments-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-  padding: 100px 0 140px;
+  padding: 100px 0 120px;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
 .loading-screen {
@@ -292,46 +270,36 @@ onMounted(fetchAppointments)
 
 .page-header {
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: 48px;
 }
 
 .page-header h1 {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
-  
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 12px;
 }
 
 .page-header p {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #64748b;
 }
 
 .search-box {
   position: relative;
-  max-width: 560px;
-  margin: 0 auto 48px;
-}
-
-.search-box i {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 40px;
 }
 
 .search-box input {
   width: 100%;
-  padding: 18px 20px 18px 56px;
+  padding: 16px 20px 16px 52px;
   border: 2px solid #e2e8f0;
   border-radius: 50px;
   background: white;
-  font-size: 1.05rem;
+  font-size: 1rem;
   transition: all .3s;
 }
 
@@ -341,27 +309,39 @@ onMounted(fetchAppointments)
   box-shadow: 0 0 0 6px rgba(14,165,233,.12);
 }
 
+.search-box::before {
+  content: '\f002';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.2rem;
+}
+
 .tabs {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 48px;
+  gap: 12px;
+  margin-bottom: 40px;
   flex-wrap: wrap;
 }
 
 .tabs button {
-  padding: 14px 32px;
+  padding: 12px 28px;
   background: white;
-  border: 2.5px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
   border-radius: 50px;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #475569;
   cursor: pointer;
   transition: all .3s;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .tabs button.active {
@@ -374,77 +354,36 @@ onMounted(fetchAppointments)
   background: rgba(0,0,0,.1);
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: .9rem;
-  min-width: 28px;
+  font-size: .85rem;
+  min-width: 26px;
 }
 
 .tabs button.active .count {
   background: rgba(255,255,255,.25);
 }
 
-
-
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 9999;
-  backdrop-filter: blur(8px);
-}
-
-.modal-card {
-  background: white;
-  border-radius: 28px;
-  padding: 28px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.4);
-  text-align: center;
-}
-
-.modal-card h3 {
-  margin: 0 0 20px;
-  font-size: 1.7rem;
-  color: #1e293b;
-}
-
-.modal-card input,
-.modal-card textarea {
-  width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 14px;
-  border: 2px solid #e2e8f0;
-  border-radius: 16px;
-  font-size: 1rem;
-}
-
 .list {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .item {
   background: white;
-  border-radius: 28px;
-  padding: 32px;
+  border-radius: 24px;
+  padding: 28px;
   display: grid;
-  grid-template-columns: 100px 1fr auto;
-  gap: 28px;
+  grid-template-columns: 90px 1fr auto;
+  gap: 24px;
   align-items: center;
-  box-shadow: 0 12px 48px rgba(0,0,0,.08);
+  box-shadow: 0 10px 40px rgba(0,0,0,.08);
   border: 1px solid #e2e8f0;
   transition: all .3s;
 }
 
 .item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 60px rgba(0,0,0,.14);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
 }
 
 .date {
@@ -452,14 +391,14 @@ onMounted(fetchAppointments)
 }
 
 .day {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 900;
   color: #0ea5e9;
   line-height: 1;
 }
 
 .month {
-  font-size: 1rem;
+  font-size: .95rem;
   color: #64748b;
   font-weight: 600;
   margin-top: 4px;
@@ -467,30 +406,30 @@ onMounted(fetchAppointments)
 }
 
 .info h3 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #1e293b;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .info p {
   color: #64748b;
-  margin: 0 0 12px;
-  font-size: 1.05rem;
+  margin: 0 0 10px;
+  font-size: 1rem;
 }
 
 .time {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: #475569;
   font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 8px;
+  font-size: .95rem;
+  margin-bottom: 6px;
 }
 
 .price {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 900;
   color: #10b981;
 }
@@ -499,14 +438,14 @@ onMounted(fetchAppointments)
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
 }
 
 .status-badge {
-  padding: 10px 24px;
+  padding: 8px 20px;
   border-radius: 50px;
   font-weight: 700;
-  font-size: .95rem;
+  font-size: .9rem;
 }
 
 .status-badge.upcoming {
@@ -525,13 +464,13 @@ onMounted(fetchAppointments)
 }
 
 .btn-cancel {
-  padding: 10px 20px;
+  padding: 8px 18px;
   background: transparent;
   color: #ef4444;
   border: 2px solid #ef4444;
   border-radius: 50px;
   font-weight: 700;
-  font-size: .95rem;
+  font-size: .9rem;
   cursor: pointer;
   transition: all .3s;
 }
@@ -542,100 +481,74 @@ onMounted(fetchAppointments)
 
 .empty {
   text-align: center;
-  padding: 120px 20px;
+  padding: 100px 20px;
   color: #94a3b8;
 }
 
 .empty i {
-  font-size: 5rem;
-  margin-bottom: 28px;
+  font-size: 4.5rem;
+  margin-bottom: 24px;
   opacity: .5;
 }
 
 .empty p {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 500;
-  margin: 0 0 32px;
+  margin: 0 0 28px;
 }
 
 .btn-explore {
-  padding: 16px 36px;
+  padding: 14px 32px;
   background: linear-gradient(135deg, #10b981, #34d399);
   color: white;
   border: none;
   border-radius: 50px;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 800;
   cursor: pointer;
   transition: all .3s;
 }
 
 .btn-explore:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(16,185,129,.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(16,185,129,.3);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 20px;
+  backdrop-filter: blur(8px);
 }
 
-.modal {
+.modal-card {
   background: white;
-  border-radius: 32px;
-  max-width: 520px;
+  border-radius: 28px;
+  padding: 28px;
   width: 100%;
-  box-shadow: 0 25px 70px rgba(0,0,0,.25);
-  overflow: hidden;
+  max-width: 460px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.35);
+  text-align: center;
 }
 
-.modal-header {
-  padding: 28px 32px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  font-size: 1.8rem;
-  font-weight: 900;
+.modal-card h4 {
+  margin: 0 0 20px;
+  font-size: 1.6rem;
   color: #1e293b;
-  margin: 0;
-}
-
-.close-btn {
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: transparent;
-  font-size: 1.5rem;
-  color: #94a3b8;
-  cursor: pointer;
-}
-
-.modal-body {
-  padding: 24px 32px;
-}
-
-.modal-body p {
-  font-size: 1.15rem;
-  color: #475569;
-  margin: 0 0 24px;
+  font-weight: 800;
 }
 
 .appointment-details {
   background: #f8fafc;
-  padding: 20px;
+  padding: 18px;
   border-radius: 16px;
-  margin-bottom: 28px;
-  text-align: center;
-  font-size: 1.1rem;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
   color: #1e293b;
 }
 
@@ -643,21 +556,22 @@ onMounted(fetchAppointments)
   display: block;
   font-weight: 700;
   color: #1e293b;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .reason-group label span {
   font-weight: 500;
   color: #ef4444;
-  font-size: .95rem;
+  font-size: .9rem;
 }
 
 .reason-group textarea {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   border: 2px solid #e2e8f0;
   border-radius: 16px;
-  font-size: 1.05rem;
+  font-size: 1rem;
   resize: vertical;
   transition: all .3s;
 }
@@ -665,18 +579,18 @@ onMounted(fetchAppointments)
 .reason-group textarea:focus {
   outline: none;
   border-color: #0ea5e9;
-  box-shadow: 0 0 0 6px rgba(14,165,233,.12);
+  box-shadow: 0 0 0 5px rgba(14,165,233,.12);
 }
 
 .modal-actions {
-  padding: 0 32px 32px;
   display: flex;
-  gap: 16px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .btn-secondary {
   flex: 1;
-  padding: 16px;
+  padding: 14px;
   background: #f1f5f9;
   color: #475569;
   border: none;
@@ -692,7 +606,7 @@ onMounted(fetchAppointments)
 
 .btn-danger {
   flex: 1;
-  padding: 16px;
+  padding: 14px;
   background: #ef4444;
   color: white;
   border: none;
@@ -703,7 +617,7 @@ onMounted(fetchAppointments)
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -716,7 +630,7 @@ onMounted(fetchAppointments)
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity .3s ease;
 }
 
 .fade-enter-from, .fade-leave-to {
@@ -725,50 +639,130 @@ onMounted(fetchAppointments)
 
 @media (max-width: 768px) {
   .item {
-    grid-template-columns: 90px 1fr;
-    gap: 24px;
-    padding: 28px;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    padding: 24px;
   }
+
   .actions {
     grid-column: 1 / -1;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top: 12px;
   }
+
   .status-badge {
     order: 2;
+    padding: 8px 16px;
+    font-size: .85rem;
   }
+
   .btn-cancel {
     order: 1;
+    padding: 8px 16px;
+    font-size: .9rem;
   }
-}
 
-@media (max-width: 640px) {
-  .appointments-page {
-    padding: 80px 0 100px;
-  }
-  .container {
-    padding: 0 20px;
-  }
-  .page-header h1 {
-    font-size: 2.4rem;
-  }
-  .item {
-    grid-template-columns: 80px 1fr;
-    gap: 20px;
-    padding: 24px;
-  }
   .day {
     font-size: 2.2rem;
   }
-  .modal-actions {
-    flex-direction: column;
+
+  .info h3 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .appointments-page {
+    padding: 80px 0 100px;
   }
 
-  
+  .container {
+    padding: 0 16px;
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .page-header p {
+    font-size: 1.1rem;
+  }
+
+  .search-box {
+    margin-bottom: 32px;
+  }
+
+  .search-box input {
+    padding: 14px 18px 14px 48px;
+    font-size: .95rem;
+  }
+
+  .tabs {
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .tabs button {
+    padding: 10px 20px;
+    font-size: .95rem;
+  }
+
+  .item {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .day {
+    font-size: 2rem;
+  }
+
+  .info h3 {
+    font-size: 1.2rem;
+  }
+
+  .time,
+  .price {
+    font-size: .95rem;
+  }
+
+  .empty {
+    padding: 80px 20px;
+  }
+
+  .empty i {
+    font-size: 4rem;
+  }
+
+  .empty p {
+    font-size: 1.2rem;
+  }
+
+  .btn-explore {
+    padding: 12px 28px;
+    font-size: 1rem;
+  }
+
   .modal-card {
     padding: 24px;
-    margin: 10px;
+    margin: 0 10px;
+    border-radius: 24px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-secondary,
+  .btn-danger {
+    padding: 14px;
+    font-size: 1rem;
   }
 }
 </style>

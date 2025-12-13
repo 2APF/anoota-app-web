@@ -40,7 +40,6 @@
           <div v-if="user.id" class="user-info">
             <h3>Agendando como:</h3>
             <p><strong>{{ user.name }}</strong></p>
-            <!-- <p>{{ user.email }}</p> -->
             <p>{{ user.phone }}</p>
           </div>
 
@@ -79,20 +78,24 @@
 
           <div v-else-if="!availableSlots.length && !loadingSlots" class="no-slots">
             <i class="fas fa-calendar-times"></i>
-            <p> Nenhum horário disponível neste dia</p>
+            <p>Nenhum horário disponível neste dia</p>
           </div>
 
           <div v-else>
             <div class="selected-date">
-              <i class="fas fa-calendar-check"></i> <strong> {{ format(selectedDate, 'EEEE, d MMMM yyyy', {
-                locale: pt
-                }) }}</strong>
+              <i class="fas fa-calendar-check"></i> <strong>{{ format(selectedDate, 'EEEE, d MMMM yyyy', { locale: pt }) }}</strong>
             </div>
 
             <div class="services-section">
               <h3>Selecione os serviços</h3>
+
+              <!-- ADICIONADO: Search de serviços (exatamente como no calendário do profissional) -->
+              <div class="search-input">
+                <input type="text" v-model="searchService" placeholder="Buscar serviços..." />
+              </div>
+
               <div class="services-list">
-                <label v-for="service in store.services" :key="service.id" class="service-item">
+                <label v-for="service in filteredServices" :key="service.id" class="service-item">
                   <input type="checkbox" :value="service.id" v-model="selectedServices" />
                   <div class="service-info">
                     <div class="name">{{ service.name }}</div>
@@ -155,7 +158,6 @@ import axios from 'axios'
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isToday, isSameDay, isPast } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import NavbarComponent from '@/components/NavbarComponent.vue'
-import { User } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -170,6 +172,15 @@ const currentMonth = ref(new Date())
 const selectedDate = ref<Date | null>(null)
 const selectedTime = ref('')
 const selectedServices = ref<number[]>([])
+
+// NOVO: Search de serviços
+const searchService = ref('')
+
+const filteredServices = computed(() => {
+  if (!searchService.value.trim()) return store.value.services || []
+  const q = searchService.value.toLowerCase()
+  return (store.value.services || []).filter((s: any) => s.name.toLowerCase().includes(q))
+})
 
 const notification = ref({ message: '', type: 'success' as 'success' | 'error' })
 
@@ -200,7 +211,6 @@ if (typeof route.params.user === 'string') {
 } else {
   user = route.params.user || { id: '', name: '', phone: '', email: '', about: '' };
 }
-
 
 const selectedCountry = ref({
   code: '+351',
@@ -321,31 +331,22 @@ const nextMonth = () => currentMonth.value = addMonths(currentMonth.value, 1)
 const selectDate = (date: Date | null) => {
   if (!date) return
   if (isPast(date)) return
-  const dateStr = format(date, 'yyyy-MM-dd')
-  // const hasAppointment = store.value.schedules?.some((s: any) =>
-  //   format(new Date(s.start_datetime), 'yyyy-MM-dd') === dateStr
-  // )
-  // if (hasAppointment) return
 
   selectedDate.value = date
   selectedServices.value = []
+  searchService.value = '' // limpa a busca ao mudar data
   fetchAvailableSlots()
 }
 
 const confirmBooking = async () => {
-
   if (!selectedDate.value || !selectedTime.value || selectedServices.value.length === 0) return
 
-
-  console.log('fullPhone.value: ', `${guestName.value} ${guestPhone.value}`)
   if (!user.id && (guestName.value == null || guestPhone.value == null)) {
     showNotification('Por favor, preencha todas as informações do usuário', 'error')
     return
   }
 
-
   submitting.value = true
-
 
   try {
     const payload: any = {
@@ -356,22 +357,17 @@ const confirmBooking = async () => {
       time: selectedTime.value
     }
 
-    if (!currentUser.value) {
-      payload.name_client = user.id ? user.name : guestName.value.trim();
-      payload.phone_client = user.id ? user.phone : selectedCountry.value.code + ' ' + guestPhone.value;
-    } else {
-      payload.user_id = currentUser.value.id
+    if (!user.id) {
+      payload.name_client = guestName.value.trim()
+      payload.phone_client = selectedCountry.value.code + ' ' + guestPhone.value
     }
 
     await axios.post(`${API_URL}/user/store/schedule/create`, payload)
 
     showNotification('Agendamento realizado com sucesso!')
 
- router.push({ name: 'app.schedule.finish' }).catch(() => { });
-
-
+    router.push({ name: 'app.schedule.finish' }).catch(() => {})
   } catch (err: any) {
-    submitting.value = false
     showNotification(err.response?.data?.message || 'Erro ao agendar', 'error')
   } finally {
     submitting.value = false
@@ -691,10 +687,32 @@ onMounted(() => {
   margin-bottom: 16px
 }
 
+/* NOVO: Estilo do search (igual ao do profissional) */
+.search-input {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.search-input input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fdfdfd;
+  font-size: 1rem;
+  transition: .3s;
+}
+
+.search-input input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14,165,233,.12);
+}
+
 .services-list {
   display: grid;
   gap: 12px;
-  max-height: 280px;
+  max-height: 300px;
   overflow-y: auto;
   padding-right: 8px
 }
@@ -754,7 +772,7 @@ onMounted(() => {
   background: #f0f9ff
 }
 
-.service-item input:checked~.service-info {
+.service-item input:checked ~ .service-info {
   background: #ecfdf5;
   border-radius: 12px;
   padding: 12px;
@@ -770,7 +788,7 @@ onMounted(() => {
   transition: opacity .2s
 }
 
-.service-item input:checked~.check {
+.service-item input:checked ~ .check {
   opacity: 1
 }
 
@@ -897,26 +915,19 @@ onMounted(() => {
 }
 
 @media (max-width:968px) {
-  .container {
-    max-width: 940px
-  }
   .booking-grid {
     grid-template-columns: 1fr
   }
 }
 
 @media (max-width:640px) {
-  .container {
-    max-width: 940px
-  }
-
   .booking-grid {
-   display: block;
+    display: block;
   }
 
-  .calendar-section { 
-  margin-bottom: 20px;
-}
+  .calendar-section {
+    margin-bottom: 32px;
+  }
 
   .slots-grid {
     grid-template-columns: repeat(2, 1fr)
@@ -929,6 +940,10 @@ onMounted(() => {
   .calendar-section,
   .booking-form {
     padding: 24px
+  }
+
+  .services-list {
+    max-height: 260px;
   }
 }
 </style>
