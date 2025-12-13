@@ -24,10 +24,10 @@
         </div>
         <div class="rating-badge">
           <i class="fas fa-star"></i> {{ store.rating || '5.0' }}
-          Called <span class="reviews">({{ store.reviews_count || 0 }} avaliações)</span>
+          <span class="reviews">({{ store.reviews_count || 0 }} avaliações)</span>
         </div>
-        <div class="status" :class="{ open: store.openNow }">
-          <i class="fas fa-circle"></i> {{ store.openNow ? 'Aberto agora' : 'Fechado' }}
+        <div class="rating-badge" style="margin-left: 10px; color: darkslategray;" :class="{ open: store.openNow }">
+          <i class="fas fa-circle"></i> {{ store.openNow ? 'Aberto' : 'Fechado' }}
         </div>
       </div>
 
@@ -40,12 +40,12 @@
   <div v-if="!loading" class="container store-content">
     <div class="gallery-section" v-if="store.gallery?.length">
       <div class="main-photo">
-        <img :src="store.gallery[currentPhoto] || placeholder" alt="Foto principal" />
+        <img :src="store.gallery[currentPhoto] || placeholder" alt="Foto principal" loading="lazy" />
       </div>
       <div class="thumbnail-grid">
         <div v-for="(photo, i) in store.gallery" :key="i" class="thumb" :class="{ active: i === currentPhoto }"
           @click="currentPhoto = i">
-          <img :src="photo || placeholder" :alt="`Foto ${i + 1}`" />
+          <img :src="photo || placeholder" :alt="`Foto ${i + 1}`" loading="lazy" />
         </div>
       </div>
     </div>
@@ -88,9 +88,10 @@
           <h3>Contacto</h3>
           <div class="contact-item" v-if="store.phone"><i class="fas fa-phone"></i> {{ store.phone }}</div>
           <div class="contact-item" v-if="store.email"><i class="fas fa-envelope"></i> {{ store.email }}</div>
-          <div class="contact-item" v-if="store.instagram"><i class="fab fa-instagram"></i><a
-              :href="store.instagram" target="_blank" style="text-decoration: solid; color: dimgrays;">Visitar
-              Instagram</a> </div>
+          <div class="contact-item" v-if="store.instagram">
+            <i class="fab fa-instagram"></i>
+            <a :href="store.instagram" target="_blank">Visitar Instagram</a>
+          </div>
           <div class="contact-item" v-if="store.whatsapp"><i class="fab fa-whatsapp"></i> {{ store.whatsapp }}</div>
           <div class="contact-item" v-if="store.address"><i class="fas fa-map-marker-alt"></i> {{ store.address }}</div>
         </div>
@@ -100,11 +101,10 @@
           <div class="map-container">
             <iframe
               :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(store.address)}`"
-              width="100%" height="420" style="border:0;border-radius:24px" loading="lazy">
+              width="100%" height="380" style="border:0;border-radius:20px" loading="lazy" allowfullscreen>
             </iframe>
             <div class="map-actions">
-              <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google
-                Maps</a>
+              <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google Maps</a>
               <a :href="wazeLink" target="_blank" class="btn-map waze"><i class="fas fa-car"></i> Waze</a>
               <a :href="appleMapsLink" target="_blank" class="btn-map apple"><i class="fab fa-apple"></i> Apple Maps</a>
             </div>
@@ -163,11 +163,8 @@ const fetchStore = async () => {
   if (!id) return
   loading.value = true
   try {
-
     const res = await axios.get(`${API_URL}/user/store/detail/${id}`)
     store.value = res.data.store || {}
-
-    console.log(store.value)
     work_schedules.value = res.data.workSchedules || []
     services.value = res.data.services || []
   } catch (err) {
@@ -191,17 +188,17 @@ onMounted(fetchStore)
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #0ea5e9;
 }
 
 .store-header {
   position: relative;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .cover-photo {
-  height: 480px;
+  height: 400px;
   background-size: cover;
   background-position: center;
 }
@@ -209,32 +206,32 @@ onMounted(fetchStore)
 .cover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, .8) 100%);
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .75) 100%);
 }
 
 .container {
-  max-width: 1240px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 90px 20px 140px;
+  padding: 0 20px;
 }
 
 .store-info-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: end;
-  gap: 32px;
-  margin-top: -120px;
+  gap: 28px;
+  margin-top: -100px;
   position: relative;
   z-index: 2;
 }
 
 .logo-wrapper {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   overflow: hidden;
-  border: 8px solid white;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, .4);
+  border: 6px solid white;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .3);
   background: white;
 }
 
@@ -246,22 +243,22 @@ onMounted(fetchStore)
 
 .store-main-info {
   color: white;
-  padding-bottom: 20px;
+  padding-bottom: 12px;
 }
 
 .store-name {
-  font-size: 3.2rem;
+  font-size: 2.6rem;
   font-weight: 900;
-  margin: 0 0 12px;
-  line-height: 1.1;
+  margin: 0 0 10px;
+  line-height: 1.2;
 }
 
 .store-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: 1.15rem;
-  margin: 12px 0;
+  gap: 12px;
+  font-size: 1.05rem;
+  margin: 10px 0;
 }
 
 .category,
@@ -269,23 +266,23 @@ onMounted(fetchStore)
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, .2);
-  padding: 8px 16px;
+  background: rgba(255, 255, 255, .15);
+  padding: 6px 14px;
   border-radius: 50px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
 }
 
 .rating-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, .25);
-  padding: 10px 20px;
+  background: rgba(255, 255, 255, .2);
+  padding: 8px 16px;
   border-radius: 50px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin: 16px 0;
-  backdrop-filter: blur(10px);
+  margin: 12px 0;
+  backdrop-filter: blur(8px);
 }
 
 .reviews {
@@ -296,10 +293,9 @@ onMounted(fetchStore)
 .status {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.2rem;
+  gap: 8px;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-left: 20px;
 }
 
 .status i {
@@ -317,52 +313,52 @@ onMounted(fetchStore)
 .btn-schedule-cta {
   background: #0ea5e9;
   color: white;
-  padding: 20px 40px;
+  padding: 16px 36px;
   border: none;
-  border-radius: 20px;
-  font-size: 1.4rem;
+  border-radius: 16px;
+  font-size: 1.25rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 15px 40px rgba(14, 165, 233, .5);
+  box-shadow: 0 12px 35px rgba(14, 165, 233, .4);
   transition: .3s;
   align-self: end;
 }
 
 .btn-schedule-cta:hover {
   background: #0284c7;
-  transform: translateY(-6px);
+  transform: translateY(-5px);
 }
 
 .gallery-section {
-  margin: 80px 0;
+  margin: 60px 0;
 }
 
 .main-photo {
-  border-radius: 28px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, .2);
-  margin-bottom: 24px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
+  margin-bottom: 20px;
 }
 
 .main-photo img {
   width: 100%;
-  height: 520px;
+  height: 420px;
   object-fit: cover;
 }
 
 .thumbnail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
 }
 
 .thumb {
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  opacity: .75;
+  opacity: .7;
   transition: all .3s;
-  height: 120px;
+  height: 100px;
   position: relative;
 }
 
@@ -376,28 +372,28 @@ onMounted(fetchStore)
 .thumb:hover,
 .thumb.active {
   opacity: 1;
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .thumb.active::after {
   content: '';
   position: absolute;
   inset: 0;
-  border: 4px solid #0ea5e9;
-  border-radius: 20px;
+  border: 3px solid #0ea5e9;
+  border-radius: 16px;
 }
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 60px;
-  margin: 60px 0;
+  grid-template-columns: 1fr 360px;
+  gap: 48px;
+  margin: 40px 0;
 }
 
 .left-column h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  margin: 48px 0 24px;
+  margin: 40px 0 20px;
   color: #1e293b;
   position: relative;
 }
@@ -405,24 +401,24 @@ onMounted(fetchStore)
 .left-column h2::after {
   content: '';
   position: absolute;
-  bottom: -12px;
+  bottom: -10px;
   left: 0;
-  width: 80px;
-  height: 6px;
+  width: 60px;
+  height: 5px;
   background: #0ea5e9;
   border-radius: 3px;
 }
 
 .about p {
-  line-height: 1.8;
-  font-size: 1.15rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
   color: #475569;
 }
 
 .service-list {
   background: #f8fafc;
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: 20px;
+  padding: 24px;
   border: 1px solid #e2e8f0;
 }
 
@@ -430,9 +426,8 @@ onMounted(fetchStore)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #e2e8f0;
-  transition: all .3s;
 }
 
 .service-item:last-child {
@@ -441,14 +436,14 @@ onMounted(fetchStore)
 
 .service-item:hover {
   background: #f0f9ff;
-  border-radius: 16px;
-  margin: 0 -28px;
-  padding: 20px 28px;
+  border-radius: 12px;
+  margin: 0 -24px;
+  padding: 16px 24px;
 }
 
 .service-name {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #1e293b;
 }
 
@@ -457,34 +452,34 @@ onMounted(fetchStore)
 }
 
 .service-details span {
-  margin-left: 20px;
+  margin-left: 16px;
   font-weight: 700;
   color: #0ea5e9;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .hours {
   background: #f8fafc;
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: 20px;
+  padding: 24px;
   border: 1px solid #e2e8f0;
 }
 
 .hour-line {
   display: flex;
   justify-content: space-between;
-  padding: 14px 0;
+  padding: 12px 0;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .hour-line.today {
   color: #0ea5e9;
   font-weight: 800;
   background: #f0f9ff;
-  border-radius: 16px;
-  padding: 14px 20px;
-  margin: 0 -20px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 0 -16px;
 }
 
 .closed-text {
@@ -494,75 +489,84 @@ onMounted(fetchStore)
 
 .contact-card {
   background: white;
-  border-radius: 28px;
-  padding: 32px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, .1);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .08);
   border: 1px solid #e2e8f0;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .contact-card h3 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   color: #1e293b;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin: 20px 0;
-  font-size: 1.1rem;
+  gap: 14px;
+  margin: 16px 0;
+  font-size: 1.05rem;
   color: #475569;
 }
 
 .contact-item i {
   color: #0ea5e9;
-  font-size: 1.3rem;
-  width: 32px;
+  font-size: 1.2rem;
+  width: 28px;
+}
+
+.contact-item a {
+  color: #0ea5e9;
+  text-decoration: none;
+}
+
+.contact-item a:hover {
+  text-decoration: underline;
 }
 
 .location-section h2 {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 900;
-  margin: 0 0 24px;
+  margin: 0 0 20px;
   color: #1e293b;
 }
 
 .map-container {
   position: relative;
-  border-radius: 28px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, .2);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
 }
 
 .map-actions {
   position: absolute;
-  bottom: 24px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 16px;
+  gap: 12px;
   z-index: 10;
 }
 
 .btn-map {
   background: white;
   color: #333;
-  padding: 16px 28px;
+  padding: 12px 24px;
   border-radius: 50px;
   font-weight: 700;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, .3);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .25);
   transition: all .3s;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1.05rem;
+  gap: 10px;
+  font-size: 1rem;
 }
 
 .btn-map:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
 }
 
 .btn-map.google:hover {
@@ -582,39 +586,38 @@ onMounted(fetchStore)
 
 .fab-schedule {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 76px;
-  height: 76px;
+  right: 20px;
+  bottom: 20px;
+  width: 68px;
+  height: 68px;
   background: #0ea5e9;
   color: white;
   border: none;
   border-radius: 50%;
-  box-shadow: 0 15px 45px rgba(14, 165, 233, .6);
+  box-shadow: 0 12px 40px rgba(14, 165, 233, .5);
   z-index: 999;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   font-weight: 800;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   transition: all .3s;
 }
 
 .fab-schedule:hover {
   background: #0284c7;
-  transform: translateY(-8px) scale(1.1);
-  box-shadow: 0 20px 50px rgba(14, 165, 233, .7);
+  transform: translateY(-6px) scale(1.1);
 }
 
 @media (max-width: 1024px) {
   .store-info-header {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 24px;
+    gap: 20px;
   }
 
   .logo-wrapper {
@@ -623,18 +626,18 @@ onMounted(fetchStore)
 
   .btn-schedule-cta {
     align-self: center;
-    max-width: 400px;
+    max-width: 360px;
   }
 
   .content-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 40px;
   }
 }
 
 @media (max-width: 768px) {
   .cover-photo {
-    height: 380px;
+    height: 340px;
   }
 
   .store-info-header {
@@ -642,16 +645,16 @@ onMounted(fetchStore)
   }
 
   .logo-wrapper {
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
   }
 
   .store-name {
-    font-size: 2.6rem;
+    font-size: 2.3rem;
   }
 
   .main-photo img {
-    height: 400px;
+    height: 360px;
   }
 
   .thumbnail-grid {
@@ -666,61 +669,8 @@ onMounted(fetchStore)
 
 @media (max-width: 480px) {
   .cover-photo {
-    height: 320px;
+    height: 300px;
   }
-
-
-
-
-
-  
-
-.service-list {
-  background: #f8fafc;
-  border-radius: 24px;
-  padding: 28px;
-  border: 1px solid #e2e8f0;
-}
-
-.service-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid #e2e8f0;
-  transition: all .3s;
-}
-
-.service-item:last-child {
-  border-bottom: none;
-}
-
-.service-item:hover {
-  background: #f0f9ff;
-  border-radius: 16px;
-  margin: 0 -28px;
-  padding: 20px 28px;
-}
-
-.service-name {
-  font-weight: 700;
-  font-size: 0.70rem;
-  color: #1e293b;
-}
-
-.service-item:hover .service-name {
-  color: #0ea5e9;
-}
-
-.service-details span {
-  margin-left: 20px;
-  font-weight: 700;
-  color: #0ea5e9;
-  font-size: 0.70rem;
-}
-
-
-
 
   .store-info-header {
     margin-top: -60px;
@@ -728,21 +678,22 @@ onMounted(fetchStore)
   }
 
   .logo-wrapper {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
   }
 
   .store-name {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 
   .store-meta {
     flex-direction: column;
     align-items: center;
+    gap: 10px;
   }
 
   .main-photo img {
-    height: 300px;
+    height: 280px;
   }
 
   .thumbnail-grid {
@@ -750,8 +701,8 @@ onMounted(fetchStore)
   }
 
   .fab-schedule {
-    width: 68px;
-    height: 68px;
+    width: 60px;
+    height: 60px;
     right: 16px;
     bottom: 16px;
   }

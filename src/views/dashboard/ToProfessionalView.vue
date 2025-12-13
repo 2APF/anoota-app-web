@@ -201,7 +201,8 @@ onMounted(() => {
 .become-pro {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc, #e0f2fe);
-  padding: 90px 20px 140px
+  padding: 90px 20px 140px;
+  margin-top: 40px;
 }
 
 .container {

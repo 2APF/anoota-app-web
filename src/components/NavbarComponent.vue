@@ -1,69 +1,44 @@
 <template>
   <header class="header">
     <div class="container top-bar">
-      <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="logo">
-      <RouterLink class="navbar-brand" to="/" aria-label="Página inicial">
-        <img src="/public/logo.png" style="width: 120px; height: 50px;" />
-      </RouterLink>
-
-        
+      <RouterLink :to="{ name: 'app.home' }" class="logo" aria-label="Página inicial">
+        <img src="/logo.png" alt="Anoota" class="logo-img" />
       </RouterLink>
 
       <div class="header-actions">
-         <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="location-btn">
-            <i class="fas fa-map-marker-alt"></i>
-          </RouterLink>
-        <!-- <button class="location-btn" @click="openLocation">
-          <i class="fas fa-star"></i>
-        </button>
-        <button class="location-btn" @click="openLocation">
+        <RouterLink :to="{ name: 'app.home' }" class="action-btn location-btn">
           <i class="fas fa-map-marker-alt"></i>
-        </button> -->
+        </RouterLink>
 
         <div class="user-menu-wrapper" ref="userMenuWrapper">
-          <button v-if="user.name" class="user-btn" @click.stop="toggleUserMenu">
+          <button v-if="user.name" class="action-btn user-btn" @click.stop="toggleUserMenu">
             <i class="fas fa-user-edit"></i>
           </button>
 
-          <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.auth.login' }" class="btn-login"
-            v-else>
+          <RouterLink v-else :to="{ name: 'app.auth.login' }" class="btn-login">
             Entrar
           </RouterLink>
 
           <Transition name="fade">
             <div v-if="userMenuOpen" class="user-dropdown">
-              <RouterLink :to="{ name: 'app.user.profile' }" class="dropdown-item" @click="closeUserMenu" :scroll-behavior="{ behavior: 'smooth' }">
-                <i class="fas fa-user-edit"></i>
-                Editar Perfil
+              <RouterLink :to="{ name: 'app.user.profile' }" class="dropdown-item" @click="closeUserMenu">
+                <i class="fas fa-user-edit"></i> Editar Perfil
               </RouterLink>
 
-
-              <RouterLink :to="{ name: 'app.store.reports' }" class="dropdown-item"  v-if="user.name && user.type == '2'"
-                :scroll-behavior="{ behavior: 'smooth' }">
-                <i class="fas fa-book-reader"></i>
-                <span>Relatórios</span>
+              <RouterLink v-if="user.type == '2'" :to="{ name: 'app.store.reports' }" class="dropdown-item" @click="closeUserMenu">
+                <i class="fas fa-book-reader"></i> Relatórios
               </RouterLink>
 
-              <RouterLink :to="{ name: 'app.user.schedules' }" class="dropdown-item"  v-if="user.name && user.type == '2'"
-                :scroll-behavior="{ behavior: 'smooth' }">
-                <i class="fas fa-users-cog"></i>
-                <span>Administradores</span>
+              <RouterLink v-if="user.type == '2'" :to="{ name: 'app.user.schedules' }" class="dropdown-item" @click="closeUserMenu">
+                <i class="fas fa-users-cog"></i> Administradores
               </RouterLink>
 
-
-              <a class="dropdown-item disabled-link" @click="closeUserMenu" :disabled="true">
-                <i class="fas fa-trophy"></i>
-                Ranking & Votos
-              </a>
-              <!-- 
-              <RouterLink :to="{ name: 'app.user.schedules' }" class="dropdown-item" @click="closeUserMenu">
-                <i class="fas fa-calendar-check"></i>
-                Meus Agendamentos
-              </RouterLink> -->
+              <div class="dropdown-item disabled">
+                <i class="fas fa-trophy"></i> Ranking & Votos
+              </div>
 
               <button class="dropdown-item logout" @click="logout">
-                <i class="fas fa-sign-out-alt"></i>
-                Sair
+                <i class="fas fa-sign-out-alt"></i> Sair
               </button>
             </div>
           </Transition>
@@ -82,7 +57,8 @@
 
   <aside class="sidebar" :class="{ active: sidebarOpen }">
     <div class="sidebar-header">
-      <div class="logo-sidebar">anoota</div>
+      <div class="logo-sidebar">
+        <img src="/logo.png" alt="Anoota" class="logo-img" /></div>
       <button class="close-btn" @click="sidebarOpen = false">
         <i class="fas fa-times"></i>
       </button>
@@ -90,105 +66,65 @@
 
     <nav class="sidebar-menu">
       <div v-if="!user.name">
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-home"></i>
-          <span>Explorar</span>
+        <RouterLink :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-home"></i> Explorar
         </RouterLink>
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.we' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-users"></i>
-          <span>Quem Somos</span>
+        <RouterLink :to="{ name: 'app.we' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-users"></i> Quem Somos
         </RouterLink>
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.contact' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-phone"></i>
-          <span>Fale Connosco</span>
+        <RouterLink :to="{ name: 'app.contact' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-phone"></i> Fale Connosco
         </RouterLink>
       </div>
 
       <div v-if="user.name && user.type == '3'">
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.homepage' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-home"></i>
-          <span>Home</span>
+        <RouterLink :to="{ name: 'app.user.homepage' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-home"></i> Home
         </RouterLink>
-
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.home' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-calendar-plus"></i>
-          <span>Explorar Profissionais</span>
+        <RouterLink :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-calendar-plus"></i> Explorar Profissionais
         </RouterLink>
-
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.schedules' }" class="menu-item"
-          @click="sidebarOpen = false">
-          <i class="fas fa-calendar-day"></i>
-          <span>Minhas Marcações</span>
+        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-calendar-day"></i> Minhas Marcações
         </RouterLink>
-
-
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.comunication' }" class="menu-item disabled-link"
-          @click="sidebarOpen = false">
-          <i class="fas fa-bullhorn"></i>
-          <span>Comunicados</span>
+        <RouterLink :to="{ name: 'app.user.comunication' }" class="menu-item disabled">
+          <i class="fas fa-bullhorn"></i> Comunicados
         </RouterLink>
-
-        <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.user.foxia' }"
-          class="menu-item disabled-link" @click="sidebarOpen = false">
-          <i class="fas fa-robot"></i>
-          <span>Fox AI</span>
+        <RouterLink :to="{ name: 'app.user.foxia' }" class="menu-item disabled">
+          <i class="fas fa-robot"></i> Fox AI
         </RouterLink>
       </div>
 
-
-
-
-
       <div v-if="user.name && user.type == '2'">
-        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item"
-          :scroll-behavior="{ behavior: 'smooth' }" @click="sidebarOpen = false">
-          <i class="fas fa-store"></i>
-          <span>Configurar Loja</span>
+        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-store"></i> Configurar Loja
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.calender' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
-          @click="sidebarOpen = false">
-          <i class="fas fa-calendar-day"></i>
-          <span>Marcações</span>
+        <RouterLink :to="{ name: 'app.store.calender' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-calendar-day"></i> Marcações
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
-          @click="sidebarOpen = false">
-          <i class="fas fa-briefcase"></i>
-          <span>Serviços</span>
+        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-briefcase"></i> Serviços
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
-          @click="sidebarOpen = false">
-          <i class="fas fa-users"></i>
-          <span>Clientes</span>
+        <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-users"></i> Clientes
         </RouterLink>
-        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" :scroll-behavior="{ behavior: 'smooth' }"
-          @click="sidebarOpen = false">
-          <i class="fas fa-book-reader"></i>
-          <span>Marcações Particulares</span>
+        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" @click="sidebarOpen = false">
+          <i class="fas fa-book-reader"></i> Marcações Particulares
         </RouterLink>
       </div>
     </nav>
 
     <div class="sidebar-footer">
-      <RouterLink v-if="user.name && user.type != '2'" :scroll-behavior="{ behavior: 'smooth' }"
-        :to="{ name: 'app.user.to.professional' }" class="menu-item" @click="sidebarOpen = false">
-        <i class="fas fa-crown"></i>
-        <span>Torna-se Profissional</span>
+      <RouterLink v-if="user.name && user.type != '2'" :to="{ name: 'app.user.to.professional' }" class="menu-item premium" @click="sidebarOpen = false">
+        <i class="fas fa-crown"></i> Tornar-se Profissional
       </RouterLink>
 
-      <RouterLink :scroll-behavior="{ behavior: 'smooth' }" :to="{ name: 'app.contact' }" class="menu-item mb-2"
-        @click="sidebarOpen = false">
-        <i class="fas fa-phone"></i>
-        <span>Suporte</span>
+      <RouterLink :to="{ name: 'app.contact' }" class="menu-item" @click="sidebarOpen = false">
+        <i class="fas fa-headset"></i> Suporte
       </RouterLink>
 
       <button class="btn-logout" @click="logout" v-if="user.name">
-        <i class="fas fa-sign-out-alt me-2"></i>
-        Sair
+        <i class="fas fa-sign-out-alt"></i> Sair
       </button>
     </div>
   </aside>
@@ -196,7 +132,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { RouterLink, useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Cookies from 'js-cookie'
 
 const router = useRouter()
@@ -241,8 +177,7 @@ const sidebarOpen = ref(false)
 const userMenuOpen = ref(false)
 const userMenuWrapper = ref<HTMLElement | null>(null)
 
-const toggleUserMenu = (e: Event) => {
-  e.stopPropagation()
+const toggleUserMenu = () => {
   userMenuOpen.value = !userMenuOpen.value
 }
 
@@ -250,16 +185,13 @@ const closeUserMenu = () => {
   userMenuOpen.value = false
 }
 
-const logout = async () => {
-  await new Promise(resolve => setTimeout(resolve, 300))
+const logout = () => {
   Cookies.remove('token')
   Cookies.remove('auth')
   Cookies.remove('user')
-  router.push({ name: 'app.home' }).catch(() => { })
-}
-
-const openLocation = () => {
-  alert('Selecionar localização')
+  user.value = { name: '', type: '' } as User
+  sidebarOpen.value = false
+  router.push({ name: 'app.home' }).catch(() => {})
 }
 
 watch(sidebarOpen, (val) => {
@@ -278,10 +210,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  document.body.style.overflow = ''
 })
 </script>
 
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
 .header {
   position: fixed;
   top: 0;
@@ -289,8 +224,13 @@ onUnmounted(() => {
   right: 0;
   background: white;
   z-index: 1000;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, .06);
+  box-shadow: 0 4px 25px rgba(0,0,0,.06);
   border-bottom: 1px solid #e2e8f0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .top-bar {
@@ -298,15 +238,12 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 14px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
+  height: 72px;
 }
 
-.logo {
-  font-size: 2rem;
-  font-weight: 900;
-  color: #0ea5e9;
-  letter-spacing: -1px;
+.logo-img {
+  height: 46px;
+  width: auto;
 }
 
 .header-actions {
@@ -315,36 +252,27 @@ onUnmounted(() => {
   gap: 12px;
 }
 
-.location-btn,
-.hamburger,
-.user-btn {
+.action-btn {
   width: 48px;
   height: 48px;
   border-radius: 14px;
   background: #f8fafc;
   border: none;
-  font-size: 1.38rem;
   color: #0ea5e9;
+  font-size: 1.38rem;
   cursor: pointer;
   transition: all .3s;
   display: grid;
   place-items: center;
 }
 
+.action-btn:hover {
+  background: #f0f9ff;
+  transform: translateY(-2px);
+}
+
 .user-btn {
   font-size: 1.8rem;
-}
-
-.location-btn:hover,
-.hamburger:hover,
-.user-btn:hover {
-  transform: translateY(-2px);
-  background: #f0f9ff;
-}
-
-.disabled-link {
-  pointer-events: none;
-  opacity: 0.6;
 }
 
 .btn-login {
@@ -357,12 +285,12 @@ onUnmounted(() => {
   font-size: 1rem;
   cursor: pointer;
   transition: all .3s;
-  box-shadow: 0 6px 20px rgba(14, 165, 233, .3);
+  box-shadow: 0 6px 20px rgba(14,165,233,.3);
 }
 
 .btn-login:hover {
   background: #0c8bd1;
-  box-shadow: 0 10px 30px rgba(14, 165, 233, .4);
+  box-shadow: 0 10px 30px rgba(14,165,233,.4);
 }
 
 .user-menu-wrapper {
@@ -376,7 +304,7 @@ onUnmounted(() => {
   margin-top: 12px;
   background: white;
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, .2);
+  box-shadow: 0 20px 50px rgba(0,0,0,.2);
   min-width: 240px;
   overflow: hidden;
   z-index: 1100;
@@ -407,6 +335,11 @@ onUnmounted(() => {
   color: #0ea5e9;
 }
 
+.dropdown-item.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .dropdown-item.logout {
   color: #ef4444;
   border-top: 1px solid #e2e8f0;
@@ -422,6 +355,20 @@ onUnmounted(() => {
 
 .hamburger {
   position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: none;
+  cursor: pointer;
+  transition: all .3s;
+  display: grid;
+  place-items: center;
+}
+
+.hamburger:hover {
+  background: #f0f9ff;
+  transform: translateY(-2px);
 }
 
 .hamburger span {
@@ -467,7 +414,7 @@ onUnmounted(() => {
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, .65);
+  background: rgba(0,0,0,.65);
   backdrop-filter: blur(12px);
   opacity: 0;
   visibility: hidden;
@@ -490,10 +437,10 @@ onUnmounted(() => {
   background: white;
   z-index: 1100;
   transform: translateX(100%);
-  transition: transform .5s cubic-bezier(.23, 1, .32, 1);
+  transition: transform .5s cubic-bezier(.23,1,.32,1);
   display: flex;
   flex-direction: column;
-  box-shadow: -12px 0 60px rgba(0, 0, 0, .22);
+  box-shadow: -12px 0 60px rgba(0,0,0,.22);
 }
 
 .sidebar.active {
@@ -501,7 +448,7 @@ onUnmounted(() => {
 }
 
 .sidebar-header {
-  padding: 24px 28px;
+  padding: 2px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -543,17 +490,16 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 19px 28px;
+  padding: 18px 28px;
   color: #475569;
   font-weight: 600;
-  font-size: 1.12rem;
+  font-size: 1.1rem;
   transition: all .35s;
   text-decoration: none;
-  position: relative;
 }
 
 .menu-item i {
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   width: 32px;
   color: #94a3b8;
   transition: .3s;
@@ -562,7 +508,7 @@ onUnmounted(() => {
 .menu-item:hover {
   background: #f0f9ff;
   color: #0ea5e9;
-  padding-left: 38px;
+  padding-left: 36px;
 }
 
 .menu-item:hover i {
@@ -581,31 +527,56 @@ onUnmounted(() => {
   color: #0ea5e9;
 }
 
+.menu-item.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.menu-item.premium {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  color: #065f46;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 16px 24px;
+  border: 2px solid #10b981;
+  box-shadow: 0 8px 25px rgba(16,185,129,.15);
+}
+
+.menu-item.premium i {
+  color: #10b981;
+}
+
+.menu-item.premium:hover {
+  background: #d1fae5;
+  transform: translateY(-2px);
+}
+
 .sidebar-footer {
-  padding: 24px 28px;
+  padding: 20px 28px;
   border-top: 1px solid #e2e8f0;
 }
 
 .btn-logout {
   width: 100%;
-  padding: 17px;
+  padding: 15px;
   background: #fee2e2;
   color: #dc2626;
   border: none;
-  border-radius: 16px;
+  border-radius: 14px;
   font-weight: 700;
-  font-size: 1.08rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: .3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .btn-logout:hover {
   background: #fecaca;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 .fade-enter-active,
@@ -622,10 +593,26 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   .top-bar {
     padding: 12px 16px;
+    height: 68px;
+  }
+
+  .logo-img {
+    height: 42px;
   }
 
   .header-actions {
     gap: 10px;
+  }
+
+  .action-btn,
+  .hamburger {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  .user-btn {
+    font-size: 1.65rem;
   }
 
   .btn-login {
@@ -633,15 +620,28 @@ onUnmounted(() => {
     font-size: .95rem;
   }
 
-  .location-btn,
-  .hamburger,
-  .user-btn {
-    width: 44px;
-    height: 44px;
+  .sidebar {
+    max-width: 100%;
   }
 
-  .user-btn {
-    font-size: 1.6rem;
+  .menu-item {
+    padding: 16px 24px;
+    font-size: 1.05rem;
+  }
+
+  .menu-item.premium {
+    margin: 12px 20px;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .sidebar-footer {
+    padding: 18px 24px;
+  }
+
+  .btn-logout {
+    padding: 14px;
+    font-size: .98rem;
   }
 }
 </style>

@@ -898,7 +898,7 @@ onMounted(() => {
 
 @media (max-width:968px) {
   .container {
-    max-width: 840px
+    max-width: 940px
   }
   .booking-grid {
     grid-template-columns: 1fr
@@ -907,7 +907,7 @@ onMounted(() => {
 
 @media (max-width:640px) {
     .container {
-    max-width: 840px
+    max-width: 940px
   }
 
   .booking-grid {

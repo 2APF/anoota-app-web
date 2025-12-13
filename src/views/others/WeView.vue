@@ -2,22 +2,28 @@
   <NavbarComponent />
 
   <div class="about-page">
-    <!-- HERO -->
     <section class="hero">
       <div class="container">
-        <h1 style="color: white;">Somos a <span>anoota</span></h1>
+        <h1><span>Somos a Anoota</span></h1>
         <p class="subtitle">A tua agenda digital que acabou com as filas e os telefonemas perdidos.</p>
+      </div>
+    </section>
 
+    <section class="stats-section">
+      <div class="container">
         <div class="stats">
-          <div class="stat" data-count="50">+50</div>
-          <div class="stat" data-count="12000">+12.000</div>
-          <p>Profissionais parceiros</p>
-          <p>Agendamentos realizados</p>
+          <div class="stat-item">
+            <div class="stat">+50</div>
+            <p>Profissionais parceiros</p>
+          </div>
+          <div class="stat-item">
+            <div class="stat">+12.000</div>
+            <p>Agendamentos realizados</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- MISSÃO / VISÃO / VALORES -->
     <section class="mvv">
       <div class="container">
         <div class="grid">
@@ -40,35 +46,32 @@
       </div>
     </section>
 
-    <!-- SOBRE A anoota -->
     <section class="about">
       <div class="container">
         <div class="grid-about">
           <div class="text">
-            <h2>A anoota nasceu para simplificar vidas</h2>
-            <p>Pertencente à <strong>JANJATEK</strong>, empresa tecnológica portuguesa especializada em soluções digitais para pequenos negócios, a anoota surgiu em 2024 com uma missão clara: acabar com as agendas de papel, os telefonemas perdidos e a gestão manual.</p>
-            <p>Hoje operamos com força em <strong>Portugal</strong>, <strong>Brasil</strong> e <strong>Angola</strong>, conectando milhares de clientes a profissionais incríveis todos os dias.</p>
+            <p>A <strong>anoota</strong> é uma plataforma da startup <strong>JANJATEK</strong>, sediada em Vila Franca de Xira, Lisboa. Surgiu em 2024 com uma missão clara: acabar com as agendas de papel, os telefonemas perdidos e a gestão manual.</p>
+            <p>Hoje operamos com força em toda <strong>CPLP</strong>, conectando milhares de clientes a profissionais incríveis todos os dias.</p>
 
-            <div class="features">
-              <div><i class="fas fa-check-circle"></i> Agendamento online 24h</div>
+            <!-- <div class="features">
+              <div><i class="fas fa-check-circle"></i> Agendamento 24h</div>
               <div><i class="fas fa-check-circle"></i> Gestão completa de clientes</div>
               <div><i class="fas fa-check-circle"></i> Relatórios e contabilidade automática</div>
               <div><i class="fas fa-check-circle"></i> Notificações WhatsApp/SMS</div>
               <div><i class="fas fa-check-circle"></i> Perfil público personalizado</div>
               <div><i class="fas fa-check-circle"></i> Zero comissões por agendamento</div>
-            </div>
+            </div> -->
           </div>
           <div class="image">
-            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200" alt="Equipe anoota">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200" alt="Equipe anoota" loading="lazy" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
     <section class="cta">
       <div class="container">
-        <h2>Junta-te à revolução anoota</h2>
+        <h2 style="color: white;">Junta-te à revolução</h2>
         <p>Se és profissional, cresce o teu negócio. Se és cliente, encontra o melhor perto de ti.</p>
         <div class="buttons">
           <button class="btn-primary">Sou Profissional</button>
@@ -78,7 +81,6 @@
     </section>
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -122,93 +124,333 @@
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/NavbarComponent.vue'
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.querySelectorAll('.stat').forEach(el => {
-    const target = parseInt(el.getAttribute('data-count')!)
-    let count = 0
-    const inc = target / 80
-    const timer = setInterval(() => {
-      count += inc
-      if (count >= target) {
-        el.textContent = target === 98 ? '98%' : target === 3 ? '3' : target < 100 ? `+${target}` : `+${Math.round(count).toLocaleString()}`
-        clearInterval(timer)
-      } else {
-        el.textContent = target === 98 ? `${Math.round(count)}%` : target === 3 ? '3' : `+${Math.round(count)}`
-      }
-    }, 30)
-  })
-})
 </script>
 
 <style scoped>
-.about-page{background:#fff;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
-.container{max-width:1280px;margin:0 auto;padding:0 20px}
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 
-/* HERO */
-.hero{padding:160px 20px 120px;text-align:center;background:linear-gradient(135deg,#0ea5e9 0%,#0c8bd1 100%);color:white}
-.hero h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:900;margin:0 0 20px}
-.hero h1 span{color:#fff176}
-.subtitle{font-size:1.35rem;max-width:720px;margin:0 auto 56px;opacity:0.95;line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:1300px;margin:0 auto}
-.stat{font-size:3.8rem;font-weight:900;color:#fff176;line-height:1}
-.stat + p{font-size:1.1rem;margin-top:8px;opacity:0.9;font-weight:600}
-
-/* MVV */
-.mvv{padding:120px 20px;background:#f8fafc}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px}
-.card{background:white;padding:40px 28px;border-radius:24px;box-shadow:0 15px 50px rgba(0,0,0,.08);text-align:center;transition:.3s}
-.card:hover{transform:translateY(-10px);box-shadow:0 25px 60px rgba(14,165,233,.15)}
-.card i{font-size:3.2rem;color:#0ea5e9;margin-bottom:20px}
-.card h3{font-size:1.6rem;font-weight:900;margin:0 0 14px;color:#1e293b}
-.card p{font-size:1.05rem;color:#475569;line-height:1.6}
-
-/* ABOUT */
-.about{padding:140px 20px;background:white}
-.grid-about{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.text h2{font-size:2.6rem;font-weight:900;color:#1e293b;margin-bottom:24px;line-height:1.2}
-.text p{font-size:1.1rem;color:#475569;line-height:1.8;margin-bottom:20px}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
-.features div{display:flex;align-items:center;gap:12px;font-size:1.05rem;font-weight:500}
-.features i{color:#10b981;font-size:1.3rem}
-.image img{width:100%;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.15)}
-
-/* CTA */
-.cta{padding:140px 20px;background:linear-gradient(135deg,#0ea5e9,#0c8bd1);text-align:center;color:white}
-.cta h2{font-size:2.8rem;font-weight:900;margin-bottom:20px}
-.cta p{font-size:1.3rem;max-width:720px;margin:0 auto 48px;opacity:0.95}
-.buttons{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
-.btn-primary,.btn-secondary{padding:18px 44px;border-radius:50px;font-size:1.2rem;font-weight:800;cursor:pointer;transition:.3s}
-.btn-primary{background:#fff176;color:#1e293b}
-.btn-primary:hover{background:#fde047;transform:translateY(-5px)}
-.btn-secondary{background:transparent;border:3px solid white;color:white}
-.btn-secondary:hover{background:white;color:#0ea5e9}
-
-/* FOOTER */
-.footer{background:#1e293b;color:#cbd5e1;padding:100px 20px 40px}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:48px;max-width:1280px;margin:0 auto 48px}
-.brand h3{font-size:2.6rem;font-weight:900;color:#0ea5e9;margin-bottom:12px}
-.brand p{font-size:1rem;margin-bottom:28px}
-.social a{font-size:1.7rem;color:#64748b;margin-right:18px;transition:.3s}
-.social a:hover{color:#0ea5e9;transform:scale(1.2)}
-.links h4{font-size:1.2rem;font-weight:800;color:white;margin-bottom:20px}
-.links a{display:block;color:#94a3b8;margin:10px 0;transition:.3s;font-size:1rem}
-.links a:hover{color:#0ea5e9;transform:translateX(6px)}
-.bottom{text-align:center;padding-top:32px;border-top:1px solid #334155;font-size:.9rem;color:#64748b}
-
-/* RESPONSIVO */
-@media (max-width:960px){
-  .grid-about{grid-template-columns:1fr;gap:60px;text-align:center}
-  .features{grid-template-columns:1fr}
+.about-page {
+  background: #fff;
 }
-@media (max-width:640px){
-  .hero{padding:120px 20px 100px}
-  .stats{grid-template-columns:1fr 1fr;gap:28px}
-  .stat{font-size:3rem}
-  .mvv,.about,.cta{padding:100px 20px}
-  .cta h2{font-size:2.4rem}
-  .footer-grid{grid-template-columns:1fr}
-  .brand{text-align:center}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero {
+  padding: 130px 20px 80px;
+  text-align: center;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.hero h1 span {
+  color: white;
+  opacity: .9;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  max-width: 680px;
+  margin: 0 auto;
+  opacity: .95;
+  line-height: 1.6;
+}
+
+.stats-section {
+  padding: 60px 20px 80px;
+  background: #f8fafc;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stat-item .stat {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #0ea5e9;
+  line-height: 1;
+}
+
+.stat-item p {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.mvv {
+  padding: 80px 20px;
+  background: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  background: #f8fafc;
+  padding: 36px 28px;
+  border-radius: 24px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.05);
+  text-align: center;
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(14,165,233,.08);
+}
+
+.card i {
+  font-size: 2.8rem;
+  color: #0ea5e9;
+  margin-bottom: 18px;
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0 0 12px;
+  color: #1e293b;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.about {
+  padding: 90px 20px;
+  background: #f8fafc;
+}
+
+.grid-about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.text h2 {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.text p {
+  font-size: 1.05rem;
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.features div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.features i {
+  color: #10b981;
+  font-size: 1.2rem;
+}
+
+.image img {
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.08);
+}
+
+.cta {
+  padding: 90px 20px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  text-align: center;
+  color: white;
+}
+
+.cta h2 {
+  font-size: 2.4rem;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  max-width: 640px;
+  margin: 0 auto 40px;
+  opacity: .95;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.btn-primary {
+  background: white;
+  color: #0ea5e9;
+}
+
+.btn-primary:hover {
+  background: #f0f9ff;
+  transform: translateY(-4px);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: #0ea5e9;
+}
+
+.footer {
+  background: #1e293b;
+  color: #cbd5e1;
+  padding: 80px 20px 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 36px;
+  margin-bottom: 36px;
+}
+
+.brand h3 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #0ea5e9;
+  margin-bottom: 10px;
+}
+
+.social a {
+  font-size: 1.4rem;
+  color: #64748b;
+  margin-right: 14px;
+  transition: .3s;
+}
+
+.social a:hover {
+  color: #0ea5e9;
+}
+
+.links h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 14px;
+}
+
+.links a {
+  display: block;
+  color: #94a3b8;
+  margin: 8px 0;
+  font-size: .95rem;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.links a:hover {
+  color: #0ea5e9;
+  transform: translateX(4px);
+}
+
+.bottom {
+  text-align: center;
+  padding-top: 24px;
+  border-top: 1px solid #334155;
+  font-size: .85rem;
+  color: #64748b;
+}
+
+@media (max-width: 960px) {
+  .grid-about {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    text-align: center;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 110px 20px 70px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .stat-item .stat {
+    font-size: 2.8rem;
+  }
+
+  .mvv,
+  .about,
+  .cta {
+    padding: 70px 20px;
+  }
+
+  .cta h2 {
+    font-size: 2.2rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
 }
 </style>

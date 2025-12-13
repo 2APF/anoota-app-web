@@ -1,9 +1,9 @@
 <template>
   <NavbarComponent />
 
-  <div class="success-page">
+  <div class="success-page" style="margin-top: 25px;">
     <div class="container">
-      <div class="success-card mt-3">
+      <div class="success-card">
         <div class="confetti">
           <div v-for="n in 30" :key="n" class="particle"></div>
         </div>
@@ -13,9 +13,6 @@
         </div>
 
         <h1>Marcação Feita!</h1>
-        <!-- <p>O teu agendamento foi realizado com sucesso.</p> -->
-        <!-- <p class="detail">Em breve receberás uma confirmação por SMS e email.</p> -->
-
 
         <div class="contact">
           <p>Qualquer dúvida, entra em contacto com a loja diretamente.</p>
@@ -42,11 +39,11 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
 const router = useRouter()
 
 interface User {
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  about: string;
+  id?: string
+  name: string
+  email: string
+  phone: string
+  about: string
 }
 
 const user: User = {
@@ -71,16 +68,16 @@ const user: User = {
 }
 
 .container {
-  max-width: 620px;
+  max-width: 560px;
   margin: 0 auto;
 }
 
 .success-card {
   background: white;
-  border-radius: 40px;
-  padding: 60px 40px;
+  border-radius: 32px;
+  padding: 52px 36px;
   text-align: center;
-  box-shadow: 0 25px 70px rgba(16, 185, 129, 0.18);
+  box-shadow: 0 20px 60px rgba(16, 185, 129, .15);
   position: relative;
   overflow: hidden;
 }
@@ -93,8 +90,8 @@ const user: User = {
 
 .particle {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background: #10b981;
   border-radius: 50%;
   opacity: 0;
@@ -106,11 +103,11 @@ const user: User = {
 }
 
 .particle:nth-child(3n) {
-  background: #f59e0b;
+  background: #34d399;
 }
 
 .particle:nth-child(4n) {
-  background: #ec4899;
+  background: #86efac;
 }
 
 @keyframes confetti-fall {
@@ -125,20 +122,20 @@ const user: User = {
 }
 
 .icon-wrapper {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   background: linear-gradient(135deg, #10b981, #34d399);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 32px;
-  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+  margin: 0 auto 28px;
+  box-shadow: 0 12px 35px rgba(16, 185, 129, .3);
   animation: pulse 2s infinite;
 }
 
 .icon-wrapper i {
-  font-size: 4.5rem;
+  font-size: 3.8rem;
   color: white;
 }
 
@@ -152,34 +149,20 @@ const user: User = {
 }
 
 h1 {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 900;
   color: #1e293b;
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   background: linear-gradient(90deg, #10b981, #0ea5e9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-p {
-  font-size: 1.25rem;
-  color: #475569;
-  margin: 12px 0;
-  line-height: 1.6;
-}
-
-.detail {
-  font-size: 1.1rem;
-  color: #10b981;
-  font-weight: 600;
-  margin: 20px 0 32px;
-}
-
 .contact {
   background: #f0fdf4;
-  border-radius: 20px;
-  padding: 20px;
-  margin: 32px 0;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 28px 0;
   border: 2px dashed #86efac;
 }
 
@@ -187,65 +170,72 @@ p {
   margin: 0;
   color: #065f46;
   font-weight: 600;
+  font-size: 1.05rem;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 40px;
+  gap: 14px;
+  margin-top: 36px;
 }
 
 .btn-primary {
-  padding: 18px;
+  padding: 16px;
   background: linear-gradient(135deg, #10b981, #34d399);
   color: white;
   border: none;
-  border-radius: 20px;
-  font-size: 1.3rem;
+  border-radius: 18px;
+  font-size: 1.2rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all .3s;
 }
 
 .btn-primary:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(16, 185, 129, .25);
 }
 
 .btn-secondary {
-  padding: 18px;
+  padding: 16px;
   background: transparent;
   color: #0ea5e9;
   border: 2px solid #0ea5e9;
-  border-radius: 20px;
-  font-size: 1.2rem;
+  border-radius: 18px;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all .3s;
 }
 
 .btn-secondary:hover {
   background: #f0f9ff;
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 @media (max-width: 480px) {
   .success-card {
-    padding: 48px 24px;
+    padding: 44px 24px;
+    border-radius: 28px;
   }
 
   h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
   }
 
   .icon-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
   }
 
   .icon-wrapper i {
-    font-size: 3.8rem;
+    font-size: 3.4rem;
+  }
+
+  .contact {
+    padding: 16px;
+    margin: 24px 0;
   }
 }
 </style>

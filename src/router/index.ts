@@ -50,7 +50,7 @@ const router = createRouter({
       name: 'app.we',
       component: WeView,
       meta: {
-        title: 'Login - anoota',
+        title: 'Sobre a Anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
         ogImage: 'https://anoota.online/logo-black.png',

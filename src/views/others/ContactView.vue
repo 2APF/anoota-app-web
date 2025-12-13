@@ -6,10 +6,9 @@
   </a>
 
   <div class="contact-page">
-
     <section class="hero">
       <div class="container">
-        <h1 style="color: white;">Fala connosco</h1>
+        <h1>Fala connosco</h1>
         <p class="subtitle">Estamos aqui para te ajudar</p>
       </div>
     </section>
@@ -17,7 +16,6 @@
     <section class="contact">
       <div class="container">
         <div class="cards">
-
           <div class="card">
             <div class="icon"><i class="fab fa-whatsapp"></i></div>
             <h3>WhatsApp</h3>
@@ -47,10 +45,8 @@
             <h3>Escritório</h3>
             <p>Rua da Tecnologia, 123</p>
             <p>1000-001 Lisboa · Portugal</p>
-            <a href="https://maps.google.com/?q=Rua+da+Tecnologia+123+Lisboa" target="_blank" class="btn">Ver no
-              mapa</a>
+            <a href="https://maps.google.com/?q=Rua+da+Tecnologia+123+Lisboa" target="_blank" class="btn">Ver no mapa</a>
           </div>
-
         </div>
       </div>
     </section>
@@ -59,11 +55,10 @@
       <div class="container">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3112.8451567890123!2d-9.139336684684687!3d38.72225297959803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337a2c58d9c5%3A0x79f7e9f9e9f9e9f9!2sLisboa!5e0!3m2!1spt-PT!2spt!4v1234567890"
-          width="100%" height="500" style="border:0;border-radius:28px;" loading="lazy">
+          width="100%" height="420" style="border:0;border-radius:20px;" loading="lazy" allowfullscreen>
         </iframe>
       </div>
     </section>
-
   </div>
 
   <footer class="footer">
@@ -112,209 +107,222 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
 </script>
 
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
 .contact-page {
   background: #f8fafc;
-  min-height: 100vh
 }
 
 .container {
-  max-width: 1280px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 20px
+  padding: 0 20px;
 }
 
 .hero {
-  padding: 160px 20px 100px;
+  padding: 120px 20px 70px;
   text-align: center;
-  background: linear-gradient(135deg, #0ea5e9, #0c8bd1);
-  color: white
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
 }
 
 .hero h1 {
-  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
   font-weight: 900;
-  margin-bottom: 16px
+  margin-bottom: 14px;
+  color: white;
 }
 
 .subtitle {
-  font-size: 1.35rem;
-  max-width: 720px;
+  font-size: 1.2rem;
+  max-width: 640px;
   margin: 0 auto;
-  opacity: 0.95
+  color: white;
+  opacity: .95;
 }
 
 .contact {
-  padding: 100px 20px
+  padding: 80px 20px;
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
 }
 
 .card {
   background: white;
-  padding: 40px;
-  border-radius: 28px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .08);
+  padding: 32px;
+  border-radius: 22px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .06);
   text-align: center;
-  transition: .3s
+  transition: .3s;
 }
 
 .card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 30px 80px rgba(14, 165, 233, .15)
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(14, 165, 233, .1);
 }
 
 .icon {
-  width: 84px;
-  height: 84px;
+  width: 68px;
+  height: 68px;
   background: #0ea5e9;
   border-radius: 50%;
-  margin: 0 auto 24px;
+  margin: 0 auto 18px;
   display: grid;
   place-items: center;
-  font-size: 2.4rem;
-  color: white
+  font-size: 2rem;
+  color: white;
 }
 
 .card h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #1e293b;
 }
 
 .main {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  margin: 12px 0;
+  margin: 10px 0;
   color: #0ea5e9;
 }
 
 .card p {
-  font-size: 1.05rem;
+  font-size: .95rem;
   color: #475569;
-  margin: 8px 0
+  margin: 8px 0;
 }
 
 .btn {
   display: inline-block;
-  margin-top: 20px;
-  padding: 14px 32px;
+  margin-top: 16px;
+  padding: 11px 28px;
   background: #0ea5e9;
   color: white;
   border-radius: 50px;
-  font-weight: 800;
-  transition: .3s
+  font-weight: 700;
+  font-size: .95rem;
+  text-decoration: none;
+  transition: .3s;
 }
 
 .btn:hover {
-  background: #0c8bd1;
-  transform: translateY(-4px)
+  background: #0284c7;
+  transform: translateY(-3px);
 }
 
 .map {
-  padding: 80px 20px
+  padding: 80px 20px;
 }
 
 .map iframe {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .15)
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .08);
 }
 
 .whatsapp-float {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 64px;
-  height: 64px;
+  right: 20px;
+  bottom: 20px;
+  width: 58px;
+  height: 58px;
   background: #25d366;
   color: white;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 2.4rem;
-  box-shadow: 0 10px 30px rgba(37, 211, 102, .4);
+  font-size: 2.1rem;
+  box-shadow: 0 8px 25px rgba(37, 211, 102, .3);
   z-index: 1000;
-  transition: .3s
+  transition: .3s;
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.15)
+  transform: scale(1.1);
 }
 
 .footer {
   background: #1e293b;
   color: #cbd5e1;
-  padding: 100px 20px 40px
+  padding: 80px 20px 40px;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 48px;
-  max-width: 1280px;
-  margin: 0 auto 48px
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 36px;
+  margin-bottom: 36px;
 }
 
 .brand h3 {
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   font-weight: 900;
   color: #0ea5e9;
-  margin-bottom: 12px
+  margin-bottom: 10px;
 }
 
 .social a {
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   color: #64748b;
-  margin-right: 18px;
-  transition: .3s
+  margin-right: 14px;
+  transition: .3s;
 }
 
 .social a:hover {
-  color: #0ea5e9
+  color: #0ea5e9;
 }
 
 .links h4 {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: white;
-  margin-bottom: 20px
+  margin-bottom: 14px;
 }
 
 .links a {
   display: block;
   color: #94a3b8;
-  margin: 10px 0;
-  transition: .3s
+  margin: 8px 0;
+  font-size: .9rem;
+  text-decoration: none;
+  transition: .3s;
 }
 
 .links a:hover {
   color: #0ea5e9;
-  transform: translateX(6px)
+  transform: translateX(4px);
 }
 
 .bottom {
   text-align: center;
-  padding-top: 32px;
+  padding-top: 24px;
   border-top: 1px solid #334155;
-  font-size: .9rem;
-  color: #64748b
+  font-size: .85rem;
+  color: #64748b;
 }
 
-@media (max-width:640px) {
+@media (max-width: 640px) {
   .hero {
-    padding: 120px 20px 80px
+    padding: 110px 20px 60px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
   }
 
   .contact,
   .map {
-    padding: 80px 20px
+    padding: 70px 20px;
   }
 
   .card {
-    padding: 32px
+    padding: 28px;
+  }
+
+  .footer {
+    padding: 70px 20px 40px;
   }
 }
 </style>
