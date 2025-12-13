@@ -119,7 +119,7 @@ const phrases = ['perto de si', 'ao seu gosto', 'mantendo a fidelidade', 'hoje m
 let phraseIndex = 0
 let charIndex = 0
 let isDeleting = false
-let typingTimer: number | null = null
+let typingTimer: number | any = null
 
 const type = () => {
   const current = phrases[phraseIndex % phrases.length]
@@ -139,6 +139,7 @@ const type = () => {
 }
 
 const loadStores = async (append = false) => {
+  
   if (loading.value || (!append && page.value > 1 && !hasMore.value)) return
   loading.value = true
 
