@@ -1,20 +1,20 @@
 {
-    "name": "Bizness Label Group",
-    "short_name": "Bizness Label Group",
+    "name": "Anoota",
+    "short_name": "Anoota",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "lang": "pt",
     "scope": "/",
     "theme_color": "#000000",
-    "description": "Sua garantia de privacidade e segurança online. Proteja suas conversas com criptografia avançada e desfrute de uma experiência de comunicação livre de preocupações.",
+    "description": "A tua agenda digital que acabou com as filas e os telefonemas perdidos.",
     "id": "nohere.private.02.#",
     "orientation": "any",
     "shortcuts": [
       {
         "name": "Home",
-        "url": "https://nohere.online/",
-        "description": "Página inicial da Bizness Label Group"
+        "url": "https://anoota.com/",
+        "description": "Página inicial da Anoota"
       }
     ],
     "categories": [
@@ -30,8 +30,8 @@
       "url": "https://arturfrancisco.me"
     },
     "publisher": {
-      "name": "NoHere Inc.",
-      "url": "https://nohere.online/"
+      "name": "Anoota Inc.",
+      "url": "https://anoota.com"
     },
     "privacy_policy": "/privacy-policy",
     "terms_of_service": "/terms-of-service",

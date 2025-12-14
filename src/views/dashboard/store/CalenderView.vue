@@ -48,7 +48,8 @@
       </div>
 
       <div v-else class="list">
-        <div v-for="apt in dayAppointments" :key="apt.id" class="item" :style="{ backgroundColor: apt.status === '3' ? '#d4edda' : ''}">
+        <div v-for="apt in dayAppointments" :key="apt.id" class="item"
+          :style="{ backgroundColor: apt.status === '3' ? '#d4edda' : '' }">
           <div class="time">{{ apt.time }}</div>
           <div class="details">
             <div class="client">{{ apt.client_name }}</div>
@@ -58,13 +59,13 @@
           </div>
           <div class="price">€{{ apt.total_price }}</div>
           <div class="duration">{{ apt.total_duration }}min</div>
-          
+
           <div class="actions" v-if="apt.status != '3'">
             <button @click="openModalChecked(apt)" class="edit"><i class="fas fa-check"></i></button>
             <button @click="edit(apt)" class="edit"><i class="fas fa-edit"></i></button>
             <button @click="openDelete(apt)" class="delete"><i class="fas fa-trash"></i></button>
           </div>
-           <div class="actions" v-else>
+          <div class="actions" v-else>
             <button @click="openDelete(apt)" class="delete"><i class="fas fa-trash"></i></button>
           </div>
         </div>
@@ -89,10 +90,21 @@
                 <label>Cliente *</label>
                 <select v-model="form.client_id" required>
                   <option value="">Selecione o cliente</option>
+                  <option value="0">Cliente Novo(a)</option>
                   <option v-for="c in clients" :key="c.id" :value="c.id">
                     {{ c.name }} {{ c.phone ? `(${c.phone})` : '' }}
                   </option>
                 </select>
+
+                
+                  <div class="row client-inputs"  v-if="form.client_id == '0'" style="margin-top: 25px;">
+                    <div class="col-6">
+                      <input v-model="nameClient" type="text" class="form-group"" placeholder="Nome *" required>
+                    </div>
+                    <div class="col-6">
+                      <input v-model="phoneClient" type="number" class="form-group" maxlength="10" placeholder="Telefone *" required>
+                    </div>
+                  </div>
               </div>
 
               <div class="field">
@@ -122,17 +134,17 @@
               <div class="field">
                 <label>Horário *</label>
                 <select v-model="form.time" required :disabled="loadingSlots">
-                  <option :value="form.time" v-if="editMode" selected >{{ form.time }}</option>
+                  <option :value="form.time" v-if="editMode" selected>{{ form.time }}</option>
                   <option value="">{{ loadingSlots ? 'Carregando...' : 'Selecione o horário' }}</option>
-                  <option v-for="slot in availableTimeSlots" :key="slot" :value="slot" >{{ slot }}</option>
+                  <option v-for="slot in availableTimeSlots" :key="slot" :value="slot">{{ slot }}</option>
                 </select>
               </div>
 
               <div class="form-actions">
-                
-                
+
+
                 <button type="button" @click="modal = false">Manter</button>
-                <button type="submit" class="primary" 
+                <button type="submit" class="primary"
                   :disabled="!form.client_id || !form.service_ids.length || !form.time || loadingSlots || loading">
                   {{ editMode ? 'Atualizar' : 'Agendar' }}
                 </button>
@@ -140,7 +152,7 @@
             </form>
           </div>
 
-            <div v-else class="modal-card pro" @click.stop>
+          <div v-else class="modal-card pro" @click.stop>
             <div class="modal-header">
               <h3>Sem horários disponíveis</h3>
               <button @click="modal = false" class="close-btn">×</button>
@@ -153,7 +165,7 @@
               </div>
             </div>
           </div>
-        
+
         </div>
       </Transition>
     </teleport>
@@ -179,19 +191,19 @@
 
     <teleport to="body">
       <Transition name="modal">
-      <div v-if="checkedModal" class="modal-overlay" @click="checkedModal = false">
-        <div class="modal-card delete-modal" @click.stop>
-        <i class="fas fa-check-circle"></i>
-        <h3>Marcação concluída?</h3>
-        <p><strong>{{ appointmentToCheck?.client_name }}</strong></p>
-        <p>{{ appointmentToCheck?.time }} • {{appointmentToCheck?.services_list.map(s => s.name).join(', ')}}
-        </p>
-        <div class="form-actions">
-          <button @click="checkedModal = false">Cancelar</button>
-          <button @click="confirmChecked" :disabled="loading" class="primary check">Sim, concluir</button>
+        <div v-if="checkedModal" class="modal-overlay" @click="checkedModal = false">
+          <div class="modal-card delete-modal" @click.stop>
+            <i class="fas fa-check-circle"></i>
+            <h3>Marcação concluída?</h3>
+            <p><strong>{{ appointmentToCheck?.client_name }}</strong></p>
+            <p>{{ appointmentToCheck?.time }} • {{appointmentToCheck?.services_list.map(s => s.name).join(', ')}}
+            </p>
+            <div class="form-actions">
+              <button @click="checkedModal = false">Cancelar</button>
+              <button @click="confirmChecked" :disabled="loading" class="primary check">Sim, concluir</button>
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
       </Transition>
     </teleport>
 
@@ -199,7 +211,7 @@
 
   </div>
 
-  
+
   <div v-if="notification.message" class="notification" :class="notification.type">
     {{ notification.message }}
   </div>
@@ -239,8 +251,10 @@ if (typeof route.params.user === 'string') {
   user = route.params.user || { id: '', name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '', type: '' };
 }
 
+let nameClient = ref<string | null>(null)
+let phoneClient = ref<number | null>(null)
 
-interface Client { id: number; name: string; phone: string; email: string }
+interface Client { id: number; name: string; phone: string; email: string;}
 interface Service { id: number; name: string; price: string; duration_minutes: number }
 interface Appointment { id: number; client_id: number; client_name: string; services_list: Service[]; time: string; total_price: string; total_duration: number; date: string }
 
@@ -339,7 +353,7 @@ const fetchAvailableTimes = async () => {
       // params: { date: dateStr },
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
-    
+
     availableTimeSlots.value = Array.isArray(res.data) ? res.data : []
 
     if (!res.data[0]) {
@@ -384,14 +398,18 @@ const submitCreate = async () => {
 
   loading.value = true
 
-  if (!form.value.client_id || form.value.service_ids.length === 0 || !form.value.time) return
+  if (form.value.service_ids.length === 0 || !form.value.time) return
 
+
+      // console.log(res)
   const payload = {
-    client_id: Number(form.value.client_id),
+    client_id: Number(form.value.client_id) || 1,
     service_ids: form.value.service_ids,
     date: format(selectedDate.value, 'yyyy-MM-dd'),
     time: form.value.time,
-    user_id: user.id
+    user_id: user.id,
+    nameClient: nameClient.value || null,
+    phoneClient: phoneClient.value || null
   }
 
   try {
@@ -400,18 +418,19 @@ const submitCreate = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
     } else {
-      await axios.post(`${API_URL}/store/schedule/create`, payload, {
+      const res = await axios.post(`${API_URL}/store/schedule/create`, payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
-
     }
+    nameClient.value = null
+    phoneClient.value = null
     showNotification(editMode.value ? 'Marcação atualizada com sucesso' : 'Marcação criada com sucesso', 'success')
     loading.value = false
 
     modal.value = false
     loadData()
   } catch (err: any) {
-   // console.log(err)
+    // console.log(err)
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }
@@ -437,7 +456,7 @@ const confirmChecked = async () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     showNotification('Marcação concluída com sucesso', 'success')
-      loading.value = false
+    loading.value = false
 
     checkedModal.value = false
     loadData()
@@ -458,7 +477,7 @@ const confirmDelete = async () => {
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
   })
   showNotification('Agendamento excluido com sucesso', 'success')
-    loading.value = false
+  loading.value = false
 
   deleteModal.value = false
   loadData()
@@ -466,7 +485,7 @@ const confirmDelete = async () => {
 
 const loadData = async () => {
   try {
-    
+
     const res = await axios.get(`${API_URL}/store/calendary/${user.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
@@ -476,7 +495,7 @@ const loadData = async () => {
     services.value = Array.isArray(data.services) ? data.services : []
 
     const schedules = Array.isArray(data.schedules) ? data.schedules : []
-    
+
     appointments.value = schedules.map((s: any) => {
 
       const client = clients.value.find(c => c.id === s.client_id) || { name: 'Cliente desconhecido' }
@@ -938,6 +957,22 @@ select,
   transition: all .2s;
 }
 
+
+.client-inputs input {
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 1rem;
+  background: white;
+  transition: all .2s;
+}
+.client-inputs input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, .15);
+}
+
 select:focus,
 .search-input input:focus {
   outline: none;
@@ -1135,6 +1170,7 @@ select:focus,
     border-radius: 28px 28px 0 0;
     max-height: 95vh;
   }
+
   .modal-card.delete-modal {
     border-radius: 28px 28px 0 0;
     max-width: 100%;

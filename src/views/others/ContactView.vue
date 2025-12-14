@@ -1,7 +1,7 @@
 <template>
   <NavbarComponent />
 
-  <a href="https://wa.me/351912345678" target="_blank" class="whatsapp-float">
+  <a href="https://wa.me/+351925220453" target="_blank" class="whatsapp-float">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -19,7 +19,7 @@
           <div class="card">
             <div class="icon"><i class="fab fa-whatsapp"></i></div>
             <h3>WhatsApp</h3>
-            <p class="main">+351 91 234 5678</p>
+            <p class="main">+351 925 220 453</p>
             <p>Segunda a Sexta · 9h–19h</p>
             <a href="https://wa.me/351912345678" target="_blank" class="btn">Falar agora</a>
           </div>
@@ -27,7 +27,7 @@
           <div class="card">
             <div class="icon"><i class="fas fa-envelope"></i></div>
             <h3>Email</h3>
-            <p class="main">ola@anoota.pt</p>
+            <p class="main">geral@anoota.pt</p>
             <p>Resposta em menos de 2h úteis</p>
             <a href="mailto:ola@anoota.pt" class="btn">Enviar email</a>
           </div>
@@ -35,7 +35,7 @@
           <div class="card">
             <div class="icon"><i class="fas fa-phone-alt"></i></div>
             <h3>Telefone</h3>
-            <p class="main">+351 211 234 567</p>
+            <p class="main">+351 925 220 453</p>
             <p>Segunda a Sexta · 10h–18h</p>
             <a href="tel:+351211234567" class="btn">Ligar agora</a>
           </div>
@@ -65,7 +65,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="brand">
-          <h3>anoota</h3>
+          <h3>Anoota</h3>
           <p>A tua agenda digital.</p>
           <div class="social">
             <a href="#"><i class="fab fa-instagram"></i></a>

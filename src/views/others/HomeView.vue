@@ -148,7 +148,10 @@ const loadStores = async (append = false) => {
     if (searchQuery.value.trim()) params.search = searchQuery.value.trim()
     if (selectedCategory.value && selectedCategory.value !== 'Todas as categorias') params.category = selectedCategory.value
 
-    const res = await axios.get(`${API_URL}/store/all`, { params })
+    const res = await axios.get(`${API_URL}/store/all`, {
+       params 
+      
+      })
     const data = res.data
 
     if (append) {
