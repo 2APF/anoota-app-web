@@ -7,8 +7,7 @@
 
       <div class="header-actions">
         <RouterLink :to="{ name: 'app.home' }" class="action-btn location-btn">
-          <!-- <i class="fas fa-map-marker-alt"></i> -->
-            <i class="fas fa-store"></i>
+          <i class="fas fa-store"></i>
         </RouterLink>
 
         <div class="user-menu-wrapper" ref="userMenuWrapper">
@@ -59,7 +58,8 @@
   <aside class="sidebar" :class="{ active: sidebarOpen }">
     <div class="sidebar-header">
       <div class="logo-sidebar">
-        <img src="/logo.png" alt="Anoota" class="logo-img" /></div>
+        <img src="/logo.png" alt="Anoota" class="logo-img" />
+      </div>
       <button class="close-btn" @click="sidebarOpen = false">
         <i class="fas fa-times"></i>
       </button>
@@ -435,6 +435,7 @@ onUnmounted(() => {
   width: 100%;
   max-width: 380px;
   height: 100vh;
+  height: 100dvh; /* Melhor suporte em mobile */
   background: white;
   z-index: 1100;
   transform: translateX(100%);
@@ -449,17 +450,16 @@ onUnmounted(() => {
 }
 
 .sidebar-header {
-  padding: 2px 28px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
-.logo-sidebar {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: #0ea5e9;
+.logo-sidebar .logo-img {
+  height: 42px;
 }
 
 .close-btn {
@@ -485,6 +485,7 @@ onUnmounted(() => {
   flex: 1;
   padding: 16px 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .menu-item {
@@ -542,6 +543,7 @@ onUnmounted(() => {
   padding: 16px 24px;
   border: 2px solid #10b981;
   box-shadow: 0 8px 25px rgba(16,185,129,.15);
+  margin: 0 20px;
 }
 
 .menu-item.premium i {
@@ -556,6 +558,7 @@ onUnmounted(() => {
 .sidebar-footer {
   padding: 20px 28px;
   border-top: 1px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
 .btn-logout {
@@ -591,7 +594,8 @@ onUnmounted(() => {
   transform: translateY(-10px);
 }
 
-@media (max-width: 480px) {
+/* Responsividade Mobile */
+@media (max-width: 768px) {
   .top-bar {
     padding: 12px 16px;
     height: 68px;
@@ -623,26 +627,52 @@ onUnmounted(() => {
 
   .sidebar {
     max-width: 100%;
+    width: 100%;
+  }
+
+  .sidebar-header {
+    padding: 12px 16px;
   }
 
   .menu-item {
-    padding: 16px 24px;
+    padding: 16px 20px;
     font-size: 1.05rem;
   }
 
+  .menu-item:hover {
+    padding-left: 28px;
+  }
+
+  .menu-item.router-link-active {
+    padding-left: 15px;
+  }
+
   .menu-item.premium {
-    margin: 12px 20px;
-    padding: 14px 20px;
+    margin: 12px 16px;
+    padding: 14px 18px;
     font-size: 1rem;
   }
 
   .sidebar-footer {
-    padding: 18px 24px;
+    padding: 18px 20px;
   }
 
   .btn-logout {
     padding: 14px;
     font-size: .98rem;
+  }
+}
+
+/* Ajustes específicos para iPhone (safe area) */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .header {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .sidebar {
+    padding-top: env(safe-area-inset-top);
+    height: calc(100vh - env(safe-area-inset-top));
+    height: calc(100dvh - env(safe-area-inset-top));
   }
 }
 </style>
