@@ -8,7 +8,7 @@
       <div class="header-actions">
         <RouterLink :to="{ name: 'app.home' }" class="action-btn location-btn">
           <!-- <i class="fas fa-map-marker-alt"></i> -->
-            <i class="fas fa-times"></i>
+            <i class="fas fa-store"></i>
         </RouterLink>
 
         <div class="user-menu-wrapper" ref="userMenuWrapper">

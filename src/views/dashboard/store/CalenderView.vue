@@ -99,7 +99,7 @@
                 
                   <div class="row client-inputs"  v-if="form.client_id == '0'" style="margin-top: 25px;">
                     <div class="col-6">
-                      <input v-model="nameClient" type="text" class="form-group"" placeholder="Nome *" required>
+                      <input v-model="nameClient" type="text" class="form-group" placeholder="Nome *" required>
                     </div>
                     <div class="col-6">
                       <input v-model="phoneClient" type="number" class="form-group" maxlength="10" placeholder="Telefone *" required>

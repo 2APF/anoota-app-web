@@ -7,17 +7,18 @@
     <div class="container">
 
       <header class="header">
-      <div class="title">
-        <h1>Meus Serviços</h1>
-        <p class="total-count">{{ services.length }} serviço{{ services.length !== 1 ? 's' : '' }} cadastrado{{ services.length !== 1 ? 's' : '' }}</p>
-      </div>
-      <button @click="openNewService" class="btn-add">
-        + Novo Serviço
-      </button>
-    </header>
+        <div class="title">
+          <h1>Meus Serviços</h1>
+          <p class="total-count">{{ services.length }} serviço{{ services.length !== 1 ? 's' : '' }} cadastrado{{
+            services.length !== 1 ? 's' : '' }}</p>
+        </div>
+        <button @click="openNewService" class="btn-add">
+          + Novo Serviço
+        </button>
+      </header>
 
 
-      <div class="search-bar"> 
+      <div class="search-bar">
         <input v-model="searchQuery" @input="filterServices" placeholder="Pesquisar por nome do serviço..." />
       </div>
 
@@ -31,7 +32,7 @@
       <div v-else class="services-list">
         <div v-for="service in filteredServices" :key="service.id" class="service-item">
           <div class="main-info">
-         
+
             <div class="details">
               <h3 class="service-name">{{ service.name }}</h3>
               <div class="meta">
@@ -58,11 +59,17 @@
         <div class="modal-card" @click.stop>
           <h3>{{ editingService ? 'Editar Serviço' : 'Novo Serviço' }}</h3>
           <form @submit.prevent="saveService">
-            <input v-model="form.name" placeholder="Nome do serviço *" required />
-            <div class="row">
-              <input v-model.number="form.duration_minutes" type="number" min="5" placeholder="Duração (min) *" required />
+
+            <!-- <div class="row"> -->
+              <input v-model="form.name" placeholder="Nome do serviço *" required />
+            <!-- </div> -->
+
+               <!-- <div class="row mb-3"> -->
+              <!-- <label></label> -->
+              <input v-model.number="form.duration_minutes" type="number" min="5" placeholder="Duração (o total em minutos) *"
+                required />
               <input v-model.number="form.price" type="number" step="0.01" min="0" placeholder="Preço € *" required />
-            </div>
+       
 
             <div class="modal-actions">
               <button type="button" @click="closeModal" class="cancel">Cancelar</button>
@@ -282,13 +289,13 @@ onMounted(loadServices)
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 8px 25px rgba(14,165,233,.3);
+  box-shadow: 0 8px 25px rgba(14, 165, 233, .3);
 }
 
 
 .btn-add:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(16,185,129,.4);
+  box-shadow: 0 16px 40px rgba(16, 185, 129, .4);
 }
 
 .container {
@@ -319,14 +326,14 @@ onMounted(loadServices)
   border-radius: 50px;
   background: white;
   font-size: 1.1rem;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
   transition: all .3s;
 }
 
 .search-bar input:focus {
   outline: none;
   border-color: #0ea5e9;
-  box-shadow: 0 0 0 8px rgba(14,165,233,.15);
+  box-shadow: 0 0 0 8px rgba(14, 165, 233, .15);
 }
 
 .empty {
@@ -361,7 +368,7 @@ onMounted(loadServices)
   background: white;
   border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
   border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
@@ -372,7 +379,7 @@ onMounted(loadServices)
 
 .service-item:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(14,165,233,.15);
+  box-shadow: 0 20px 50px rgba(14, 165, 233, .15);
 }
 
 .main-info {
@@ -453,7 +460,7 @@ onMounted(loadServices)
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.7);
+  background: rgba(0, 0, 0, .7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,7 +475,7 @@ onMounted(loadServices)
   padding: 32px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.4);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .4);
 }
 
 .modal-card h3 {
@@ -492,7 +499,7 @@ onMounted(loadServices)
 .modal-card input:focus {
   outline: none;
   border-color: #0ea5e9;
-  box-shadow: 0 0 0 6px rgba(14,165,233,.12);
+  box-shadow: 0 0 0 6px rgba(14, 165, 233, .12);
 }
 
 .row {
@@ -568,7 +575,7 @@ onMounted(loadServices)
   color: white;
   font-weight: 700;
   z-index: 9999;
-  box-shadow: 0 20px 50px rgba(0,0,0,.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
 }
 
 .notification.success {
