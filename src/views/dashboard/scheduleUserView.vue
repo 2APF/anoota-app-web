@@ -44,15 +44,15 @@
           </div>
 
           <div v-else class="user-info">
-            <h3>Informações do Usuário</h3>
+            <h3>Informações do(a) Cliente</h3>
             <form @submit.prevent class="user-form">
               <div class="input-group">
-                <label for="guest-name">Nome completo *</label>
-                <input id="guest-name" v-model="guestName" placeholder="Seu nome completo" required />
+                <label for="guest-name">Nome *</label>
+                <input id="guest-name" v-model="guestName" placeholder="Digite seu nome *" required />
               </div>
 
               <div class="phone-group">
-                <label for="phone-number">Número de Telefone *</label>
+                <label for="phone-number">Número de Contacto *</label>
                 <div class="phone-input">
                   <div class="country-select">
                     <img :src="selectedCountry.flag" alt="" class="flag">
@@ -62,12 +62,11 @@
                       </option>
                     </select>
                   </div>
-                  <input id="phone-number" v-model="guestPhone" type="tel" placeholder="912 345 678" required />
+                  <input id="phone-number" v-model="guestPhone" type="tel" placeholder="Ex: 912 345 678" required />
                 </div>
               </div>
             </form>
           </div>
-
         </div>
 
         <div class="booking-form">
