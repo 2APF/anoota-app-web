@@ -43,7 +43,7 @@
           <div class="card">
             <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
             <h3>Escritório</h3>
-            <p>Rua da Tecnologia, 123</p>
+            <p>Vila Franca de Xira, Centro Comercial Foca</p>
             <p>1000-001 Lisboa · Portugal</p>
             <a href="https://maps.google.com/?q=Rua+da+Tecnologia+123+Lisboa" target="_blank" class="btn">Ver no mapa</a>
           </div>
@@ -54,7 +54,7 @@
     <section class="map">
       <div class="container">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3112.8451567890123!2d-9.139336684684687!3d38.72225297959803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337a2c58d9c5%3A0x79f7e9f9e9f9e9f9!2sLisboa!5e0!3m2!1spt-PT!2spt!4v1234567890"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50904040.74245572!2d-82.88085937500003!3d38.85682013474361!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd192f679ebbbf75%3A0xd0f7fbe3b5882d49!2sCentro%20comercial%20foca!5e0!3m2!1spt-PT!2smn!4v1765744042232!5m2!1spt-PT!2smn"
           width="100%" height="420" style="border:0;border-radius:20px;" loading="lazy" allowfullscreen>
         </iframe>
       </div>
