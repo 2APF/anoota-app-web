@@ -61,49 +61,13 @@
     </section>
   </div>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="brand">
-          <h3>Anoota</h3>
-          <p>A tua agenda digital.</p>
-          <div class="social">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-          </div>
-        </div>
-        <div class="links">
-          <h4>Plataforma</h4>
-          <a href="#">Como funciona</a>
-          <a href="#">Preços</a>
-          <a href="#">Profissionais</a>
-          <a href="#">Blog</a>
-        </div>
-        <div class="links">
-          <h4>Empresa</h4>
-          <a href="#">Quem Somos</a>
-          <a href="#">Carreiras</a>
-          <a href="#">Imprensa</a>
-          <a href="#">Contacto</a>
-        </div>
-        <div class="links">
-          <h4>Legal</h4>
-          <a href="#">Termos de Uso</a>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Cookies</a>
-        </div>
-      </div>
-      <div class="bottom">
-        <p>© 2025 anoota • Pertencente à JANJATEK, Lda • Todos os direitos reservados</p>
-      </div>
-    </div>
-  </footer>
+  
+  <FooterComponent />
 </template>
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/NavbarComponent.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 </script>
 
 <style scoped>
@@ -242,66 +206,7 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
 .whatsapp-float:hover {
   transform: scale(1.1);
 }
-
-.footer {
-  background: #1e293b;
-  color: #cbd5e1;
-  padding: 80px 20px 40px;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 36px;
-  margin-bottom: 36px;
-}
-
-.brand h3 {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: #0ea5e9;
-  margin-bottom: 10px;
-}
-
-.social a {
-  font-size: 1.4rem;
-  color: #64748b;
-  margin-right: 14px;
-  transition: .3s;
-}
-
-.social a:hover {
-  color: #0ea5e9;
-}
-
-.links h4 {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 14px;
-}
-
-.links a {
-  display: block;
-  color: #94a3b8;
-  margin: 8px 0;
-  font-size: .9rem;
-  text-decoration: none;
-  transition: .3s;
-}
-
-.links a:hover {
-  color: #0ea5e9;
-  transform: translateX(4px);
-}
-
-.bottom {
-  text-align: center;
-  padding-top: 24px;
-  border-top: 1px solid #334155;
-  font-size: .85rem;
-  color: #64748b;
-}
+ 
 
 @media (max-width: 640px) {
   .hero {
@@ -321,8 +226,5 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
     padding: 28px;
   }
 
-  .footer {
-    padding: 70px 20px 40px;
-  }
 }
 </style>

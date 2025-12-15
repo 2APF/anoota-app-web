@@ -67,25 +67,25 @@
 
     <nav class="sidebar-menu">
       <div v-if="!user.name">
-        <RouterLink :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.home' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-home"></i> Explorar
         </RouterLink>
-        <RouterLink :to="{ name: 'app.we' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.we' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-users"></i> Quem Somos
         </RouterLink>
-        <RouterLink :to="{ name: 'app.contact' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.contact' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-phone"></i> Fale Connosco
         </RouterLink>
       </div>
 
       <div v-if="user.name && user.type == '3'">
-        <RouterLink :to="{ name: 'app.user.homepage' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.user.homepage' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-home"></i> Home
         </RouterLink>
-        <RouterLink :to="{ name: 'app.home' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.home' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-calendar-plus"></i> Explorar Profissionais
         </RouterLink>
-        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.user.schedules' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-calendar-day"></i> Minhas Marcações
         </RouterLink>
         <RouterLink :to="{ name: 'app.user.comunication' }" class="menu-item disabled">
@@ -97,32 +97,38 @@
       </div>
 
       <div v-if="user.name && user.type == '2'">
-        <RouterLink :to="{ name: 'app.store.configuration' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.store.configuration' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-store"></i> Configurar Loja
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.calender' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.store.calender' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-calendar-day"></i> Marcações
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.services' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.store.services' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-briefcase"></i> Serviços
         </RouterLink>
-        <RouterLink :to="{ name: 'app.store.clients' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.store.clients' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-users"></i> Clientes
         </RouterLink>
-        <RouterLink :to="{ name: 'app.user.schedules' }" class="menu-item" @click="sidebarOpen = false">
+        <RouterLink :to="{ name: 'app.user.schedules' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
           <i class="fas fa-book-reader"></i> Marcações Particulares
         </RouterLink>
       </div>
     </nav>
 
     <div class="sidebar-footer">
-      <RouterLink v-if="user.name && user.type != '2'" :to="{ name: 'app.user.to.professional' }" class="menu-item premium" @click="sidebarOpen = false">
+      <RouterLink v-if="user.name && user.type != '2'" :to="{ name: 'app.user.to.professional' }"  :scroll-behavior="{ behavior: 'smooth' }" class="menu-item premium" @click="sidebarOpen = false">
         <i class="fas fa-crown"></i> Tornar-se Profissional
       </RouterLink>
 
-      <RouterLink :to="{ name: 'app.contact' }" class="menu-item" @click="sidebarOpen = false">
+      <RouterLink v-if="user.name" :to="{ name: 'app.contact' }" :scroll-behavior="{ behavior: 'smooth' }" class="menu-item" @click="sidebarOpen = false">
         <i class="fas fa-headset"></i> Suporte
       </RouterLink>
+
+
+      
+      <RouterLink v-if="!user.name" :to="{ name: 'app.auth.login' }" :scroll-behavior="{ behavior: 'smooth' }" class="btn-logout" style="background-color: #0ea5e9; color: white; text-decoration: solid;">
+         <i class="fas fa-sign-in-alt"></i> Entrar
+      </RouterLink> 
 
       <button class="btn-logout" @click="logout" v-if="user.name">
         <i class="fas fa-sign-out-alt"></i> Sair
@@ -281,6 +287,7 @@ onUnmounted(() => {
   background: #0ea5e9;
   color: white;
   border: none;
+   text-decoration: solid;
   border-radius: 14px;
   font-weight: 800;
   font-size: 1rem;

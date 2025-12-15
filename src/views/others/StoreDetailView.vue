@@ -24,7 +24,8 @@
         </div>
         <div class="rating-badge">
           <i class="fas fa-star"></i> {{ store.rating || '5.0' }}
-          <span class="reviews">({{ store.reviews_count || 0 }} avaliações)</span>
+          <!-- <span class="reviews">({{ store.reviews_count || 0 }} avaliações)</span> -->
+          <span class="reviews">Indisponíveis</span>
         </div>
         <div class="rating-badge" style="margin-left: 10px; color: darkslategray;" :class="{ open: store.openNow }">
           <i class="fas fa-circle"></i> {{ store.openNow ? 'Aberto' : 'Fechado' }}
@@ -38,18 +39,6 @@
   </div>
 
   <div v-if="!loading" class="container store-content">
-    <div class="gallery-section" v-if="store.gallery?.length">
-      <div class="main-photo">
-        <img :src="store.gallery[currentPhoto] || placeholder" alt="Foto principal" loading="lazy" />
-      </div>
-      <div class="thumbnail-grid">
-        <div v-for="(photo, i) in store.gallery" :key="i" class="thumb" :class="{ active: i === currentPhoto }"
-          @click="currentPhoto = i">
-          <img :src="photo || placeholder" :alt="`Foto ${i + 1}`" loading="lazy" />
-        </div>
-      </div>
-    </div>
-
     <div class="content-grid">
       <div class="left-column">
         <section class="about">
@@ -84,6 +73,18 @@
       </div>
 
       <div class="right-column">
+        <div class="gallery-section" v-if="store.gallery?.length">
+          <div class="main-photo">
+            <img :src="store.gallery[currentPhoto] || placeholder" alt="Foto principal" loading="lazy" />
+          </div>
+          <div class="thumbnail-grid">
+            <div v-for="(photo, i) in store.gallery" :key="i" class="thumb" :class="{ active: i === currentPhoto }"
+              @click="currentPhoto = i">
+              <img :src="photo || placeholder" :alt="`Foto ${i + 1}`" loading="lazy" />
+            </div>
+          </div>
+        </div>
+
         <div class="contact-card">
           <h3>Contacto</h3>
           <div class="contact-item" v-if="store.phone"><i class="fas fa-phone"></i> {{ store.phone }}</div>
@@ -105,7 +106,6 @@
             </iframe>
             <div class="map-actions">
               <a :href="googleMapsLink" target="_blank" class="btn-map google"><i class="fab fa-google"></i> Google Maps</a>
-              <a :href="wazeLink" target="_blank" class="btn-map waze"><i class="fas fa-car"></i> Waze</a>
               <a :href="appleMapsLink" target="_blank" class="btn-map apple"><i class="fab fa-apple"></i> Apple Maps</a>
             </div>
           </div>
@@ -138,7 +138,6 @@ const currentPhoto = ref(0)
 const placeholder = 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1600'
 
 const googleMapsLink = computed(() => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.value.address || '')}`)
-const wazeLink = computed(() => `https://waze.com/ul?q=${encodeURIComponent(store.value.address || '')}`)
 const appleMapsLink = computed(() => `http://maps.apple.com/?q=${encodeURIComponent(store.value.address || '')}`)
 
 const formattedHours = computed(() => {
@@ -290,28 +289,9 @@ onMounted(fetchStore)
   opacity: .9;
 }
 
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.status i {
-  font-size: .7rem;
-}
-
-.status.open {
-  color: #10b981;
-}
-
-.status.open i {
-  color: #10b981;
-}
-
 .btn-schedule-cta {
   background: #0ea5e9;
+   text-decoration: solid;
   color: white;
   padding: 16px 36px;
   border: none;
@@ -329,65 +309,11 @@ onMounted(fetchStore)
   transform: translateY(-5px);
 }
 
-.gallery-section {
-  margin: 60px 0;
-}
-
-.main-photo {
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
-  margin-bottom: 20px;
-}
-
-.main-photo img {
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-}
-
-.thumbnail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 14px;
-}
-
-.thumb {
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  opacity: .7;
-  transition: all .3s;
-  height: 100px;
-  position: relative;
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: .3s;
-}
-
-.thumb:hover,
-.thumb.active {
-  opacity: 1;
-  transform: scale(1.06);
-}
-
-.thumb.active::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 3px solid #0ea5e9;
-  border-radius: 16px;
-}
-
 .content-grid {
   display: grid;
   grid-template-columns: 1fr 360px;
   gap: 48px;
-  margin: 40px 0;
+  margin: 60px 0;
 }
 
 .left-column h2 {
@@ -485,6 +411,60 @@ onMounted(fetchStore)
 .closed-text {
   color: #ef4444;
   font-weight: 700;
+}
+
+.gallery-section {
+  margin-bottom: 36px;
+}
+
+.main-photo {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
+  margin-bottom: 20px;
+}
+
+.main-photo img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.thumb {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: .7;
+  transition: all .3s;
+  height: 80px;
+  position: relative;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: .3s;
+}
+
+.thumb:hover,
+.thumb.active {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.thumb.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 3px solid #0ea5e9;
+  border-radius: 16px;
 }
 
 .contact-card {
@@ -606,6 +586,7 @@ onMounted(fetchStore)
   font-size: 11px;
   text-transform: uppercase;
   transition: all .3s;
+   text-decoration: solid;
 }
 
 .fab-schedule:hover {
@@ -632,6 +613,10 @@ onMounted(fetchStore)
   .content-grid {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .right-column .gallery-section {
+    order: -1;
   }
 }
 
@@ -664,6 +649,11 @@ onMounted(fetchStore)
   .map-actions {
     flex-direction: column;
     width: 80%;
+  }
+
+  .service-item:hover {
+    margin: 0;
+    padding: 16px 0;
   }
 }
 
@@ -705,6 +695,17 @@ onMounted(fetchStore)
     height: 60px;
     right: 16px;
     bottom: 16px;
+  }
+
+  .service-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .service-details span {
+    margin-left: 0;
   }
 }
 </style>
