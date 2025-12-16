@@ -10,6 +10,11 @@
           <i class="fas fa-store"></i>
         </RouterLink>
 
+        
+        <RouterLink :to="{ name: 'app.home' }" class="action-btn location-btn">
+          <i class="fas fa-store"></i>
+        </RouterLink>
+
         <div class="user-menu-wrapper" ref="userMenuWrapper">
           <button v-if="user.name" class="action-btn user-btn" @click.stop="toggleUserMenu">
             <i class="fas fa-user-edit"></i>
