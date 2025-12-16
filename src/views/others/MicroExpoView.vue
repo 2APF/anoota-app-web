@@ -1,7 +1,7 @@
 <!-- views/HomePage.vue -->
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { Search, Clock, MapPin, Star, Filter, TrendingUp, Sparkles, Heart } from 'lucide-vue-next'
+// import { Search, Clock, MapPin, Star, Filter, TrendingUp, Sparkles, Heart } from 'lucide-vue-next'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 

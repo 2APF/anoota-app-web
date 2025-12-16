@@ -35,10 +35,10 @@ const router = createRouter({
       name: 'app.home',
       component: HomeView,
       meta: {
-        title: 'Página Inicial - Facilitando sua vida',
-        description: 'Estamos redefinindo todo conceito de comunicação segura.',
-        keywords: 'anoota, segurança, chat, mensagens seguras, criptomoeda, criptografia',
-        ogImage: 'https://anoota.online/logo-black.png',
+        title: 'Anoota - A tua agenda digital que acabou com as filas e os telefonemas perdidos.',
+        description: 'Facilitando a vida de milhões .',
+        keywords: 'Anoota, início, página inicial, agenda, trabalho',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -51,9 +51,9 @@ const router = createRouter({
       component: WeView,
       meta: {
         title: 'Sobre a Anoota',
-        description: 'Faça login na sua conta anoota.',
-        keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        description: 'Saiba mais sobre a Anoota',
+        keywords: 'sobre, nós, we, anoota',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -65,10 +65,10 @@ const router = createRouter({
       name: 'app.contact',
       component: ContactView,
       meta: {
-        title: 'Login - anoota',
+        title: 'Fale Connosco',
         description: 'Faça login na sua conta anoota.',
-        keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        keywords: 'fale connosco, contacto, anoota',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -81,10 +81,10 @@ const router = createRouter({
       name: 'app.store.detail',
       component: StoreDetailView,
       meta: {
-        title: 'Login - anoota',
-        description: 'Faça login na sua conta anoota.',
-        keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        title: 'Perfil da Loja',
+        description: 'Ver perfil detalhado da loja e agendar',
+        keywords: 'agenda, profissional, loja',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -95,10 +95,10 @@ const router = createRouter({
       name: 'app.schedule',
       component: ScheduleUserView,
       meta: {
-        title: 'Login - anoota',
-        description: 'Faça login na sua conta anoota.',
-        keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        title: 'Fazer Marcação',
+        description: 'Faça marcação agora e evite imprevistos',
+        keywords: 'schendule, agenda, marcação, agendamento, ',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -114,7 +114,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -132,7 +132,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -164,7 +164,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -179,7 +179,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -196,7 +196,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -212,7 +212,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -227,7 +227,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -244,7 +244,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -259,7 +259,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -273,7 +273,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -286,7 +286,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -308,7 +308,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -324,7 +324,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -339,7 +339,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuth: true
       },
     },
@@ -354,7 +354,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -369,7 +369,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -383,7 +383,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -397,7 +397,7 @@ const router = createRouter({
         title: 'Login - anoota',
         description: 'Faça login na sua conta anoota.',
         keywords: 'login, autenticação, anoota',
-        ogImage: 'https://anoota.online/logo-black.png',
+        ogImage: 'https://anoota.online/logo.png',
         requiresAuthUser: true
       },
     },
@@ -414,7 +414,7 @@ const router = createRouter({
     //     title: 'Criar Conta - anoota',
     //     description: 'Crie uma nova conta anoota.',
     //     keywords: 'criar conta, registro, anoota',
-    //     ogImage: 'https://anoota.online/logo-black.png'
+    //     ogImage: 'https://anoota.online/logo.png'
     //   },
     // },
 
@@ -432,7 +432,7 @@ const router = createRouter({
         title: 'Configurações - anoota',
         description: 'Gerencie as configurações da sua conta no anoota.',
         keywords: 'histórico, faturas, anoota',
-        ogImage: 'https://anoota.online/logo-black.png'
+        ogImage: 'https://anoota.online/logo.png'
       }
     },
 
@@ -443,7 +443,7 @@ const router = createRouter({
       meta: {
         title: 'Página Não Encontrada - anoota',
         description: 'A página que você tentou acessar não foi encontrada.',
-        ogImage: 'https://anoota.online/logo-black.png'
+        ogImage: 'https://anoota.online/logo.png'
       }
     }
   ],
