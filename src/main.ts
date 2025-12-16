@@ -30,7 +30,7 @@ app.use(createPinia())
 app.use(router)
 
 //app.use(VueTheMask);
-const APP_VERSION = '1.0.1'; // Define a versão do aplicativo
+const APP_VERSION = '1.0.2'; // Define a versão do aplicativo
 const storedVersion = localStorage.getItem('app_version');
 
 if (storedVersion !== APP_VERSION) {

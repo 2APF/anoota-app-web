@@ -16,12 +16,14 @@
         </div>
 
         <div class="custom-range" v-if="period === 'custom'">
-          <input v-model="data_start_search" type="date" />
+          <input v-model="data_start_search" type="date" placeholder="De" />
           <span>até</span>
-          <input v-model="data_end_search" type="date" />
+          <input v-model="data_end_search" type="date" placeholder="Até" />
         </div>
-
-        <input v-model="searchClient" type="text" placeholder="Buscar cliente..." class="search-input" />
+<!-- 
+        <div class="search-wrapper">
+          <input v-model="searchClient" type="text" placeholder="Buscar por cliente ou serviço..." />
+        </div> -->
       </div>
 
       <div class="stats-grid">
@@ -50,28 +52,32 @@
       <div class="charts-container">
         <div class="chart-card">
           <h3>Receita por Dia</h3>
-          <canvas ref="revenueChart"></canvas>
+          <div class="chart-wrapper">
+            <canvas ref="revenueChart"></canvas>
+          </div>
         </div>
         <div class="chart-card">
           <h3>Serviços Mais Realizados</h3>
-          <canvas ref="servicesChart"></canvas>
+          <div class="chart-wrapper">
+            <canvas ref="servicesChart"></canvas>
+          </div>
         </div>
       </div>
 
       <div class="table-section">
         <div class="table-header">
-          <h3>Últimas Marcações</h3>
+          <h3>Marcações </h3>
           <div class="export-buttons">
             <button @click="exportPDF" class="btn-export pdf">
-              <i class="fas fa-file-pdf"></i> PDF
+              <i class="fas fa-file-pdf"></i> Exportar em PDF
             </button>
             <button @click="exportExcel" class="btn-export excel">
-              <i class="fas fa-file-excel"></i> Excel
+              <i class="fas fa-file-excel"></i> Exportar em Excel
             </button>
           </div>
         </div>
 
-                <div class="table-wrapper">
+        <div class="table-wrapper">
           <table>
             <thead>
               <tr>
@@ -84,18 +90,15 @@
               </tr>
             </thead>
             <tbody>
-
-
-              
               <tr v-for="apt in filteredAppointments" :key="apt.id">
                 <td>{{ formatDate(apt.start_datetime) }}</td>
                 <td>{{ apt.name_client }}</td>
                 <td>{{ apt.name_service }}</td>
-                <td>{{ apt.duration_minutes_service }}</td>
-                <td>€{{ apt.price }}</td>
+                <td>{{ apt.duration_minutes_service }} min</td>
+                <td>€{{ apt.price_paid }}</td>
                 <td>
-                  <span class="status" :class="apt.status">
-                    {{ apt.status === 'confirmed' ? 'Concluído' : 'Pendente' }}
+                  <span class="status-badge" :class="{ completed: apt.status === '3' }">
+                    {{ apt.status === '3' ? 'Concluído' : 'Pendente' }}
                   </span>
                 </td>
               </tr>
@@ -113,10 +116,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import { useRouter, useRoute } from 'vue-router'
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns'
+import { format } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 
@@ -129,8 +132,8 @@ interface Schedule {
   status: string
   name_service: string
   name_client: string
-  start_datetime: any
-  duration_minutes_service: any
+  start_datetime: string
+  duration_minutes_service: number
   price: string
 }
 
@@ -138,7 +141,6 @@ const period = ref<'week' | 'month' | 'custom'>('month')
 const data_start_search = ref('')
 const data_end_search = ref('')
 const searchClient = ref('')
-const loading = ref(true)
 
 const API_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://api.cirimoveis.com/api/v1'
 
@@ -155,7 +157,6 @@ if (typeof route.params.user === 'string') userId = route.params.user
 else if (Array.isArray(route.params.user)) userId = route.params.user[0] || ''
 else if (route.params.user && typeof route.params.user === 'object') userId = (route.params.user as any).id || ''
 
-
 const revenueChart = ref<HTMLCanvasElement | null>(null)
 const servicesChart = ref<HTMLCanvasElement | null>(null)
 let chart1: Chart | null = null
@@ -164,19 +165,24 @@ let chart2: Chart | null = null
 const filteredAppointments = computed(() => {
   let filtered = schedules.value.filter(s => s.status === '3')
 
-  if (searchClient.value) {
-    filtered = filtered.filter(s => s.name_service.toLowerCase().includes(searchClient.value.toLowerCase()))
+  if (searchClient.value.trim()) {
+    const query = searchClient.value.toLowerCase()
+    filtered = filtered.filter(s =>
+      s.name_client.toLowerCase().includes(query) ||
+      s.name_service.toLowerCase().includes(query)
+    )
   }
+
+  filtered.sort((a, b) => new Date(b.start_datetime).getTime() - new Date(a.start_datetime).getTime())
 
   return filtered
 })
 
-const formatDate = (d: Date) => format(d, "dd MMM yyyy", { locale: pt })
-
+const formatDate = (dateStr: string) => format(new Date(dateStr), "dd MMM yyyy", { locale: pt })
 
 const uniqueClients = computed(() => {
-  const clients = new Set(filteredAppointments.value.map(s => s.id))
-  return clients.size
+  const clientIds = new Set(filteredAppointments.value.map(s => s.name_client))
+  return clientIds.size
 })
 
 const avgTicket = computed(() => 
@@ -184,43 +190,45 @@ const avgTicket = computed(() =>
 )
 
 const fetchReports = async () => {
-  loading.value = true
   try {
-    const params: any = {}
+    const params = new URLSearchParams()
     if (period.value === 'custom' && data_start_search.value && data_end_search.value) {
-      params.start = data_start_search.value
-      params.end = data_end_search.value
+      params.append('start', data_start_search.value)
+      params.append('end', data_end_search.value)
     }
 
-    const res = await fetch(`${API_URL}/store/report/all/${userId}`, { method: 'GET' })
+    const url = `${API_URL}/store/report/all/${userId}?${params.toString()}`
+    const res = await fetch(url)
+
     const data = await res.json()
+
 
     schedules.value = data.schedules || []
     totalRevenue.value = Number(data.total_revenue || 0)
     totalAppointments.value = data.total_schedules_finished || 0
     servicesMoreBooked.value = data.services_more_booked || []
   } catch (err) {
-    console.error('Erro ao carregar relatórios', err)
     schedules.value = []
     totalRevenue.value = 0
     totalAppointments.value = 0
     servicesMoreBooked.value = []
-  } finally {
-    loading.value = false
   }
 }
 
 const exportPDF = () => alert('Exportação PDF em desenvolvimento')
 const exportExcel = () => alert('Exportação Excel em desenvolvimento')
 
-onMounted(() => {
-  fetchReports()
+onMounted(async () => {
+  await fetchReports()
+  await nextTick()
   createCharts()
 })
 
-watch([period, data_start_search, data_end_search], () => {
-  fetchReports()
-}, { deep: true })
+watch([period, data_start_search, data_end_search, searchClient], async () => {
+  await fetchReports()
+  await nextTick()
+  createCharts()
+})
 
 const createCharts = () => {
   const ctx1 = revenueChart.value?.getContext('2d')
@@ -233,13 +241,13 @@ const createCharts = () => {
     labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
     datasets: [{
       label: 'Receita',
-      data: [420, 380, 510, 460, 620, 550, 480],
+      data: [100, 100, 100, 100, 100, 100, 100],
       backgroundColor: '#0ea5e9',
       borderRadius: 8,
     }]
   }
 
-  const servicesLabels = servicesMoreBooked.value.map(s => s.name)
+  const servicesLabels = servicesMoreBooked.value.map(s => s.name.slice(0, 20))
   const servicesValues = servicesMoreBooked.value.map(s => s.total_bookings)
 
   const servicesData = {
@@ -259,7 +267,10 @@ const createCharts = () => {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } }
+        scales: { 
+          y: { beginAtZero: true, grid: { display: false } }, 
+          x: { grid: { display: false } } 
+        }
       }
     })
   }
@@ -271,7 +282,12 @@ const createCharts = () => {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' as const } }
+        plugins: { 
+          legend: { 
+            position: 'bottom' as const, 
+            labels: { padding: 16 } 
+          } 
+        }
       }
     })
   }
@@ -284,40 +300,40 @@ const createCharts = () => {
 .reports-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-  
-  padding: 80px 80px 80px;
+  padding: 100px 16px 120px;
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 48px;
 }
 
 .page-header h1 {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: 900;
   background: linear-gradient(90deg, #1e293b 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
 }
 
 .page-header p {
-  font-size: 1.25rem;
-  color: #475569;
+  font-size: 1.15rem;
+  color: #64748b;
 }
 
 .filters-bar {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
-  margin-bottom: 48px;
+  align-items: center;
 }
 
 .period-selector {
@@ -325,18 +341,18 @@ const createCharts = () => {
   background: white;
   border-radius: 50px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,.08);
-  width: fit-content;
+  box-shadow: 0 8px 30px rgba(0,0,0,.1);
 }
 
 .period-selector button {
-  padding: 14px 28px;
-  background: transparent;
+  padding: 14px 24px;
   border: none;
+  background: transparent;
   font-weight: 700;
   color: #475569;
   cursor: pointer;
   transition: all .3s;
+  min-width: 110px;
 }
 
 .period-selector button.active {
@@ -351,51 +367,71 @@ const createCharts = () => {
   background: white;
   padding: 12px 20px;
   border-radius: 50px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.08);
-  width: fit-content;
+  box-shadow: 0 8px 30px rgba(0,0,0,.1);
+  width: 100%;
+  max-width: 420px;
+  justify-content: center;
 }
 
 .custom-range input {
-  padding: 10px;
+  padding: 12px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 1rem;
+  flex: 1;
 }
 
-.search-input {
-  padding: 14px 20px;
+.search-wrapper {
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 16px 20px 16px 48px;
   border: 2px solid #e2e8f0;
   border-radius: 50px;
   background: white;
   font-size: 1rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.08);
+  box-shadow: 0 8px 30px rgba(0,0,0,.1);
+  transition: all .3s;
+}
+
+.search-wrapper::before {
+  content: '\f002';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.1rem;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-  margin-bottom: 56px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
 }
 
 .stat-card {
   background: white;
-  border-radius: 28px;
-  padding: 28px;
+  border-radius: 24px;
+  padding: 28px 20px;
   text-align: center;
   box-shadow: 0 12px 40px rgba(0,0,0,.08);
   border: 1px solid #e2e8f0;
-  transition: all .3s;
+  transition: transform .3s;
 }
 
 .stat-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
 }
 
 .icon {
-  font-size: 3.2rem;
+  font-size: 3rem;
   margin-bottom: 16px;
 }
 
@@ -405,14 +441,14 @@ const createCharts = () => {
 .icon.avg { color: #f59e0b; }
 
 .value {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 900;
   color: #1e293b;
   margin: 8px 0;
 }
 
 .label {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #64748b;
   font-weight: 600;
 }
@@ -421,36 +457,45 @@ const createCharts = () => {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
-  margin-bottom: 64px;
 }
 
 .chart-card {
   background: white;
-  border-radius: 28px;
-  padding: 32px;
+  border-radius: 24px;
+  padding: 24px;
   box-shadow: 0 15px 50px rgba(0,0,0,.1);
   border: 1px solid #e2e8f0;
-  height: 380px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .chart-card h3 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #1e293b;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.chart-card canvas {
-  height: 100% !important;
+.chart-wrapper {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+}
+
+.chart-wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100% !important;
+  height: 100% !important;
 }
 
 .table-section {
   background: white;
-  border-radius: 28px;
-  padding: 32px;
+  border-radius: 24px;
+  padding: 28px 20px;
   box-shadow: 0 15px 50px rgba(0,0,0,.1);
   border: 1px solid #e2e8f0;
 }
@@ -459,12 +504,12 @@ const createCharts = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin-bottom: 28px;
 }
 
 .table-header h3 {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 800;
   color: #1e293b;
   margin: 0;
@@ -473,50 +518,46 @@ const createCharts = () => {
 .export-buttons {
   display: flex;
   gap: 12px;
+  width: 100%;
+  max-width: 420px;
 }
 
 .btn-export {
-  padding: 12px 20px;
+  flex: 1;
+  padding: 14px;
   border: none;
   border-radius: 50px;
   font-weight: 700;
+  color: white;
   cursor: pointer;
-  transition: all .3s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  transition: transform .3s;
 }
 
-.btn-export.pdf {
-  background: #ef4444;
-  color: white;
-}
+.btn-export.pdf { background: #ef4444; }
+.btn-export.excel { background: #10b981; }
 
-.btn-export.excel {
-  background: #10b981;
-  color: white;
-}
-
-.btn-export:hover {
-  transform: translateY(-3px);
-}
+.btn-export:hover { transform: translateY(-3px); }
 
 .table-wrapper {
   overflow-x: auto;
-  border-radius: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
 }
 
 table {
   width: 100%;
-  min-width: 500px;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
-table th,
-table td {
-  padding: 16px 12px;
+th, td {
+  padding: 14px 10px;
   text-align: left;
-  white-space: nowrap;
+  font-size: .95rem;
 }
 
 thead {
@@ -526,20 +567,26 @@ thead {
 
 th {
   font-weight: 800;
-  font-size: .95rem;
 }
 
 tbody tr {
   border-bottom: 1px solid #f1f5f9;
-  transition: .2s;
 }
 
 tbody tr:hover {
   background: #f8fafc;
 }
 
-tbody tr:last-child {
-  border-bottom: none;
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.status-badge.completed {
+  background: #d4edda;
+  color: #155724;
 }
 
 .empty {
@@ -554,53 +601,81 @@ tbody tr:last-child {
   opacity: .6;
 }
 
-@media (max-width: 640px) {
-  .reports-page {
-    padding: 80px 16px 120px;
+.empty p {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Responsividade aprimorada */
+@media (min-width: 768px) {
+  .charts-container {
+    grid-template-columns: repeat(2, 1fr);
   }
+  
+  .filters-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .custom-range {
+    width: auto;
+  }
+  
+  .search-wrapper {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
   .page-header h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
   }
-  .period-selector {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  
   .period-selector button {
-    flex: 1;
-    padding: 14px 12px;
+    padding: 12px 16px;
     font-size: .95rem;
+    min-width: auto;
   }
+  
   .custom-range {
     flex-direction: column;
-    width: 100%;
+    gap: 12px;
+    padding: 16px 20px;
   }
+  
   .custom-range input {
     width: 100%;
   }
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+  
   .stat-card {
-    padding: 24px;
+    padding: 24px 16px;
   }
+  
   .value {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
   }
+  
   .chart-card {
-    padding: 24px;
-    height: 340px;
+    padding: 20px;
   }
-  .table-header {
-    align-items: stretch;
+  
+  .chart-wrapper {
+    min-height: 260px;
   }
+  
+  .table-header h3 {
+    font-size: 1.5rem;
+  }
+  
   .export-buttons {
-    width: 100%;
-    justify-content: center;
+    flex-direction: column;
   }
-  .btn-export {
-    flex: 1;
+  
+  th, td {
+    padding: 12px 8px;
+    font-size: .9rem;
   }
 }
 </style>

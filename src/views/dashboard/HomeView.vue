@@ -6,7 +6,7 @@
 
       <header class="welcome">
         <h1>Olá, {{ user.name.split(' ')[0] }}!</h1>
-        <p v-if="appointmentsCount === 0">Vamos começar sua jornada de beleza?</p>
+        <p v-if="appointmentsCount === 0">Vamos começar sua jornada?</p>
         <p v-else>Você já fez <strong>{{ appointmentsCount }}</strong> agendamento{{ appointmentsCount > 1 ? 's' : '' }}</p>
       </header>
 
@@ -44,16 +44,24 @@
         </div>
       </section> -->
 
-      <div  class="empty-state" v-if="!recentAppointments.length">
+      <div  class="empty-state" v-if="!recentAppointments.length && user.type != '2'">
         <i class="fas fa-calendar-alt"></i>
         <p >Ainda não tens agendamentos</p>
         <button @click="goToSearch" class="btn-explore">Explorar serviços</button>
       </div>
-      <div v-else class="empty-state">
+      <div v-else-if="user.type != '2'" class="empty-state">
         <i class="fas fa-calendar-check"></i>
         <p>Bora explorar mais serviços?</p>
         <button @click="goToSearch" class="btn-explore">Explorar serviços
         </button>
+      </div>
+      <div v-else" class="empty-state">
+        <!-- <i class="fas fa-calendar-check"></i> -->
+        <p>Acredito que deves ter marcações? 🤔</p>
+        
+        <RouterLink :to="{ name: 'app.store.calender' }" :scroll-behavior="{ behavior: 'smooth' }" class="btn-explore">
+          <i class="fas fa-calendar-day"></i> Ver Marcações
+        </RouterLink>
       </div>
 
     </div>
@@ -82,17 +90,17 @@ interface User {
   about: string;
   address?: string;
   provider?: string;
-  createdAt?: string;
+  type?: string;
   photo?: string;
 }
 
 let user: User;
 if (typeof route.params.user === 'string') {
-  user = { id: route.params.user, name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '' };
+  user = { id: route.params.user, name: '', phone: '', email: '', about: '', type: '', provider: '', photo: '', address: '' };
 } else if (Array.isArray(route.params.user)) {
-  user = { id: route.params.user[0], name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '' };
+  user = { id: route.params.user[0], name: '', phone: '', email: '', about: '', type: '', provider: '', photo: '', address: '' };
 } else {
-  user = route.params.user || { id: '', name: '', phone: '', email: '', about: '', createdAt: '', provider: '', photo: '', address: '' };
+  user = route.params.user || { id: '', name: '', phone: '', email: '', about: '', type: '', provider: '', photo: '', address: '' };
 }
 
 

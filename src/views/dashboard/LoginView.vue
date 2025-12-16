@@ -135,11 +135,11 @@ const submitFormLogin = async () => {
     Cookies.set('user', JSON.stringify(data.data.data.id), { expires: form.value.remember ? 7 : undefined, secure: true, sameSite: 'Strict' });
     axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.data.access_token}`;
 
-    if (data.data.data.type == '3') {
+    // if (data.data.data.type == '3') {
       router.push({ name: 'app.user.homepage' }).catch(() => { });
-    } else {
-      router.push({ name: 'app.store.configuration' }).catch(() => { });
-    }
+    // } else {
+    //   router.push({ name: 'app.store.configuration' }).catch(() => { });
+    // }
   } catch (error: any) {
     showNotification(error.response?.data?.message || 'Erro ao efetuar login.', 'error')
   } finally {

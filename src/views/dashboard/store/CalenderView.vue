@@ -96,15 +96,16 @@
                   </option>
                 </select>
 
-                
-                  <div class="row client-inputs"  v-if="form.client_id == '0'" style="margin-top: 25px;">
-                    <div class="col-6">
-                      <input v-model="nameClient" type="text" class="form-group" placeholder="Nome *" required>
-                    </div>
-                    <div class="col-6">
-                      <input v-model="phoneClient" type="number" class="form-group" maxlength="10" placeholder="Telefone *" required>
-                    </div>
+
+                <div class="row client-inputs" v-if="form.client_id == '0'" style="margin-top: 25px;">
+                  <div class="col-6">
+                    <input v-model="nameClient" type="text" class="form-group" placeholder="Nome *" required>
                   </div>
+                  <div class="col-6">
+                    <input v-model="phoneClient" type="number" class="form-group" maxlength="10"
+                      placeholder="Telefone *" required>
+                  </div>
+                </div>
               </div>
 
               <div class="field">
@@ -196,8 +197,22 @@
             <i class="fas fa-check-circle"></i>
             <h3>Marcação concluída?</h3>
             <p><strong>{{ appointmentToCheck?.client_name }}</strong></p>
-            <p>{{ appointmentToCheck?.time }} • {{appointmentToCheck?.services_list.map(s => s.name).join(', ')}}
+            <p>{{ appointmentToCheck?.time }} • {{ getServicesNames(appointmentToCheck) }}
             </p>
+
+            <div class="row client-inputs" style="margin-top: 25px;">
+              <label style="color: red; margin-bottom: 10px;">Altere o preço, caso seja diferente</label>
+              <div class="col-12">
+              <input 
+                v-model="appointmentToCheck.price_paid" 
+                type="number" 
+                class="form-group" 
+                placeholder="Preço actualizado" 
+                required
+              >
+              </div>
+            </div>
+
             <div class="form-actions">
               <button @click="checkedModal = false">Cancelar</button>
               <button @click="confirmChecked" :disabled="loading" class="primary check">Sim, concluir</button>
@@ -254,9 +269,12 @@ if (typeof route.params.user === 'string') {
 let nameClient = ref<string | null>(null)
 let phoneClient = ref<number | null>(null)
 
-interface Client { id: number; name: string; phone: string; email: string;}
-interface Service { id: number; name: string; price: string; duration_minutes: number }
-interface Appointment { id: number; client_id: number; client_name: string; services_list: Service[]; time: string; total_price: string; total_duration: number; date: string }
+interface Client { id: number; name: string; phone: string; email: string; }
+interface Service { id: number; name: any; price: string; duration_minutes: number }
+interface Appointment { id: number; client_id: number; client_name: string; services_list: Service[]; 
+  time: string; total_price: string; total_duration: number; date: string;
+  price_paid: number | null
+}
 
 const view = ref<'day' | 'month'>('day')
 const selectedDate = ref(new Date())
@@ -271,7 +289,7 @@ const loadingSlots = ref(false)
 const modal = ref(false)
 const deleteModal = ref(false)
 const checkedModal = ref(false)
-const appointmentToCheck = ref<Appointment | null>(null)
+const appointmentToCheck = ref<Appointment | any>(null)
 const editMode = ref(false)
 const appointmentToDelete = ref<Appointment | null>(null)
 const currentEditId = ref<number | null>(null)
@@ -285,6 +303,12 @@ const form = ref({
   service_ids: [] as number[],
   time: ''
 })
+
+// Esta função lida com a tipagem corretamente fora do template
+const getServicesNames = (apt: Appointment | null | undefined): string => {
+  if (!apt || !apt.services_list) return '';
+  return apt.services_list.map((s: Service) => s.name).join(', ');
+};
 
 const filteredServices = computed(() => {
   if (!searchService.value.trim()) return services.value
@@ -300,6 +324,11 @@ const notification = ref({ message: '', type: 'success' as 'success' | 'error' }
 const showNotification = (msg: string, type: 'success' | 'error') => {
   notification.value = { message: msg, type }
   setTimeout(() => notification.value.message = '', 5000)
+}
+
+const formatPrice = (value: string): string => {
+  const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+  return numericValue.toFixed(2).replace('.', ',');
 }
 
 
@@ -401,7 +430,7 @@ const submitCreate = async () => {
   if (form.value.service_ids.length === 0 || !form.value.time) return
 
 
-      // console.log(res)
+  // console.log(res)
   const payload = {
     client_id: Number(form.value.client_id) || 1,
     service_ids: form.value.service_ids,
@@ -450,9 +479,12 @@ const confirmChecked = async () => {
 
   loading.value = true
 
+  const payload = { price_paid: Number(appointmentToCheck.value.price_paid).toFixed(2) }
+console.log(payload)
   if (!appointmentToCheck.value) return
+
   try {
-    await axios.post(`${API_URL}/store/schedule/complete/${appointmentToCheck.value.id}`, {}, {
+    await axios.post(`${API_URL}/store/schedule/complete/${appointmentToCheck.value.id}`, payload, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     showNotification('Marcação concluída com sucesso', 'success')
@@ -460,8 +492,7 @@ const confirmChecked = async () => {
 
     checkedModal.value = false
     loadData()
-  } catch (err: any) {
-    // console.log(err)
+  } catch (err: any) { 
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }
@@ -504,9 +535,10 @@ const loadData = async () => {
         .map((id: number) => services.value.find(sv => sv.id === id))
         .filter(Boolean) as Service[]
 
-      const totalPrice = servicesList.reduce((sum, sv) => sum + Number(sv.price || 0), 0).toFixed(2)
+      // const totalPrice = servicesList.reduce((sum, sv) => sum + Number(sv.price || 0), 0).toFixed(2)
       const totalDuration = servicesList.reduce((sum, sv) => sum + (sv.duration_minutes || 0), 0)
 
+      
       return {
         id: s.id,
         client_id: s.client_id,
@@ -514,9 +546,10 @@ const loadData = async () => {
         services_list: servicesList,
         status: s.status,
         time: format(new Date(s.start_datetime), 'HH:mm'),
-        total_price: s.price ? Number(s.price).toFixed(2) : totalPrice,
+        total_price: s.price_paid ? Number(s.price_paid).toFixed(2) : s.price_service,
         total_duration: s.duration_minutes ? s.duration_minutes : totalDuration,
-        date: format(new Date(s.start_datetime), 'yyyy-MM-dd')
+        date: format(new Date(s.start_datetime), 'yyyy-MM-dd'),
+        price_paid: s.price_paid ?? s.price_service
       }
     })
   } catch {
@@ -967,6 +1000,7 @@ select,
   background: white;
   transition: all .2s;
 }
+
 .client-inputs input:focus {
   outline: none;
   border-color: #0ea5e9;
@@ -1146,6 +1180,7 @@ select:focus,
 
   .item .price,
   .item .duration {
+    font-size: 10pt;
     grid-column: 3;
     text-align: right;
   }

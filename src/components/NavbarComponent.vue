@@ -10,10 +10,10 @@
           <i class="fas fa-store"></i>
         </RouterLink>
 
-        
+<!--         
         <RouterLink :to="{ name: 'app.home' }" class="action-btn location-btn">
           <i class="fas fa-store"></i>
-        </RouterLink>
+        </RouterLink> -->
 
         <div class="user-menu-wrapper" ref="userMenuWrapper">
           <button v-if="user.name" class="action-btn user-btn" @click.stop="toggleUserMenu">
@@ -34,8 +34,8 @@
                 <i class="fas fa-book-reader"></i> Relatórios
               </RouterLink>
 
-              <RouterLink v-if="user.type == '2'" :to="{ name: 'app.user.schedules' }" class="dropdown-item" @click="closeUserMenu">
-                <i class="fas fa-users-cog"></i> Administradores
+              <RouterLink v-if="user.type == '2'" :to="{ name: 'app.user.schedules' }" class="dropdown-item disabled" @click="closeUserMenu">
+                <i class="fas fa-users-cog"></i> Colaboradores
               </RouterLink>
 
               <div class="dropdown-item disabled">
