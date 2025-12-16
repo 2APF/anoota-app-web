@@ -134,9 +134,11 @@
 
               <div class="field">
                 <label>Horário *</label>
+                <!-- <input type="time" v-model="form.time" class="disabled" v-if="editMode"> -->
                 <select v-model="form.time" required :disabled="loadingSlots">
-                  <option :value="form.time" v-if="editMode" selected>{{ form.time }}</option>
-                  <option value="">{{ loadingSlots ? 'Carregando...' : 'Selecione o horário' }}</option>
+                  <option value="form.time" v-if="editMode">{{ form.price +' (manter o mesmo)' }}</option>
+                  <option value="" v-if="!editMode">{{ loadingSlots ? 'Carregando...' : 'Selecione o horário' }}
+                  </option>
                   <option v-for="slot in availableTimeSlots" :key="slot" :value="slot">{{ slot }}</option>
                 </select>
               </div>
@@ -166,7 +168,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </Transition>
     </teleport>
@@ -203,13 +204,8 @@
             <div class="row client-inputs" style="margin-top: 25px;">
               <label style="color: red; margin-bottom: 10px;">Altere o preço, caso seja diferente</label>
               <div class="col-12">
-              <input 
-                v-model="appointmentToCheck.price_paid" 
-                type="number" 
-                class="form-group" 
-                placeholder="Preço actualizado" 
-                required
-              >
+                <input v-model="appointmentToCheck.price_paid" type="number" class="form-group"
+                  placeholder="Preço actualizado" required>
               </div>
             </div>
 
@@ -271,9 +267,10 @@ let phoneClient = ref<number | null>(null)
 
 interface Client { id: number; name: string; phone: string; email: string; }
 interface Service { id: number; name: any; price: string; duration_minutes: number }
-interface Appointment { id: number; client_id: number; client_name: string; services_list: Service[]; 
-  time: string; total_price: string; total_duration: number; date: string;
-  price_paid: number | null
+interface Appointment {
+  id: number; client_id: number; client_name: string; services_list: Service[];
+  time: string; total_price: string; total_duration: number; date: string; price: any;
+  price_paid: number | any
 }
 
 const view = ref<'day' | 'month'>('day')
@@ -301,7 +298,8 @@ const availableTimes = ref(true)
 const form = ref({
   client_id: '',
   service_ids: [] as number[],
-  time: ''
+  time: '',
+  price: '00:00'
 })
 
 // Esta função lida com a tipagem corretamente fora do template
@@ -405,7 +403,7 @@ watch(modal, (val) => { if (val) fetchAvailableTimes() })
 const openNew = () => {
   editMode.value = false
   currentEditId.value = null
-  form.value = { client_id: '', service_ids: [], time: '' }
+  form.value = { client_id: '', service_ids: [], time: '', price: '00:00' }
   searchService.value = ''
   modal.value = true
 }
@@ -417,7 +415,8 @@ const edit = (apt: Appointment) => {
   form.value = {
     client_id: String(apt.client_id),
     service_ids: apt.services_list.map(s => s.id),
-    time: apt.time
+    time: apt.time,
+    price: apt.time
   }
   searchService.value = ''
   modal.value = true
@@ -480,7 +479,7 @@ const confirmChecked = async () => {
   loading.value = true
 
   const payload = { price_paid: Number(appointmentToCheck.value.price_paid).toFixed(2) }
-console.log(payload)
+  console.log(payload)
   if (!appointmentToCheck.value) return
 
   try {
@@ -492,7 +491,7 @@ console.log(payload)
 
     checkedModal.value = false
     loadData()
-  } catch (err: any) { 
+  } catch (err: any) {
     showNotification(err.response?.data?.message || 'Tente novamente', 'error')
     loading.value = false
   }
@@ -515,6 +514,7 @@ const confirmDelete = async () => {
 }
 
 const loadData = async () => {
+
   try {
 
     const res = await axios.get(`${API_URL}/store/calendary/${user.id}`, {
@@ -535,10 +535,10 @@ const loadData = async () => {
         .map((id: number) => services.value.find(sv => sv.id === id))
         .filter(Boolean) as Service[]
 
+
       // const totalPrice = servicesList.reduce((sum, sv) => sum + Number(sv.price || 0), 0).toFixed(2)
       const totalDuration = servicesList.reduce((sum, sv) => sum + (sv.duration_minutes || 0), 0)
 
-      
       return {
         id: s.id,
         client_id: s.client_id,
